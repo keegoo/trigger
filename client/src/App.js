@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import AppBar from 'material-ui/AppBar'
 import ServerList from './ServerList.js'
+import TextField from 'material-ui/TextField'
 
 const styles = {
   width: '60%',
@@ -19,11 +20,12 @@ class App extends React.Component {
         {id: 2, name: "APC-WGGenerator2"},
         {id: 3, name: "APC-WGGenerator3"},
         {id: 4, name: "APC-WGGenerator4"},
-        {id: 5, name: "APC-WGGenerator5"},
-        {id: 6, name: "APC-WGGenerator6"},
-        {id: 7, name: "APC-WGGenerator7"},
-        {id: 8, name: "APC-WGGenerator8"}
-      ]
+        {id: 5, name: "SF1-WGGenerator5"},
+        {id: 6, name: "SF1-WGGenerator6"},
+        {id: 7, name: "SF1-WGGenerator7"},
+        {id: 8, name: "SF1-WGGenerator8"}
+      ],
+      filterStr: ""
     }
   }
 
@@ -33,8 +35,12 @@ class App extends React.Component {
         <div>
           <AppBar title="Trigger" />
           <div className="searchable-list" style={styles}>
-            <p>Generators available:</p>
-            <ServerList servers={this.state.servers}/>
+            <span>Generators available: </span>
+            <TextField 
+              onChange={ e => this.setState({ filterStr: e.target.value })}
+              hintText="Filter" />
+            <br />
+            <ServerList servers={this.state.servers.filter( e => e.name.includes(this.state.filterStr))}/>
           </div>
         </div>
       </MuiThemeProvider>
