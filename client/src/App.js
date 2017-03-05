@@ -5,6 +5,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import AppBar from 'material-ui/AppBar'
 import ServerList from './ServerList.js'
 import TextField from 'material-ui/TextField'
+import NcTable from './NcTable.js'
 
 const styles = {
   width: '60%',
@@ -25,7 +26,8 @@ class App extends React.Component {
         {id: 7, name: "SF1-WGGenerator7"},
         {id: 8, name: "SF1-WGGenerator8"}
       ],
-      filterStr: ""
+      filterStr: "",
+      serverSelected: []
     }
   }
 
@@ -34,13 +36,19 @@ class App extends React.Component {
       <MuiThemeProvider>
         <div>
           <AppBar title="Trigger" />
-          <div className="searchable-list" style={styles}>
-            <span>Generators available: </span>
-            <TextField 
-              onChange={ e => this.setState({ filterStr: e.target.value })}
-              hintText="Filter" />
-            <br />
-            <ServerList servers={this.state.servers.filter( e => e.name.includes(this.state.filterStr))}/>
+          <div className="app-body" style={styles}>
+            <div className="searchable-list">
+              <span>Generators available: </span>
+              <TextField 
+                onChange={ e => this.setState({ filterStr: e.target.value })}
+                hintText="Filter" />
+              <br />
+              <ServerList servers={this.state.servers.filter( e => e.name.includes(this.state.filterStr))}/>
+            </div>
+            <div className="generator-table">
+              <div><span>Generators selected: </span></div>
+              <NcTable servers={this.state.serverSelected} />
+            </div>
           </div>
         </div>
       </MuiThemeProvider>
