@@ -19,7 +19,7 @@ class ServerList extends React.Component {
     return(
       <Chip 
         style={this.styles.chip}
-        onClick={() => {this.props.handleClick(server.name)}}
+        onClick={() => {this.props.handleClick(server)}}
         >{server.name}</Chip>
     )
   }

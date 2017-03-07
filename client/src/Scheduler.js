@@ -7,6 +7,7 @@ import NcTable from './NcTable.js'
 class Scheduler extends React.Component {
   constructor (){
     super()
+    this.handleServerClick = this.handleServerClick.bind(this)
     this.state = {
       servers: [
         {id: 1, name: "APC-WGGenerator1"},
@@ -26,8 +27,24 @@ class Scheduler extends React.Component {
     }
   }
 
-  handleServerClick(name){
-    alert(name)
+  handleServerClick(server){
+    let len = this.state.serverSelected.filter((s) => s.name === server.name).length
+    if (len == 1) {
+      console.log("remove")
+      this.removeServerFromSchedule(server)
+    } else {
+      console.log("add")
+      this.addServerToSchedule(server)
+    }
+  }
+
+  removeServerFromSchedule(server){
+    let arr = this.state.serverSelected
+    this.setState({serverSelected: arr.filter((s) => s.name !== server.name)})
+  }
+
+  addServerToSchedule(server){
+    this.setState({serverSelected: this.state.serverSelected.concat(server)})
   }
 
   render (){
