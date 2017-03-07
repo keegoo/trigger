@@ -17,7 +17,10 @@ class ServerList extends React.Component {
 
   toHtmlTag(server) {
     return(
-      <Chip style={this.styles.chip}>{server.name}</Chip>
+      <Chip 
+        style={this.styles.chip}
+        onClick={() => {this.props.handleClick(server.name)}}
+        >{server.name}</Chip>
     )
   }
 

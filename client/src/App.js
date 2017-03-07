@@ -18,7 +18,7 @@ class App extends React.Component {
         <div>
           <AppBar title="Trigger" />
           <div className="app-body" style={styles}>
-            <Scheduler servers={this.state.servers}/>
+            <Scheduler/>
           </div>
         </div>
       </MuiThemeProvider>

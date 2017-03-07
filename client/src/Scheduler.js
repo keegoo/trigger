@@ -26,6 +26,10 @@ class Scheduler extends React.Component {
     }
   }
 
+  handleServerClick(name){
+    alert(name)
+  }
+
   render (){
     return(
       <div className="scheduler">
@@ -34,7 +38,10 @@ class Scheduler extends React.Component {
           onChange={ e => this.setState({ filterStr: e.target.value })}
           hintText="Filter" />
         <br />
-        <ServerList servers={this.state.servers.filter( e => e.name.includes(this.state.filterStr))}/>
+        <ServerList 
+          servers={this.state.servers.filter( e => e.name.includes(this.state.filterStr))}
+          handleClick={this.handleServerClick}
+          />
 
         <div className="generator-table">
           <div><span>Generators selected: </span></div>
