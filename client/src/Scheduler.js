@@ -30,10 +30,8 @@ class Scheduler extends React.Component {
   handleServerClick(server){
     let len = this.state.serverSelected.filter((s) => s.name === server.name).length
     if (len == 1) {
-      console.log("remove")
       this.removeServerFromSchedule(server)
     } else {
-      console.log("add")
       this.addServerToSchedule(server)
     }
   }
@@ -57,6 +55,7 @@ class Scheduler extends React.Component {
         <br />
         <ServerList 
           servers={this.state.servers.filter( e => e.name.includes(this.state.filterStr))}
+          filterStr={this.state.filterStr}
           handleClick={this.handleServerClick}
           />
 
