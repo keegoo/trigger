@@ -1,8 +1,7 @@
 import React from 'react'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
-import TimePicker from 'material-ui/TimePicker'
 import injectTapEventPlugin from 'react-tap-event-plugin'
-injectTapEventPlugin()
+import TextField from 'material-ui/TextField'
 
 class NcTable extends React.Component {
 
@@ -16,12 +15,16 @@ class NcTable extends React.Component {
     )
   }
 
+  overwritePartialDefaultText(str){
+    console.log(str)
+  }
+
   toRowTag(server) {
     return(
       <TableRow>
         <TableRowColumn>{server.name}</TableRowColumn>
         <TableRowColumn>
-          <TimePicker format="24hr" hintText="24hr Format"></TimePicker>
+          <TextField hintText="e.g. 1:9 or 23:11"/>
         </TableRowColumn>
         <TableRowColumn>module be executed</TableRowColumn>
       </TableRow>
