@@ -2,7 +2,7 @@ import React from 'react'
 import ServerList from './ServerList.js'
 import TextField from 'material-ui/TextField'
 import NcTable from './NcTable.js'
-
+import ComingFewDays from './ComingFewDays.js'
 
 class Scheduler extends React.Component {
   constructor (){
@@ -25,6 +25,16 @@ class Scheduler extends React.Component {
         {id: 4, name: "APC-WGGenerator4"}
       ]
     }
+  }
+
+  componentDidMount(){
+    console.log("hi there")
+    fetch("data.json")
+      .then(response => response.json())
+      .then(json => {
+        console.log(json);
+        // this.setState({data: json})
+      })
   }
 
   handleServerClick(server){
@@ -61,6 +71,8 @@ class Scheduler extends React.Component {
 
         <div className="generator-table">
           <div><span>Generators selected: </span></div>
+          <ComingFewDays />
+          <br />
           <NcTable servers={this.state.serverSelected} />
         </div>
       </div>
