@@ -4,6 +4,15 @@ import TextField from 'material-ui/TextField'
 import NcTable from './NcTable.js'
 import ComingFewDays from './ComingFewDays.js'
 
+// save delete icon
+import SaveIcon from 'material-ui/svg-icons/content/save'
+import DeleteIcon from 'material-ui/svg-icons/action/delete'
+
+// icon float right
+const styles = {
+  float: 'right'
+}
+
 class Scheduler extends React.Component {
   constructor (){
     super()
@@ -73,6 +82,8 @@ class Scheduler extends React.Component {
           <div><span>Generators selected: </span></div>
           <ComingFewDays />
           <br />
+          <SaveIcon style={styles} />
+          <DeleteIcon style={styles} />
           <NcTable servers={this.state.serverSelected} />
         </div>
       </div>
