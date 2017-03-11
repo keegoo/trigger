@@ -3,6 +3,7 @@ import ServerList from './ServerList.js'
 import TextField from 'material-ui/TextField'
 import NcTable from './NcTable.js'
 import ComingFewDays from './ComingFewDays.js'
+import Paper from 'material-ui/Paper'
 
 // save delete icon
 import SaveIcon from 'material-ui/svg-icons/content/save'
@@ -10,7 +11,9 @@ import DeleteIcon from 'material-ui/svg-icons/action/delete'
 
 // icon float right
 const styles = {
-  float: 'right'
+  icon: {
+    float: 'right'
+  }
 }
 
 class Scheduler extends React.Component {
@@ -32,7 +35,8 @@ class Scheduler extends React.Component {
       serverSelected: [
         {id: 7, name: "SF1-WGGenerator7"},
         {id: 4, name: "APC-WGGenerator4"}
-      ]
+      ],
+      borderWidth: 0
     }
   }
 
@@ -64,9 +68,14 @@ class Scheduler extends React.Component {
     this.setState({serverSelected: this.state.serverSelected.concat(server)})
   }
 
+  handleHoverPaper (){
+
+  }
+
   render (){
     return(
       <div className="scheduler">
+        <br />
         <span>Generators available: </span>
         <TextField 
           onChange={ e => this.setState({ filterStr: e.target.value })}
@@ -77,15 +86,20 @@ class Scheduler extends React.Component {
           filterStr={this.state.filterStr}
           handleClick={this.handleServerClick}
           />
-
-        <div className="generator-table">
+        <br />
+        <Paper 
+          className="generator-table" 
+          zDepth={this.state.borderWidth} 
+          onMouseEnter={ e => this.setState({ borderWidth: 1 })} 
+          onMouseLeave={ e => this.setState({ borderWidth: 0 })}
+        >
           <div><span>Generators selected: </span></div>
           <ComingFewDays />
           <br />
-          <SaveIcon style={styles} />
-          <DeleteIcon style={styles} />
+          <SaveIcon style={styles.icon} />
+          <DeleteIcon style={styles.icon} />
           <NcTable servers={this.state.serverSelected} />
-        </div>
+        </Paper>
       </div>
     )
   }

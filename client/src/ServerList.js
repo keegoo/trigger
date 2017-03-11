@@ -49,7 +49,6 @@ class ServerList extends React.Component {
     return(
       <div style={this.styles.wrapper} >
         {this.props.servers.map((s) => this.toHtmlTag(s))}
-        <Chip style={this.styles.wrapper}>this is a t<span style={this.styles.highlight}>es</span>t</Chip>
       </div>
     )
   }
