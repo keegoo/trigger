@@ -3,7 +3,7 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 
 class HsTable extends React.Component {
   render (){
-    const t = this.props.historialInfo
+    const t = this.props.historicalInfo
 
     return(
       <Table>
@@ -20,13 +20,13 @@ class HsTable extends React.Component {
         </TableHeader>
         <TableBody displayRowCheckbox={false}>
           {
-            t.items.map((item) => {
+            t.schedule.map((s) => {
               return(
                 <TableRow>
-                  <TableRowColumn>{item.generator}</TableRowColumn>
-                  <TableRowColumn>{item.time}</TableRowColumn>
-                  <TableRowColumn>{item.module}</TableRowColumn>
-                  <TableRowColumn>{item.status}</TableRowColumn>
+                  <TableRowColumn>{s.generator}</TableRowColumn>
+                  <TableRowColumn>{s.time}</TableRowColumn>
+                  <TableRowColumn>{s.module}</TableRowColumn>
+                  <TableRowColumn>{s.status}</TableRowColumn>
                 </TableRow>
               )
             })

@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import AppBar from 'material-ui/AppBar'
 import Scheduler from './Scheduler.js'
-import HistorialSchedule from './HistorialSchedule.js'
+import HistoricalSchedule from './HistoricalSchedule.js'
 
 const styles = {
   width: '60%',
@@ -21,7 +21,7 @@ class App extends React.Component {
           <div className="app-body" style={styles}>
             <Scheduler />
             <br />
-            <HistorialSchedule />
+            <HistoricalSchedule />
           </div>
         </div>
       </MuiThemeProvider>
