@@ -60,37 +60,16 @@ class HistorialSchedule extends React.Component {
         // ....
       ]
     }
-
-    this.nextPage = this.nextPage.bind(this)
-    this.previousPage = this.previousPage.bind(this)
   }
 
   currentPageItems(){
     const sBegin = (this.state.currentPage - 1) * this.state.itemsEachPage
-    const sEnd = sBegin + 2
+    const sEnd = sBegin + this.state.itemsEachPage
     return this.state.historials.slice(sBegin, sEnd)
   }
 
-  nextPage() {
-    console.log(`before next: ${this.state.currentPage}`)
-    this.setState({currentPage: this.state.currentPage + 1})
-    console.log(`current page: ${this.state.currentPage}`)
-    // this.setState({leftBoundary: false})
-    // console.log(`current page: ${this.state.currentPage}`)
-    // const lastPage = Math.ceil(this.state.historials.length / this.state.itemsEachPage)
-    // if (this.state.currentPage == lastPage) {
-    //   this.setState({rightBoundary: true})
-    // }
-  }
-
-  previousPage() {
-    console.log(`before previous: ${this.state.currentPage}`)
-    this.setState({currentPage: this.state.currentPage - 1})
-    // this.setState({rightBoundary: false})
-    // console.log(`current page: ${this.state.currentPage}`)
-    // if (this.state.currentPage == 1) {
-    //   this.setState({leftBoundary: true})
-    // }
+  getTotalPages(){
+    return Math.ceil(this.state.historials.length / this.state.itemsEachPage)
   }
 
   render(){
@@ -103,11 +82,15 @@ class HistorialSchedule extends React.Component {
           })
         }
         <div>
-          <IconButton disabled={this.state.leftBoundary} onClick={this.previousPage}>
+          <IconButton 
+            disabled={ this.state.currentPage == 1 ? true : false } 
+            onClick={ () => this.setState({currentPage: this.state.currentPage - 1}) }>
             <NavigateBeforeIcon/>
           </IconButton>
-          <IconButton>
-            <NavigateNextIcon disabled={this.state.rightBoundary} onClick={this.nextPage}/>
+          <IconButton 
+            disabled={ this.getTotalPages() == this.state.currentPage ? true : false } 
+            onClick={ () => this.setState({currentPage: this.state.currentPage + 1}) }>
+            <NavigateNextIcon/>
           </IconButton>
         </div>
       </div>

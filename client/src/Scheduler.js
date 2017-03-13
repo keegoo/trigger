@@ -41,13 +41,12 @@ class Scheduler extends React.Component {
   }
 
   componentDidMount(){
-    console.log("hi there")
-    fetch("data.json")
-      .then(response => response.json())
-      .then(json => {
-        console.log(json);
-        // this.setState({data: json})
-      })
+    // fetch("data.json")
+    //   .then(response => response.json())
+    //   .then(json => {
+    //     console.log(json);
+    //     // this.setState({data: json})
+    //   })
   }
 
   handleServerClick(server){
