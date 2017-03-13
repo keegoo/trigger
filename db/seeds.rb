@@ -7,7 +7,7 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 11.times do |i|
-  HistorialSchedule.create(
+  HistoricalSchedule.create(
     {
       date: "#{i.day.ago.utc.iso8601}", 
       schedule: [

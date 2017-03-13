@@ -1,4 +1,4 @@
-class HistorialSchedule
+class HistoricalSchedule
   include Mongoid::Document
 
   field :date, type: String
