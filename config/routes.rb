@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-
+  
+  resources :generators, only: [:index]
   resources :historical_schedules, only: [:index]
 end

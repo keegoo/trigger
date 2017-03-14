@@ -18,3 +18,20 @@
       ]
     })
 end
+
+
+
+15.times do |i|
+  j = rand(0..2)
+  prefix = ["APC", "SF1", "SF2", "SZN"]
+  n = i.to_s.length == 1 ? "0#{i}" : i
+  status = (j == 1 ? "connected" : "disconnected")
+  Generator.create(
+    {
+      name: "#{prefix[j]}-WGROAPP3#{n}",
+      status: status,
+      last_used: "#{i.day.ago.utc.iso8601}",
+      frequency: 0
+    }
+  )
+end
