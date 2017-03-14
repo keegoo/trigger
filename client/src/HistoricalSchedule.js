@@ -6,7 +6,19 @@ import IconButton from 'material-ui/IconButton'
 import NavigateBeforeIcon from 'material-ui/svg-icons/image/navigate-before'
 import NavigateNextIcon from 'material-ui/svg-icons/image/navigate-next'
 
-
+const styles = {
+  titleText: {
+    fontSize: '24px',
+    color: 'rgb(0, 188, 212)',
+    marginBottom: '10px',
+    marginTop: '20px'
+  },
+  historicalBorder: {
+    boxShadow: 'rgba(0,0,0,0.17) 0px 0px 10px',
+    border: 'solid 1px',
+    padding: '10px'
+  }
+}
 class HistoricalSchedule extends React.Component {
   constructor(){
     super()
@@ -41,23 +53,25 @@ class HistoricalSchedule extends React.Component {
   render(){
     return(
       <div>
-        <div><span>historical Records: </span></div>
-        {
-          this.currentPageItems().map((t, index) => {
-            return <HsTable historicalInfo={t} key={index}/>
-          })
-        }
-        <div>
-          <IconButton 
-            disabled={ this.state.currentPage == 1 ? true : false } 
-            onClick={ () => this.setState({currentPage: this.state.currentPage - 1}) }>
-            <NavigateBeforeIcon/>
-          </IconButton>
-          <IconButton 
-            disabled={ this.getTotalPages() == this.state.currentPage ? true : false } 
-            onClick={ () => this.setState({currentPage: this.state.currentPage + 1}) }>
-            <NavigateNextIcon/>
-          </IconButton>
+        <div style={styles.titleText}><span>historical Records: </span></div>
+        <div style={styles.historicalBorder}>
+          {
+            this.currentPageItems().map((t, index) => {
+              return <HsTable historicalInfo={t} key={index}/>
+            })
+          }
+          <div>
+            <IconButton 
+              disabled={ this.state.currentPage == 1 ? true : false } 
+              onClick={ () => this.setState({currentPage: this.state.currentPage - 1}) }>
+              <NavigateBeforeIcon/>
+            </IconButton>
+            <IconButton 
+              disabled={ this.getTotalPages() == this.state.currentPage ? true : false } 
+              onClick={ () => this.setState({currentPage: this.state.currentPage + 1}) }>
+              <NavigateNextIcon/>
+            </IconButton>
+          </div>
         </div>
       </div>
     )

@@ -11,6 +11,12 @@ import DeleteIcon from 'material-ui/svg-icons/action/delete'
 
 // icon float right
 const styles = {
+  titleText: {
+    fontSize: '24px',
+    color: 'rgb(0, 188, 212)',
+    marginBottom: '10px',
+    marginTop: '20px'
+  },
   icon: {
     float: 'right'
   }
@@ -64,36 +70,36 @@ class Scheduler extends React.Component {
 
   render (){
     return(
-      <div className="scheduler">
-        <br />
-        <span>Generators available: </span>
-        <TextField 
-          onChange={ e => this.setState({ filterStr: e.target.value })}
-          hintText="Filter" />
-        <br />
-        <ServerList 
-          generators={this.state.generators.filter( e => e.name.includes(this.state.filterStr))}
-          filterStr={this.state.filterStr}
-          handleClick={this.handleServerClick}
-          />
-        <br />
-        <div>
-          <div><span>Generators selected: </span></div>
+      <div>
+        <div style={styles.titleText}><span>Generators available: </span></div>
+        <div >
+          <TextField 
+            onChange={ e => this.setState({ filterStr: e.target.value })}
+            hintText="Filter" />
           <br />
-          <Paper
-            className="generator-table" 
-            zDepth={this.state.borderWidth} 
-            onMouseEnter={ e => this.setState({ borderWidth: 1 })} 
-            onMouseLeave={ e => this.setState({ borderWidth: 0 })}
-          >
-            <div>
-              <ComingFewDays />
-              <SaveIcon style={styles.icon} />
-              <DeleteIcon style={styles.icon} />
-            </div>
-            <br />
-            <NcTable generators={this.state.selected} />
-          </Paper>
+          <ServerList 
+            generators={this.state.generators.filter( e => e.name.includes(this.state.filterStr))}
+            filterStr={this.state.filterStr}
+            handleClick={this.handleServerClick}
+            />
+          <br />
+          <div>
+            <div style={styles.titleText}><span>Generators selected: </span></div>
+            <Paper
+              className="generator-table" 
+              zDepth={this.state.borderWidth} 
+              onMouseEnter={ e => this.setState({ borderWidth: 1 })} 
+              onMouseLeave={ e => this.setState({ borderWidth: 0 })}
+            >
+              <div>
+                <ComingFewDays />
+                <SaveIcon style={styles.icon} />
+                <DeleteIcon style={styles.icon} />
+              </div>
+              <br />
+              <NcTable generators={this.state.selected} />
+            </Paper>
+          </div>
         </div>
       </div>
     )
