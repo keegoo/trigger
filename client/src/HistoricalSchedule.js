@@ -53,7 +53,7 @@ class HistoricalSchedule extends React.Component {
   render(){
     return(
       <div>
-        <div style={styles.titleText}><span>historical Records: </span></div>
+        <div style={styles.titleText}><span>Historical Records: </span></div>
         <div style={styles.historicalBorder}>
           {
             this.currentPageItems().map((t, index) => {

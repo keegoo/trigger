@@ -4,6 +4,12 @@ import MenuItem from 'material-ui/MenuItem'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 injectTapEventPlugin()
 
+const styles = {
+  menuItem: {
+    width: '180px'
+  }
+}
+
 class ComingFewDays extends React.Component {
 
   constructor() {
@@ -31,9 +37,9 @@ class ComingFewDays extends React.Component {
         value={this.state.value}
         onChange={this.handleDateChange}
       >
-        <MenuItem value={1} label={this.dateStartFromToday(0)} primaryText="Today" />
-        <MenuItem value={2} label={this.dateStartFromToday(1)} primaryText="Tomorrow" />
-        <MenuItem value={3} label={this.dateStartFromToday(2)} primaryText="The day after tomorrow" />
+        <MenuItem value={1} label={this.dateStartFromToday(0)} primaryText="Today" style={styles.menuItem}/>
+        <MenuItem value={2} label={this.dateStartFromToday(1)} primaryText="Tomorrow" style={styles.menuItem}/>
+        <MenuItem value={3} label={this.dateStartFromToday(2)} primaryText="The day after tomorrow" style={styles.menuItem}/>
       </DropDownMenu>
     )
   }

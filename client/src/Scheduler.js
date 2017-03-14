@@ -17,15 +17,27 @@ const styles = {
     marginBottom: '10px',
     marginTop: '20px'
   },
-  icon: {
-    float: 'right'
+  deleteIcon: {
+    float: 'right',
+    color: 'gray',
+    marginTop: '20px',
+    marginRight: '10px'
+  },
+  saveIcon: {
+    float: 'right',
+    color: 'gray',
+    marginTop: '20px',
+    marginRight: '10px'
+  },
+  filter: {
+    width: '200px'
   }
 }
 
 class Scheduler extends React.Component {
   constructor (){
     super()
-    this.handleServerClick = this.handleServerClick.bind(this)
+    this.handleGeneratorClick = this.handleGeneratorClick.bind(this)
     this.state = {
       generators: [],
       filterStr: "",
@@ -33,7 +45,7 @@ class Scheduler extends React.Component {
         {id: 7, name: "SF1-WGGenerator7"},
         {id: 4, name: "APC-WGGenerator4"}
       ],
-      borderWidth: 0
+      paperBorderWidth: 0
     }
   }
 
@@ -46,57 +58,54 @@ class Scheduler extends React.Component {
       })
   }
 
-  handleServerClick(server){
-    let len = this.state.selected.filter((s) => s.name === server.name).length
+  handleGeneratorClick(generator){
+    let len = this.state.selected.filter((s) => s.name === generator.name).length
     if (len == 1) {
-      this.removeServerFromSchedule(server)
+      this.removeGeneratorFromSchedule(generator)
     } else {
-      this.addServerToSchedule(server)
+      this.addGeneratorToSchedule(generator)
     }
   }
 
-  removeServerFromSchedule(server){
+  removeGeneratorFromSchedule(generator){
     let arr = this.state.selected
-    this.setState({selected: arr.filter((s) => s.name !== server.name)})
+    this.setState({selected: arr.filter((s) => s.name !== generator.name)})
   }
 
-  addServerToSchedule(server){
-    this.setState({selected: this.state.selected.concat(server)})
-  }
-
-  handleHoverPaper (){
-
+  addGeneratorToSchedule(generator){
+    this.setState({selected: this.state.selected.concat(generator)})
   }
 
   render (){
     return(
       <div>
-        <div style={styles.titleText}><span>Generators available: </span></div>
-        <div >
+        <div style={styles.titleText}>
+          <span>Generators available: </span>
           <TextField 
-            onChange={ e => this.setState({ filterStr: e.target.value })}
+            style={styles.filter}
+            onChange={ e => this.setState({ filterStr: e.target.value.toUpperCase() })}
             hintText="Filter" />
-          <br />
+        </div>
+        <div >
           <ServerList 
             generators={this.state.generators.filter( e => e.name.includes(this.state.filterStr))}
             filterStr={this.state.filterStr}
-            handleClick={this.handleServerClick}
+            handleClick={this.handleGeneratorClick}
             />
           <br />
           <div>
-            <div style={styles.titleText}><span>Generators selected: </span></div>
+            <div style={styles.titleText}><span>Schedule</span></div>
             <Paper
               className="generator-table" 
-              zDepth={this.state.borderWidth} 
-              onMouseEnter={ e => this.setState({ borderWidth: 1 })} 
-              onMouseLeave={ e => this.setState({ borderWidth: 0 })}
+              zDepth={this.state.paperBorderWidth} 
+              onMouseEnter={ e => this.setState({ paperBorderWidth: 1 })} 
+              onMouseLeave={ e => this.setState({ paperBorderWidth: 0 })}
             >
               <div>
                 <ComingFewDays />
-                <SaveIcon style={styles.icon} />
-                <DeleteIcon style={styles.icon} />
+                <DeleteIcon style={styles.deleteIcon} hoverColor={'rgb(0, 188, 212)'}/>
+                <SaveIcon style={styles.saveIcon} hoverColor={'rgb(0, 188, 212)'}/>
               </div>
-              <br />
               <NcTable generators={this.state.selected} />
             </Paper>
           </div>
