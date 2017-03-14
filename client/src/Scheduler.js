@@ -1,5 +1,5 @@
 import React from 'react'
-import ServerList from './ServerList.js'
+import GeneratorList from './GeneratorList.js'
 import TextField from 'material-ui/TextField'
 import NcTable from './NcTable.js'
 import ComingFewDays from './ComingFewDays.js'
@@ -9,11 +9,13 @@ import Paper from 'material-ui/Paper'
 import SaveIcon from 'material-ui/svg-icons/content/save'
 import DeleteIcon from 'material-ui/svg-icons/action/delete'
 
+import {cyan500} from 'material-ui/styles/colors'
+
 // icon float right
 const styles = {
   titleText: {
     fontSize: '24px',
-    color: 'rgb(0, 188, 212)',
+    color: cyan500,
     marginBottom: '10px',
     marginTop: '20px'
   },
@@ -80,14 +82,14 @@ class Scheduler extends React.Component {
     return(
       <div>
         <div style={styles.titleText}>
-          <span>Generators available: </span>
+          <span>Generators: </span>
           <TextField 
             style={styles.filter}
             onChange={ e => this.setState({ filterStr: e.target.value.toUpperCase() })}
             hintText="Filter" />
         </div>
         <div >
-          <ServerList 
+          <GeneratorList 
             generators={this.state.generators.filter( e => e.name.includes(this.state.filterStr))}
             filterStr={this.state.filterStr}
             handleClick={this.handleGeneratorClick}
@@ -103,8 +105,8 @@ class Scheduler extends React.Component {
             >
               <div>
                 <ComingFewDays />
-                <DeleteIcon style={styles.deleteIcon} hoverColor={'rgb(0, 188, 212)'}/>
-                <SaveIcon style={styles.saveIcon} hoverColor={'rgb(0, 188, 212)'}/>
+                <DeleteIcon style={styles.deleteIcon} hoverColor={cyan500}/>
+                <SaveIcon style={styles.saveIcon} hoverColor={cyan500}/>
               </div>
               <NcTable generators={this.state.selected} />
             </Paper>

@@ -6,10 +6,12 @@ import IconButton from 'material-ui/IconButton'
 import NavigateBeforeIcon from 'material-ui/svg-icons/image/navigate-before'
 import NavigateNextIcon from 'material-ui/svg-icons/image/navigate-next'
 
+import {cyan500} from 'material-ui/styles/colors'
+
 const styles = {
   titleText: {
     fontSize: '24px',
-    color: 'rgb(0, 188, 212)',
+    color: cyan500,
     marginBottom: '10px',
     marginTop: '20px'
   },
@@ -17,6 +19,9 @@ const styles = {
     boxShadow: 'rgba(0,0,0,0.17) 0px 0px 10px',
     border: 'solid 1px',
     padding: '10px'
+  },
+  navigateBtn: {
+    textAlign: 'center'
   }
 }
 class HistoricalSchedule extends React.Component {
@@ -60,7 +65,7 @@ class HistoricalSchedule extends React.Component {
               return <HsTable historicalInfo={t} key={index}/>
             })
           }
-          <div>
+          <div style={styles.navigateBtn}>
             <IconButton 
               disabled={ this.state.currentPage == 1 ? true : false } 
               onClick={ () => this.setState({currentPage: this.state.currentPage - 1}) }>

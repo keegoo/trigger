@@ -26,10 +26,6 @@ class NcTable extends React.Component {
     )
   }
 
-  overwritePartialDefaultText(str){
-    //console.log(str)
-  }
-
   toRowTag(server, index) {
     return(
       <TableRow key={index}>

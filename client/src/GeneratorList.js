@@ -1,22 +1,16 @@
 import React from 'react'
 import Chip from 'material-ui/Chip'
 
-// import {blue300, indigo900} from 'material-ui/styles/colors'
-
-class ServerList extends React.Component {
+class GeneratorList extends React.Component {
   constructor (){
     super()
     this.styles = {
       chip: {
-        margin: '4'
+        margin: '4px'
       },
       wrapper: {
         display: 'flex',
         flexWrap: 'wrap',
-      },
-      highlight: {
-        color: 'darkolivegreen',
-        fontWeight: 'bold'
       }
     }
   }
@@ -31,7 +25,7 @@ class ServerList extends React.Component {
   }
 
   wrapWithSpan(str) {
-    return `<span style='color:darkolivegreen;font-weight:bold;'>${str}</span>`
+    return `<span style='font-weight:bold;'>${str}</span>`
   }
 
   toHtmlTag(server, index) {
@@ -52,4 +46,4 @@ class ServerList extends React.Component {
   }
 }
 
-export default ServerList
+export default GeneratorList
