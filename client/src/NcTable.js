@@ -56,7 +56,7 @@ class NcTable extends React.Component {
         </TableHeader>
         <TableBody displayRowCheckbox={false}>
           {
-            this.props.servers.map((s) => {
+            this.props.generators.map((s) => {
               return this.toRowTag(s)
             })
           }

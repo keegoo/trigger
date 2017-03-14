@@ -48,7 +48,7 @@ class ServerList extends React.Component {
   render() {
     return(
       <div style={this.styles.wrapper} >
-        {this.props.servers.map((s) => this.toHtmlTag(s))}
+        {this.props.generators.map((s) => this.toHtmlTag(s))}
       </div>
     )
   }

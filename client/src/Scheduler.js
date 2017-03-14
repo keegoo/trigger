@@ -21,16 +21,7 @@ class Scheduler extends React.Component {
     super()
     this.handleServerClick = this.handleServerClick.bind(this)
     this.state = {
-      servers: [
-        {id: 1, name: "APC-WGGenerator1"},
-        {id: 2, name: "APC-WGGenerator2"},
-        {id: 3, name: "APC-WGGenerator3"},
-        {id: 4, name: "APC-WGGenerator4"},
-        {id: 5, name: "SF1-WGGenerator5"},
-        {id: 6, name: "SF1-WGGenerator6"},
-        {id: 7, name: "SF1-WGGenerator7"},
-        {id: 8, name: "SF1-WGGenerator8"}
-      ],
+      generators: [],
       filterStr: "",
       serverSelected: [
         {id: 7, name: "SF1-WGGenerator7"},
@@ -41,12 +32,12 @@ class Scheduler extends React.Component {
   }
 
   componentDidMount(){
-    // fetch("data.json")
-    //   .then(response => response.json())
-    //   .then(json => {
-    //     console.log(json);
-    //     // this.setState({data: json})
-    //   })
+    const host = "http://127.0.0.1:3000"
+    fetch(`${host}/generators`)
+      .then(response => response.json())
+      .then(json => {
+        this.setState({generators: json})
+      })
   }
 
   handleServerClick(server){
@@ -81,7 +72,7 @@ class Scheduler extends React.Component {
           hintText="Filter" />
         <br />
         <ServerList 
-          servers={this.state.servers.filter( e => e.name.includes(this.state.filterStr))}
+          generators={this.state.generators.filter( e => e.name.includes(this.state.filterStr))}
           filterStr={this.state.filterStr}
           handleClick={this.handleServerClick}
           />
@@ -97,7 +88,7 @@ class Scheduler extends React.Component {
           <br />
           <SaveIcon style={styles.icon} />
           <DeleteIcon style={styles.icon} />
-          <NcTable servers={this.state.serverSelected} />
+          <NcTable generators={this.state.serverSelected} />
         </Paper>
       </div>
     )
