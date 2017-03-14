@@ -27,18 +27,18 @@ class NcTable extends React.Component {
   }
 
   overwritePartialDefaultText(str){
-    console.log(str)
+    //console.log(str)
   }
 
-  toRowTag(server) {
+  toRowTag(server, index) {
     return(
-      <TableRow>
+      <TableRow key={index}>
         <TableRowColumn>{server.name}</TableRowColumn>
         <TableRowColumn>
           <TextField hintText="e.g. 1:9 or 23:11"/>
         </TableRowColumn>
         <TableRowColumn>
-          <AutoComplete 
+          <AutoComplete
             hintText="any commands"
             dataSource={this.state.autoComplete}
             onUpdateInput={this.handleUpdateInput}
@@ -56,8 +56,8 @@ class NcTable extends React.Component {
         </TableHeader>
         <TableBody displayRowCheckbox={false}>
           {
-            this.props.generators.map((s) => {
-              return this.toRowTag(s)
+            this.props.generators.map((s, i) => {
+              return this.toRowTag(s, i)
             })
           }
         </TableBody>

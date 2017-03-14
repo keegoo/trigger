@@ -20,9 +20,9 @@ class HsTable extends React.Component {
         </TableHeader>
         <TableBody displayRowCheckbox={false}>
           {
-            t.schedule.map((s) => {
+            t.schedule.map((s, index) => {
               return(
-                <TableRow>
+                <TableRow key={index}>
                   <TableRowColumn>{s.generator}</TableRowColumn>
                   <TableRowColumn>{s.time}</TableRowColumn>
                   <TableRowColumn>{s.module}</TableRowColumn>

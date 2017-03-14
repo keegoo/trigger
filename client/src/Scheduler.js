@@ -23,7 +23,7 @@ class Scheduler extends React.Component {
     this.state = {
       generators: [],
       filterStr: "",
-      serverSelected: [
+      selected: [
         {id: 7, name: "SF1-WGGenerator7"},
         {id: 4, name: "APC-WGGenerator4"}
       ],
@@ -41,7 +41,7 @@ class Scheduler extends React.Component {
   }
 
   handleServerClick(server){
-    let len = this.state.serverSelected.filter((s) => s.name === server.name).length
+    let len = this.state.selected.filter((s) => s.name === server.name).length
     if (len == 1) {
       this.removeServerFromSchedule(server)
     } else {
@@ -50,12 +50,12 @@ class Scheduler extends React.Component {
   }
 
   removeServerFromSchedule(server){
-    let arr = this.state.serverSelected
-    this.setState({serverSelected: arr.filter((s) => s.name !== server.name)})
+    let arr = this.state.selected
+    this.setState({selected: arr.filter((s) => s.name !== server.name)})
   }
 
   addServerToSchedule(server){
-    this.setState({serverSelected: this.state.serverSelected.concat(server)})
+    this.setState({selected: this.state.selected.concat(server)})
   }
 
   handleHoverPaper (){
@@ -77,19 +77,24 @@ class Scheduler extends React.Component {
           handleClick={this.handleServerClick}
           />
         <br />
-        <Paper 
-          className="generator-table" 
-          zDepth={this.state.borderWidth} 
-          onMouseEnter={ e => this.setState({ borderWidth: 1 })} 
-          onMouseLeave={ e => this.setState({ borderWidth: 0 })}
-        >
+        <div>
           <div><span>Generators selected: </span></div>
-          <ComingFewDays />
           <br />
-          <SaveIcon style={styles.icon} />
-          <DeleteIcon style={styles.icon} />
-          <NcTable generators={this.state.serverSelected} />
-        </Paper>
+          <Paper
+            className="generator-table" 
+            zDepth={this.state.borderWidth} 
+            onMouseEnter={ e => this.setState({ borderWidth: 1 })} 
+            onMouseLeave={ e => this.setState({ borderWidth: 0 })}
+          >
+            <div>
+              <ComingFewDays />
+              <SaveIcon style={styles.icon} />
+              <DeleteIcon style={styles.icon} />
+            </div>
+            <br />
+            <NcTable generators={this.state.selected} />
+          </Paper>
+        </div>
       </div>
     )
   }

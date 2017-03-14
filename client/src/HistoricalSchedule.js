@@ -43,8 +43,8 @@ class HistoricalSchedule extends React.Component {
       <div>
         <div><span>historical Records: </span></div>
         {
-          this.currentPageItems().map((t) => {
-            return <HsTable historicalInfo={t} />
+          this.currentPageItems().map((t, index) => {
+            return <HsTable historicalInfo={t} key={index}/>
           })
         }
         <div>

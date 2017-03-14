@@ -23,11 +23,9 @@ class ServerList extends React.Component {
 
   highlightServer(str){
     if(this.props.filterStr == "") {
-      console.log(str)
       return str
     } else {
       let re = new RegExp(this.props.filterStr, "g")
-      console.log()
       return str.replace(re, this.wrapWithSpan(this.props.filterStr))
     }
   }
@@ -36,9 +34,9 @@ class ServerList extends React.Component {
     return `<span style='color:darkolivegreen;font-weight:bold;'>${str}</span>`
   }
 
-  toHtmlTag(server) {
+  toHtmlTag(server, index) {
     return(
-      <Chip 
+      <Chip key={index} 
         style={this.styles.chip}
         onClick={() => {this.props.handleClick(server)}}
         ><div dangerouslySetInnerHTML={{__html: this.highlightServer(server.name)}}></div></Chip>
@@ -48,7 +46,7 @@ class ServerList extends React.Component {
   render() {
     return(
       <div style={this.styles.wrapper} >
-        {this.props.generators.map((s) => this.toHtmlTag(s))}
+        {this.props.generators.map((s, i) => this.toHtmlTag(s, i))}
       </div>
     )
   }
