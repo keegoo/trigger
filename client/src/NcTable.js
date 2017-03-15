@@ -28,7 +28,7 @@ class NcTable extends React.Component {
 
   toRowTag(server, index) {
     return(
-      <TableRow key={index}>
+      <TableRow key={index} selectable={false}>
         <TableRowColumn>{server.name}</TableRowColumn>
         <TableRowColumn>
           <TextField hintText="e.g. 1:9 or 23:11"/>
