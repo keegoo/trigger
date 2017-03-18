@@ -10,18 +10,22 @@ class NcTable extends React.Component {
 
   constructor(){
     super()
+    // let a = this.props.generators.map((x) => x.name)
+    // console.log(a)
     this.state = {
       autoComplete: [
         "ping 127.0.0.1 -t",
         "gatling -v -t 600s"
       ],
-      timeFormat: {}
+      timeFormat: {},
+      schedulerData: []
     }
 
-    this.handleTextFieldOnBlur = this.handleTextFieldOnBlur.bind(this)
+    //this.handleTextFieldOnBlur = this.handleTextFieldOnBlur.bind(this)
+    //this.handleAutoCompleteUpdate = this.handleAutoCompleteUpdate.bind(this)
   }
 
-  handleTextFieldOnBlur(e){
+  handleTextFieldOnBlur(server, e){
     let rightFormat = this.checkTimeFormat(e.target.value)
     let rightRange = this.checkTimeRange(e.target.value)
     if (rightFormat && rightRange){
@@ -52,6 +56,11 @@ class NcTable extends React.Component {
     }
   }
 
+  handleAutoCompleteUpdate(server, value) {
+    console.log(`server: ${server.name}, value: ${value}`)
+    console.log(this.state.schedulerData)
+  }
+
   toColumnTitle() {
     return(
       <TableRow>
@@ -68,16 +77,17 @@ class NcTable extends React.Component {
         <TableRowColumn>{server.name}</TableRowColumn>
         <TableRowColumn>
           <TextField 
+            name=""
             hintText="e.g. 1:9 or 23:11"
             underlineStyle={this.state.timeFormat}
-            onBlur={this.handleTextFieldOnBlur}
+            onBlur={this.handleTextFieldOnBlur.bind(this, server)}
             />
         </TableRowColumn>
         <TableRowColumn>
           <AutoComplete
             hintText="any commands"
             dataSource={this.state.autoComplete}
-            onUpdateInput={this.handleUpdateInput}
+            onUpdateInput={this.handleAutoCompleteUpdate.bind(this, server)}
           />
         </TableRowColumn>
       </TableRow>
@@ -92,8 +102,8 @@ class NcTable extends React.Component {
         </TableHeader>
         <TableBody displayRowCheckbox={false}>
           {
-            this.props.generators.map((s, i) => {
-              return this.toRowTag(s, i)
+            this.props.generators.map((server, index) => {
+              return this.toRowTag(server, index)
             })
           }
         </TableBody>

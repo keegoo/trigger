@@ -6,7 +6,6 @@ import ComingFewDays from './ComingFewDays.js'
 import Paper from 'material-ui/Paper'
 
 import Dialog from 'material-ui/Dialog'
-import FlatButton from 'material-ui/FlatButton'
 
 // save delete icon
 import SaveIcon from 'material-ui/svg-icons/content/save'
