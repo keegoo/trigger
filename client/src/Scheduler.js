@@ -5,6 +5,9 @@ import NcTable from './NcTable.js'
 import ComingFewDays from './ComingFewDays.js'
 import Paper from 'material-ui/Paper'
 
+import Dialog from 'material-ui/Dialog'
+import FlatButton from 'material-ui/FlatButton'
+
 // save delete icon
 import SaveIcon from 'material-ui/svg-icons/content/save'
 import DeleteIcon from 'material-ui/svg-icons/action/delete'
@@ -40,14 +43,13 @@ class Scheduler extends React.Component {
   constructor (){
     super()
     this.handleGeneratorClick = this.handleGeneratorClick.bind(this)
+    this.handleOnSaveScheduler = this.handleOnSaveScheduler.bind(this)
     this.state = {
       generators: [],
       filterStr: "",
-      selected: [
-        {id: 7, name: "SF1-WGGenerator7"},
-        {id: 4, name: "APC-WGGenerator4"}
-      ],
-      paperBorderWidth: 0
+      selected: [],
+      paperBorderWidth: 0,
+      popupDialog: false
     }
   }
 
@@ -78,6 +80,19 @@ class Scheduler extends React.Component {
     this.setState({selected: this.state.selected.concat(generator)})
   }
 
+  handleOnSaveScheduler(){
+    console.log("click save button")
+    if (this.state.selected.length == 0){
+      this.setState({popupDialog: !this.state.popupDialog})
+    } else {
+      this.saveScheduler()
+    }
+  }
+
+  saveScheduler(){
+    console.log("scheduler saved !")
+  }
+
   render (){
     return(
       <div>
@@ -105,10 +120,21 @@ class Scheduler extends React.Component {
             >
               <div>
                 <ComingFewDays />
-                <DeleteIcon style={styles.deleteIcon} hoverColor={cyan500}/>
-                <SaveIcon style={styles.saveIcon} hoverColor={cyan500}/>
+                <DeleteIcon 
+                  style={styles.deleteIcon} 
+                  hoverColor={cyan500} 
+                  onClick={ this.handleOnSaveScheduler }/>
+                <SaveIcon 
+                  style={styles.saveIcon} 
+                  hoverColor={cyan500}
+                  onClick={ this.handleOnSaveScheduler } />
               </div>
               <NcTable generators={this.state.selected} />
+              <Dialog
+                onRequestClose={ () =>  this.setState({popupDialog: false}) }
+                open={ this.state.popupDialog }
+                >You need to select at least one Generator for each Scheduler
+              </Dialog>
             </Paper>
           </div>
         </div>
