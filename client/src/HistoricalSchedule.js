@@ -15,11 +15,6 @@ const styles = {
     marginBottom: '10px',
     marginTop: '20px'
   },
-  historicalBorder: {
-    boxShadow: 'rgba(0,0,0,0.17) 0px 0px 10px',
-    border: 'solid 1px',
-    padding: '10px'
-  },
   navigateBtn: {
     textAlign: 'center'
   }
@@ -59,7 +54,7 @@ class HistoricalSchedule extends React.Component {
     return(
       <div>
         <div style={styles.titleText}><span>Historical Records: </span></div>
-        <div style={styles.historicalBorder}>
+        <div>
           {
             this.currentPageItems().map((t, index) => {
               return <HsTable historicalInfo={t} key={index}/>
