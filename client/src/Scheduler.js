@@ -44,8 +44,11 @@ class Scheduler extends React.Component {
     this.handleGeneratorClick = this.handleGeneratorClick.bind(this)
     this.handleOnSaveScheduler = this.handleOnSaveScheduler.bind(this)
     this.state = {
+      // {name: , status: , last_used: , frequency: }
       generators: [],
       filterStr: "",
+
+      // {generator: , time: , cmd: , status: }
       selected: [],
       paperBorderWidth: 0,
       popupDialog: false
@@ -76,7 +79,9 @@ class Scheduler extends React.Component {
   }
 
   addGeneratorToSchedule(generator){
-    this.setState({selected: this.state.selected.concat(generator)})
+    this.setState({
+      selected: this.state.selected.concat({name: generator.name, time: "", cmd: ""})
+    })
   }
 
   handleOnSaveScheduler(){
@@ -91,6 +96,30 @@ class Scheduler extends React.Component {
   saveScheduler(){
     console.log("scheduler saved !")
   }
+
+  // =============================
+  // NcTable component 
+  handleSaveGeneratorTime(server, value) {
+    //console.log(`server: ${server}, time: ${value}`)
+
+    this.setSchedulerData(server, {time: value})
+  }
+
+  handleSaveGeneratorCMD(server, value) {
+    //console.log(`server: ${server}, CMD: ${value}`)
+    this.setSchedulerData(server, {cmd: value})
+  }
+
+  setSchedulerData(generator, {time, cmd}) {
+    let b = this.state.selected.filter((x) => x.name == generator)[0]
+    
+    if(time) { b.time = time }
+    if(cmd)  { b.cmd = cmd }
+
+    console.log(b)
+    return b
+  }
+  // =============================
 
   render (){
     return(
@@ -128,7 +157,10 @@ class Scheduler extends React.Component {
                   hoverColor={cyan500}
                   onClick={ this.handleOnSaveScheduler } />
               </div>
-              <NcTable generators={this.state.selected} />
+              <NcTable 
+                generators={this.state.selected} 
+                saveTime={this.handleSaveGeneratorTime}
+                saveCMD={this.handleSaveGeneratorCMD} />
               <Dialog
                 onRequestClose={ () =>  this.setState({popupDialog: false}) }
                 open={ this.state.popupDialog }

@@ -10,19 +10,14 @@ class NcTable extends React.Component {
 
   constructor(){
     super()
-    // let a = this.props.generators.map((x) => x.name)
-    // console.log(a)
+    this.schedulerData = []
     this.state = {
       autoComplete: [
         "ping 127.0.0.1 -t",
         "gatling -v -t 600s"
       ],
-      timeFormat: {},
-      schedulerData: []
+      timeFormat: {}
     }
-
-    //this.handleTextFieldOnBlur = this.handleTextFieldOnBlur.bind(this)
-    //this.handleAutoCompleteUpdate = this.handleAutoCompleteUpdate.bind(this)
   }
 
   handleTextFieldOnBlur(server, e){
@@ -30,6 +25,7 @@ class NcTable extends React.Component {
     let rightRange = this.checkTimeRange(e.target.value)
     if (rightFormat && rightRange){
       this.setState({timeFormat: {}})
+      this.props.saveTime(server, e.target.value)
     } else {
       this.setState({timeFormat: {borderColor: orange500}})
     }
@@ -57,8 +53,7 @@ class NcTable extends React.Component {
   }
 
   handleAutoCompleteUpdate(server, value) {
-    console.log(`server: ${server.name}, value: ${value}`)
-    console.log(this.state.schedulerData)
+    this.props.saveCMD(server, value)
   }
 
   toColumnTitle() {
@@ -80,14 +75,14 @@ class NcTable extends React.Component {
             name=""
             hintText="e.g. 1:9 or 23:11"
             underlineStyle={this.state.timeFormat}
-            onBlur={this.handleTextFieldOnBlur.bind(this, server)}
+            onBlur={this.handleTextFieldOnBlur.bind(this, server.name)}
             />
         </TableRowColumn>
         <TableRowColumn>
           <AutoComplete
             hintText="any commands"
             dataSource={this.state.autoComplete}
-            onUpdateInput={this.handleAutoCompleteUpdate.bind(this, server)}
+            onUpdateInput={this.handleAutoCompleteUpdate.bind(this, server.name)}
           />
         </TableRowColumn>
       </TableRow>
