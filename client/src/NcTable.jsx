@@ -10,7 +10,6 @@ class NcTable extends React.Component {
 
   constructor(){
     super()
-    this.schedulerData = []
     this.state = {
       autoComplete: [
         "ping 127.0.0.1 -t",

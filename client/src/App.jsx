@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom'
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import AppBar from 'material-ui/AppBar'
-import Scheduler from './Scheduler.js'
-import HistoricalSchedule from './HistoricalSchedule.js'
+import Scheduler from './Scheduler.jsx'
+import HistoricalSchedule from './HistoricalSchedule.jsx'
 
 const styles = {
   width: '60%',

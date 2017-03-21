@@ -1,8 +1,8 @@
 import React from 'react'
-import GeneratorList from './GeneratorList.js'
+import GeneratorList from './GeneratorList.jsx'
 import TextField from 'material-ui/TextField'
-import NcTable from './NcTable.js'
-import ComingFewDays from './ComingFewDays.js'
+import NcTable from './NcTable.jsx'
+import ComingFewDays from './ComingFewDays.jsx'
 import Paper from 'material-ui/Paper'
 
 import Dialog from 'material-ui/Dialog'

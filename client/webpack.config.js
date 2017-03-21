@@ -23,6 +23,6 @@ module.exports = {
     filename: 'bundle.js'
   },
   entry: [
-    './src/App.js'
+    './src/App.jsx'
   ]
 };

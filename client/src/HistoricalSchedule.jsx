@@ -1,5 +1,5 @@
 import React from 'react'
-import HsTable from './HsTable.js'
+import HsTable from './HsTable.jsx'
 import IconButton from 'material-ui/IconButton'
 
 // navigate icon
