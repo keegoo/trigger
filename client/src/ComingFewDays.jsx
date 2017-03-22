@@ -11,31 +11,18 @@ const styles = {
 }
 
 class ComingFewDays extends React.Component {
-
-  constructor() {
-    super()
-    this.state = {
-      value: 1
-    }
-
-    this.handleDateChange = this.handleDateChange.bind(this)
-  }
-
+  
   dateStartFromToday(num){
     const oneDay = 24 * 60 * 60 * 1000
     const t = new Date(Date.now() + oneDay * num)
     return `${t.getDate()}-${t.getMonth()}-${t.getFullYear()}`
   }
 
-  handleDateChange (event, index, value){
-    this.setState({value: value})
-  }
-
   render() {
     return(
       <DropDownMenu
-        value={this.state.value}
-        onChange={this.handleDateChange}
+        value={this.props.value}
+        onChange={this.props.dateChange}
       >
         <MenuItem value={1} label={this.dateStartFromToday(0)} primaryText="Today" style={styles.menuItem}/>
         <MenuItem value={2} label={this.dateStartFromToday(1)} primaryText="Tomorrow" style={styles.menuItem}/>

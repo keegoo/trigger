@@ -48,6 +48,8 @@ class Scheduler extends React.Component {
     this.handleSaveGeneratorTime = this.handleSaveGeneratorTime.bind(this)
     this.handleSaveGeneratorCMD = this.handleSaveGeneratorCMD.bind(this)
 
+    this.handleDateChange = this.handleDateChange.bind(this)
+
     this.state = {
       // {name: , status: , last_used: , frequency: }
       generators: [],
@@ -55,6 +57,10 @@ class Scheduler extends React.Component {
 
       // {generator: , time: , cmd: , status: }
       selected: [],
+
+      // schedule date
+      dateIndex: 1,
+
       paperBorderWidth: 0,
       popupDialog: false
     }
@@ -100,6 +106,11 @@ class Scheduler extends React.Component {
 
   saveScheduler(){
     console.log(this.state.selected)
+  }
+
+  handleDateChange(event, index, value){
+    console.log(`value: ${value}`)
+    this.setState({dateIndex: value})
   }
 
   // =============================
@@ -148,7 +159,9 @@ class Scheduler extends React.Component {
               onMouseLeave={ e => this.setState({ paperBorderWidth: 0 })}
             >
               <div>
-                <ComingFewDays />
+                <ComingFewDays 
+                  value={this.state.dateIndex} 
+                  dateChange={this.handleDateChange} />
                 <DeleteIcon 
                   style={styles.deleteIcon} 
                   hoverColor={cyan500} 
