@@ -59,7 +59,7 @@ class Scheduler extends React.Component {
       selected: [],
 
       // schedule date
-      dateIndex: 1,
+      dateOffset: 0,
 
       paperBorderWidth: 0,
       popupDialog: false
@@ -76,7 +76,7 @@ class Scheduler extends React.Component {
   }
 
   handleGeneratorClick(generator){
-    let len = this.state.selected.filter((s) => s.name === generator.name).length
+    let len = this.state.selected.filter((s) => s.generator === generator.name).length
     if (len == 1) {
       this.removeGeneratorFromSchedule(generator)
     } else {
@@ -86,12 +86,12 @@ class Scheduler extends React.Component {
 
   removeGeneratorFromSchedule(generator){
     let arr = this.state.selected
-    this.setState({selected: arr.filter((s) => s.name !== generator.name)})
+    this.setState({selected: arr.filter((s) => s.generator !== generator.name)})
   }
 
   addGeneratorToSchedule(generator){
     this.setState({
-      selected: this.state.selected.concat({name: generator.name, time: "", cmd: ""})
+      selected: this.state.selected.concat({generator: generator.name, time: "", cmd: ""})
     })
   }
 
@@ -105,30 +105,50 @@ class Scheduler extends React.Component {
   }
 
   saveScheduler(){
-    console.log(this.state.selected)
+    const host = "http://127.0.0.1:3000"
+    const x = {
+      date: this.isoDateStartFromToday(this.state.dateOffset),
+      schedule: this.state.selected
+    }
+
+    fetch(`${host}/schedulers`, {
+      method: 'POST',
+      headers: new Headers({
+          'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify(x)
+    }).then(response => response.json())
+    .then(json => {
+      console.log(json)
+    })
   }
 
   handleDateChange(event, index, value){
-    console.log(`value: ${value}`)
-    this.setState({dateIndex: value})
+    this.setState({dateOffset: value})
+  }
+
+  isoDateStartFromToday(offset){
+    const oneDay = 24 * 60 * 60 * 1000
+    const t = new Date(Date.now() + oneDay * offset)
+    return t.toISOString().split('.')[0]+"Z"
   }
 
   // =============================
   // NcTable component 
-  handleSaveGeneratorTime(server, value) {
-    this.setSchedulerData(server, {time: value})
+  handleSaveGeneratorTime(generator, value) {
+    this.setSchedulerData(generator, {time: value})
   }
 
-  handleSaveGeneratorCMD(server, value) {
-    this.setSchedulerData(server, {cmd: value})
+  handleSaveGeneratorCMD(generator, value) {
+    this.setSchedulerData(generator, {cmd: value})
   }
 
   setSchedulerData(generator, {time, cmd}) {
-    let b = this.state.selected.filter((x) => x.name == generator)[0]
+    let b = this.state.selected.filter((x) => x.generator == generator)[0]
     if(time) { b.time = time }
     if(cmd)  { b.cmd = cmd }
 
-    let c = this.state.selected.filter((x) => x.name != generator).concat(b)
+    let c = this.state.selected.filter((x) => x.generator != generator).concat(b)
     this.setState({selected: c})
   }
   // =============================
@@ -160,7 +180,7 @@ class Scheduler extends React.Component {
             >
               <div>
                 <ComingFewDays 
-                  value={this.state.dateIndex} 
+                  value={this.state.dateOffset} 
                   dateChange={this.handleDateChange} />
                 <DeleteIcon 
                   style={styles.deleteIcon} 
@@ -172,7 +192,7 @@ class Scheduler extends React.Component {
                   onClick={ this.handleOnSaveScheduler } />
               </div>
               <NcTable 
-                generators={this.state.selected} 
+                generators={this.state.selected.map((x) => x.generator)}
                 saveTime={this.handleSaveGeneratorTime}
                 saveCMD={this.handleSaveGeneratorCMD} />
               <Dialog
