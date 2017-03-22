@@ -43,6 +43,11 @@ class Scheduler extends React.Component {
     super()
     this.handleGeneratorClick = this.handleGeneratorClick.bind(this)
     this.handleOnSaveScheduler = this.handleOnSaveScheduler.bind(this)
+
+    this.setSchedulerData = this.setSchedulerData.bind(this)
+    this.handleSaveGeneratorTime = this.handleSaveGeneratorTime.bind(this)
+    this.handleSaveGeneratorCMD = this.handleSaveGeneratorCMD.bind(this)
+
     this.state = {
       // {name: , status: , last_used: , frequency: }
       generators: [],
