@@ -99,30 +99,26 @@ class Scheduler extends React.Component {
   }
 
   saveScheduler(){
-    console.log("scheduler saved !")
+    console.log(this.state.selected)
   }
 
   // =============================
   // NcTable component 
   handleSaveGeneratorTime(server, value) {
-    //console.log(`server: ${server}, time: ${value}`)
-
     this.setSchedulerData(server, {time: value})
   }
 
   handleSaveGeneratorCMD(server, value) {
-    //console.log(`server: ${server}, CMD: ${value}`)
     this.setSchedulerData(server, {cmd: value})
   }
 
   setSchedulerData(generator, {time, cmd}) {
     let b = this.state.selected.filter((x) => x.name == generator)[0]
-    
     if(time) { b.time = time }
     if(cmd)  { b.cmd = cmd }
 
-    console.log(b)
-    return b
+    let c = this.state.selected.filter((x) => x.name != generator).concat(b)
+    this.setState({selected: c})
   }
   // =============================
 
