@@ -19,7 +19,7 @@ const styles = {
     textAlign: 'center'
   }
 }
-class HistoricalSchedule extends React.Component {
+class SavedSchedulers extends React.Component {
   constructor(){
     super()
     this.state = {
@@ -78,4 +78,4 @@ class HistoricalSchedule extends React.Component {
   }
 }
 
-export default HistoricalSchedule
+export default SavedSchedulers

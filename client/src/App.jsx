@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import AppBar from 'material-ui/AppBar'
 import Scheduler from './Scheduler.jsx'
-import HistoricalSchedule from './HistoricalSchedule.jsx'
+import SavedSchedulers from './SavedSchedulers.jsx'
 
 const styles = {
   width: '60%',
@@ -12,6 +12,26 @@ const styles = {
 }
 
 class App extends React.Component {
+
+  constructor(){
+    super()
+
+    this.state = {
+      schedulers: []
+    }
+  }
+
+  // =============================
+  // schedulers component
+  fetchHistoricalSchedulers(){
+    const host = "http://127.0.0.1:3000"
+    fetch(`${host}/schedulers`)
+      .then(response => response.json())
+      .then(json => {
+        this.setState({schedulers: json})
+      })
+  }
+  // =============================
 
   render() {
     return (
@@ -21,7 +41,7 @@ class App extends React.Component {
           <div className="app-body" style={styles}>
             <Scheduler />
             <br />
-            <HistoricalSchedule />
+            <SavedSchedulers />
           </div>
         </div>
       </MuiThemeProvider>
