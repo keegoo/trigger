@@ -20,40 +20,31 @@ const styles = {
   }
 }
 class SavedSchedulers extends React.Component {
-  constructor(){
-    super()
+  constructor(props){
+    super(props)
     this.state = {
       currentPage: 1,
       itemsEachPage: 2,
       leftBoundary: true,
       rightBoundary: false,
-      historicals: []
     }
   }
 
-  componentDidMount(){
-    const host = "http://127.0.0.1:3000"
-    fetch(`${host}/historical_schedules`)
-      .then(response => response.json())
-      .then(json => {
-        this.setState({historicals: json})
-      })
-  }
-
   currentPageItems(){
+    console.log(`this props: <schedulers> ${this.props.schedulers[0]}`)
     const sBegin = (this.state.currentPage - 1) * this.state.itemsEachPage
     const sEnd = sBegin + this.state.itemsEachPage
-    return this.state.historicals.slice(sBegin, sEnd)
+    return this.props.schedulers.slice(sBegin, sEnd)
   }
 
   getTotalPages(){
-    return Math.ceil(this.state.historicals.length / this.state.itemsEachPage)
+    return Math.ceil(this.props.schedulers.length / this.state.itemsEachPage)
   }
 
   render(){
     return(
       <div>
-        <div style={styles.titleText}><span>Historical Records: </span></div>
+        <div style={styles.titleText}><span>Saved Schedules: </span></div>
         <div>
           {
             this.currentPageItems().map((t, index) => {

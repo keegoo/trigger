@@ -15,10 +15,13 @@ class App extends React.Component {
 
   constructor(){
     super()
-
     this.state = {
-      schedulers: []
+      savedSchedulersData: []
     }
+  }
+
+  componentDidMount(){
+    this.fetchHistoricalSchedulers()
   }
 
   // =============================
@@ -27,8 +30,8 @@ class App extends React.Component {
     const host = "http://127.0.0.1:3000"
     fetch(`${host}/schedulers`)
       .then(response => response.json())
-      .then(json => {
-        this.setState({schedulers: json})
+      .then(json => { 
+        this.setState({savedSchedulersData: json})
       })
   }
   // =============================
@@ -41,7 +44,7 @@ class App extends React.Component {
           <div className="app-body" style={styles}>
             <Scheduler />
             <br />
-            <SavedSchedulers />
+            <SavedSchedulers schedulers={this.state.savedSchedulersData}/>
           </div>
         </div>
       </MuiThemeProvider>
