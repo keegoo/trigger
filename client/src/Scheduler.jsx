@@ -144,12 +144,12 @@ class Scheduler extends React.Component {
   }
 
   setSchedulerData(generator, {time, cmd}) {
-    let b = this.state.selected.filter((x) => x.generator == generator)[0]
-    if(time) { b.time = time }
-    if(cmd)  { b.cmd = cmd }
+    let selected = this.state.selected
+    const index = selected.map((x) => x.generator).indexOf(generator)
+    if(time) {selected[index].time = time}
+    if(cmd)  {selected[index].cmd = cmd}
 
-    let c = this.state.selected.filter((x) => x.generator != generator).concat(b)
-    this.setState({selected: c})
+    this.setState({selected: selected})
   }
   // =============================
 
