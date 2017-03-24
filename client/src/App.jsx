@@ -15,6 +15,10 @@ class App extends React.Component {
 
   constructor(){
     super()
+
+    this.handleSchedulerSave = this.handleSchedulerSave.bind(this)
+    this.fetchHistoricalSchedulers = this.fetchHistoricalSchedulers.bind(this)
+
     this.state = {
       savedSchedulersData: []
     }
@@ -25,7 +29,7 @@ class App extends React.Component {
   }
 
   // =============================
-  // schedulers component
+  // savedSchedulers component
   fetchHistoricalSchedulers(){
     const host = "http://127.0.0.1:3000"
     fetch(`${host}/schedulers`)
@@ -36,14 +40,20 @@ class App extends React.Component {
   }
   // =============================
 
+  // =============================
+  // scheduler component
+  handleSchedulerSave (){
+    this.fetchHistoricalSchedulers()
+  }
+  // =============================
+
   render() {
     return (
       <MuiThemeProvider>
         <div>
           <AppBar title="Trigger" />
           <div className="app-body" style={styles}>
-            <Scheduler />
-            <br />
+            <Scheduler onSave={this.handleSchedulerSave}/>
             <SavedSchedulers schedulers={this.state.savedSchedulersData}/>
           </div>
         </div>

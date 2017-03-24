@@ -121,6 +121,9 @@ class Scheduler extends React.Component {
     .then(json => {
       console.log(json)
     })
+
+    // tell its father: App
+    this.props.onSave()
   }
 
   handleDateChange(event, index, value){
