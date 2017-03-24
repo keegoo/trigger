@@ -75,6 +75,8 @@ class Scheduler extends React.Component {
       })
   }
 
+  // =============================
+  // handle event from GeneratorList component
   handleGeneratorClick(generator){
     let len = this.state.selected.filter((s) => s.generator === generator.name).length
     if (len == 1) {
@@ -94,6 +96,8 @@ class Scheduler extends React.Component {
       selected: this.state.selected.concat({generator: generator.name, time: "", cmd: ""})
     })
   }
+  // =============================
+
 
   handleOnSaveScheduler(){
     console.log("click save button")
@@ -140,7 +144,7 @@ class Scheduler extends React.Component {
   }
 
   // =============================
-  // NcTable component 
+  // handle event from NcTable component 
   handleSaveGeneratorTime(generator, value) {
     this.setSchedulerData(generator, {time: value})
   }
@@ -171,10 +175,10 @@ class Scheduler extends React.Component {
         </div>
         <div >
           <GeneratorList 
-            generators={this.state.generators.filter( e => e.name.includes(this.state.filterStr))}
+            generatorsFiltered={this.state.generators.filter( e => e.name.includes(this.state.filterStr))}
+            generatorsSelected={this.state.selected.map((x) => x.generator)}
             filterStr={this.state.filterStr}
-            handleClick={this.handleGeneratorClick}
-            />
+            handleClick={this.handleGeneratorClick} />
           <br />
           <div>
             <div style={styles.titleText}><span>Schedule</span></div>

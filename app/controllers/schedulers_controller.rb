@@ -10,6 +10,6 @@ class SchedulersController < ApplicationController
   end
 
   def index
-    render json: Scheduler.order_by(date: :desc)
+    render json: Scheduler.order_by(date: :desc).limit(30)
   end
 end
