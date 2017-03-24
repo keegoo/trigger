@@ -24,7 +24,7 @@ class SavedSchedulers extends React.Component {
     super(props)
     this.state = {
       currentPage: 1,
-      itemsEachPage: 2,
+      itemsEachPage: 4,
       leftBoundary: true,
       rightBoundary: false,
     }

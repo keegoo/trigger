@@ -2,18 +2,28 @@ import React from 'react'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 
 const styles = {
-  border: {
-    boxShadow: 'rgba(0,0,0,0.17) 0px 0px 10px',
+  borderInactive: {
+    boxShadow: 'rgba(0, 0, 0, 0.2) 0px 0px 10px',
+    marginBottom: '10px'
+  },
+  borderActive: {
+    boxShadow: 'rgba(0, 188, 212, 1) 0px 0px 10px',
     marginBottom: '10px'
   }
 }
 
 class HsTable extends React.Component {
+
+  isoDateToday(time){
+    const t = new Date(Date.now())
+    return t.toISOString().split('.')[0]+"Z"
+  }
+
   render (){
     const t = this.props.historicalInfo
-
+    
     return(
-      <div style={styles.border}>
+      <div style={this.isoDateToday() < t.date ? styles.borderActive : styles.borderInactive}>
         <Table>
           <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
             <TableRow>
@@ -33,7 +43,7 @@ class HsTable extends React.Component {
                   <TableRow key={index}>
                     <TableRowColumn>{s.generator}</TableRowColumn>
                     <TableRowColumn>{s.time}</TableRowColumn>
-                    <TableRowColumn>{s.module}</TableRowColumn>
+                    <TableRowColumn>{s.cmd}</TableRowColumn>
                     <TableRowColumn>{s.status}</TableRowColumn>
                   </TableRow>
                 )
