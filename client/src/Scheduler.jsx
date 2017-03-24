@@ -124,6 +124,9 @@ class Scheduler extends React.Component {
 
     // tell its father: App
     this.props.onSave()
+
+    // clear itself
+    this.setState({selected: []})
   }
 
   handleDateChange(event, index, value){
