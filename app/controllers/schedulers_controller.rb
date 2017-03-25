@@ -12,4 +12,9 @@ class SchedulersController < ApplicationController
   def index
     render json: Scheduler.order_by(date: :desc).limit(30)
   end
+
+  def active
+    now = Time.now.utc.iso8601
+    render json: Scheduler.where(date: {"$gt" => now})
+  end
 end
