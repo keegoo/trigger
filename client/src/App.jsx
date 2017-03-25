@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom'
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import AppBar from 'material-ui/AppBar'
+import FlatButton from 'material-ui/FlatButton'
+
 import Scheduler from './Scheduler.jsx'
 import SavedSchedulers from './SavedSchedulers.jsx'
 
@@ -51,7 +53,9 @@ class App extends React.Component {
     return (
       <MuiThemeProvider>
         <div>
-          <AppBar title="Trigger" />
+          <AppBar 
+            title="Trigger" 
+            iconElementRight={<FlatButton href="/generator.rb" download>Script</FlatButton>}/>
           <div className="app-body" style={styles}>
             <Scheduler onSave={this.handleSchedulerSave}/>
             <SavedSchedulers schedulers={this.state.savedSchedulersData}/>
