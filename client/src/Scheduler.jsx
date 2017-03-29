@@ -13,6 +13,8 @@ import DeleteIcon from 'material-ui/svg-icons/action/delete'
 
 import {cyan500} from 'material-ui/styles/colors'
 
+import Config from 'Config'
+
 // icon float right
 const styles = {
   titleText: {
@@ -67,7 +69,7 @@ class Scheduler extends React.Component {
   }
 
   componentDidMount(){
-    const host = "http://127.0.0.1:3000"
+    const host = Config.host
     fetch(`${host}/generators`)
       .then(response => response.json())
       .then(json => {

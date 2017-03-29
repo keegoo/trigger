@@ -8,6 +8,8 @@ import FlatButton from 'material-ui/FlatButton'
 import Scheduler from './Scheduler.jsx'
 import SavedSchedulers from './SavedSchedulers.jsx'
 
+import Config from 'Config'
+
 const styles = {
   width: '60%',
   margin: 'auto'
@@ -33,7 +35,7 @@ class App extends React.Component {
   // =============================
   // savedSchedulers component
   fetchHistoricalSchedulers(){
-    const host = "http://127.0.0.1:3000"
+    const host = Config.host
     fetch(`${host}/schedulers`)
       .then(response => response.json())
       .then(json => { 

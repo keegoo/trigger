@@ -24,5 +24,8 @@ module.exports = {
   },
   entry: [
     './src/App.jsx'
-  ]
+  ],
+  externals: {
+    'Config': JSON.stringify({host: "http://127.0.0.1:3000"})
+  }
 };
