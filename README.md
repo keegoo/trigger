@@ -4,7 +4,7 @@
 
 ## Introduction
 
-Offically, `Gatling` provides the [batch](http://gatling.io/docs/2.2/cookbook/scaling_out/) way to scale out. It's not very convenient as 1). it supports Linux only; 2). it doesn't have a user friendly UI.
+Offically, `Gatling` provides the [batch](http://gatling.io/docs/2.2/cookbook/scaling_out/) way to scale out. But it's not very convenient as 1). it supports Linux only; 2). it doesn't have a friendly UI. So `Trigger` was here to fill the gap.
 
 `Trigger` consists of two parts: a `controller`(rails app) and a `generator`(ruby script ran locally).
 
@@ -17,11 +17,11 @@ The idea is very simple:
 
 `Ruby`, `Rails`, `React`, `MongoDB` and `Material UI` are used to build `Trigger`. 
 
-Before setup the environment, you need to confirm following tools has been installed: 
+Before setup `Trigger` locally, you need to confirm following tools has been installed: 
 
   - npm
   - ruby
-  - mongo
+  - mongodb
 
 Here's how I check mine:
 
@@ -35,7 +35,7 @@ Here's how I check mine:
 
 ## Public server
 
-You could visit xxx to give it a try first.
+You could visit https://trigger-sample.herokuapp.com/ to give it a try first.
 
 ## Setup
 

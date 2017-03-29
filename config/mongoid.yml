@@ -141,3 +141,14 @@ test:
         read:
           mode: :primary
         max_pool_size: 1
+production:
+  clients:
+    default:
+      database: trigger
+      hosts:
+        - ds145370.mlab.com:45370
+      username: myname
+      password: mypass
+      options:
+        read:
+          mode: :primary
