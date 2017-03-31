@@ -27,11 +27,15 @@ Here's how I check mine:
 
     shell$ npm -v
     4.0.5
+
     shell$ ruby -v
     ruby 2.3.3p222 (2016-11-21 revision 56859) [x86_64-darwin16]
+
+    shell$ bunle -v
+    Bundler version 1.13.6
+
     shell$ mongo --version
     MongoDB shell version: 3.2.11
-    shell$ 
 
 ## Public server
 
@@ -46,7 +50,6 @@ You could visit https://trigger-sample.herokuapp.com/ to give it a try first.
 #### resolve dependencies
 
 ```shell
-shell$ gem install bundle
 shell$ cd trigger/
 shell$ bundle install
 shell$ rake setup:all

@@ -146,9 +146,9 @@ production:
     default:
       database: trigger
       hosts:
-        - ds145370.mlab.com:45370
-      username: myname
-      password: mypass
+        - <%= ENV['MONGO_CONNECTION'] %>
+      username: <%= ENV['MONGO_USERNAME'] %>
+      password: <%= ENV['MONGO_PASSWORD'] %>
       options:
         read:
           mode: :primary
