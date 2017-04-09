@@ -111,7 +111,7 @@ class Scheduler extends React.Component {
   }
 
   saveScheduler(){
-    const host = "http://127.0.0.1:3000"
+    const host = Config.host
     const x = {
       date: this.isoDateStartFromToday(this.state.dateOffset),
       schedule: this.state.selected
