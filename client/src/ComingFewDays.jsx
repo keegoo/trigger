@@ -15,7 +15,7 @@ class ComingFewDays extends React.Component {
   dateStartFromToday(num){
     const oneDay = 24 * 60 * 60 * 1000
     const t = new Date(Date.now() + oneDay * num)
-    return `${t.getDate()}-${t.getMonth()}-${t.getFullYear()}`
+    return `${t.getDate()}-${t.getMonth() + 1}-${t.getFullYear()}`
   }
 
   render() {
