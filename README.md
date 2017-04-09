@@ -39,7 +39,7 @@ Here's how I check mine:
 
 ## Public server
 
-You could visit https://trigger-sample.herokuapp.com/ to give it a try first.
+You could visit https://trigger-sample.herokuapp.com/ to give it a try first (there're some known issues as Trigger is still at its early development stage; but it's enough to demonstrate the ideas).
 
 ## Setup
 
@@ -63,4 +63,4 @@ rails s
 
 #### done
 
-Open `localhost:3000` to take a look!
+Open `127.0.0.1:3000` to take a look!
