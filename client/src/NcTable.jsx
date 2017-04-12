@@ -6,6 +6,15 @@ import AutoComplete from 'material-ui/AutoComplete'
 
 import {orange500, blue500, gray500} from 'material-ui/styles/colors'
 
+const styles = {
+  timeInvalid: {
+    borderColor: orange500
+  },
+  timeValid: {
+    // empty
+  }
+}
+
 class NcTable extends React.Component {
 
   constructor(){
@@ -15,7 +24,7 @@ class NcTable extends React.Component {
         "ping 127.0.0.1 -t",
         "gatling -v -t 600s"
       ],
-      timeFormat: {}
+      isTimeValid: true
     }
   }
 
@@ -23,10 +32,10 @@ class NcTable extends React.Component {
     let rightFormat = this.checkTimeFormat(e.target.value)
     let rightRange = this.checkTimeRange(e.target.value)
     if (rightFormat && rightRange){
-      this.setState({timeFormat: {}})
+      this.setState({isTimeValid: true})
       this.props.saveTime(generator, e.target.value)
     } else {
-      this.setState({timeFormat: {borderColor: orange500}})
+      this.setState({isTimeValid: false})
     }
   }
 
@@ -73,7 +82,7 @@ class NcTable extends React.Component {
           <TextField 
             name=""
             hintText="e.g. 1:9 or 23:11"
-            underlineStyle={this.state.timeFormat}
+            underlineStyle={ this.state.isTimeValid ? styles.timeValid : styles.timeInvalid }
             onBlur={this.handleTextFieldOnBlur.bind(this, generator)}
             />
         </TableRowColumn>
