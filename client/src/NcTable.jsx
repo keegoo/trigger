@@ -4,7 +4,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin'
 import TextField from 'material-ui/TextField'
 import AutoComplete from 'material-ui/AutoComplete'
 
-import {orange500, blue500, gray500} from 'material-ui/styles/colors'
+import {orange500} from 'material-ui/styles/colors'
 
 const styles = {
   timeInvalid: {

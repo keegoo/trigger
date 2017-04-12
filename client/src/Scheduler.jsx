@@ -4,8 +4,10 @@ import TextField from 'material-ui/TextField'
 import NcTable from './NcTable.jsx'
 import ComingFewDays from './ComingFewDays.jsx'
 import Paper from 'material-ui/Paper'
+import * as utils from './utils.js'
 
 import Dialog from 'material-ui/Dialog'
+
 
 // save delete icon
 import SaveIcon from 'material-ui/svg-icons/content/save'
@@ -113,7 +115,7 @@ class Scheduler extends React.Component {
   saveScheduler(){
     const host = Config.host
     const x = {
-      date: this.isoDateStartFromToday(this.state.dateOffset),
+      date: utils.dateStartFromToday(this.state.dateOffset),
       schedule: this.state.selected
     }
 
@@ -139,17 +141,14 @@ class Scheduler extends React.Component {
   handleDateChange(event, index, value){
     this.setState({dateOffset: value})
   }
-
-  isoDateStartFromToday(offset){
-    const oneDay = 24 * 60 * 60 * 1000
-    const t = new Date(Date.now() + oneDay * offset)
-    return t.toISOString().split('.')[0]+"Z"
-  }
+  
 
   // =============================
   // handle event from NcTable component 
   handleSaveGeneratorTime(generator, value) {
-    this.setSchedulerData(generator, {time: value})
+    // this.setSchedulerData(generator, {time: value})
+    const dt = utils.dateStartFromToday(this.state.dateOffset) + ' ' + value + ':00'
+    this.setSchedulerData(generator, {time: utils.dateTimeStringToISO(dt)})
   }
 
   handleSaveGeneratorCMD(generator, value) {
