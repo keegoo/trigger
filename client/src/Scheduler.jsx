@@ -125,14 +125,15 @@ class Scheduler extends React.Component {
       body: JSON.stringify(x)
     }).then(response => response.json())
     .then(json => {
+      console.log('schedule is saved: ')
       console.log(json)
+
+      // tell its father: App
+      this.props.onSave()
+
+      // clear itself
+      this.setState({selected: []})
     })
-
-    // tell its father: App
-    this.props.onSave()
-
-    // clear itself
-    this.setState({selected: []})
   }
 
   handleDateChange(event, index, value){
