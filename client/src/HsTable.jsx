@@ -16,22 +16,18 @@ const styles = {
 
 class HsTable extends React.Component {
 
-  // isoDateToday(time){
-  //   const t = new Date(Date.now())
-  //   return t.toISOString().split('.')[0]+"Z"
-  // }
-
   render (){
     const t = this.props.historicalInfo
-    const isoDateTime = t.schedule.slice().sort((x, y) => x.time > y.time)[0].time
+    // get the nearest schedule
+    const nearT = t.schedule.slice().sort((x, y) => x.time > y.time)[0].time
     const isoToday = new Date(Date.now()).toISOString().split('.')[0]+"Z"
 
     return(
-      <div style={isoToday < isoDateTime ? styles.borderActive : styles.borderInactive}>
+      <div style={isoToday < nearT ? styles.borderActive : styles.borderInactive}>
         <Table>
           <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
             <TableRow>
-              <TableHeaderColumn colSpan="4" style={{textAlign: 'center'}}>{utils.splitISOToDateHourMin(isoDateTime)[0]}</TableHeaderColumn>
+              <TableHeaderColumn colSpan="4" style={{textAlign: 'center'}}>{utils.splitISOToDateTime(nearT)[0]}</TableHeaderColumn>
             </TableRow>
             <TableRow>
               <TableHeaderColumn>Name</TableHeaderColumn>
@@ -46,7 +42,7 @@ class HsTable extends React.Component {
                 return(
                   <TableRow key={index}>
                     <TableRowColumn>{s.generator}</TableRowColumn>
-                    <TableRowColumn>{utils.splitISOToDateHourMin(s.time)[1]}</TableRowColumn>
+                    <TableRowColumn>{utils.splitISOToDateTime(s.time)[1].substring(0, 5)}</TableRowColumn>
                     <TableRowColumn>{s.cmd}</TableRowColumn>
                     <TableRowColumn>{s.status}</TableRowColumn>
                   </TableRow>

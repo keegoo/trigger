@@ -147,7 +147,7 @@ class Scheduler extends React.Component {
   // handle event from NcTable component 
   handleSaveGeneratorTime(generator, value) {
     const date = utils.dateStartFromToday(this.state.dateOffset)
-    this.setSchedulerData(generator, {time: utils.combineDateHourMinToISO(date, value)})
+    this.setSchedulerData(generator, {time: utils.combineDateTimeToISO(date, value + ':00')})
   }
 
   handleSaveGeneratorCMD(generator, value) {
