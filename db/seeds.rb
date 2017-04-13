@@ -6,7 +6,6 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-
 15.times do |i|
   j = rand(0..2)
   prefix = ["APC", "SF1", "SF2", "SZN"]
@@ -21,3 +20,13 @@
     }
   )
 end
+
+# test purpose
+Generator.create(
+  {
+      name: "CYs-MacBook-Pro.local",
+      status: "connected",
+      last_used: "2017-03-27T07:02:22Z",
+      frequency: 0
+  }
+)
