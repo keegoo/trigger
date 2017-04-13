@@ -115,7 +115,7 @@ class Scheduler extends React.Component {
   saveScheduler(){
     const host = Config.host
     const x = {
-      date: utils.dateStartFromToday(this.state.dateOffset),
+      // date: utils.dateStartFromToday(this.state.dateOffset),
       schedule: this.state.selected
     }
 
@@ -141,14 +141,13 @@ class Scheduler extends React.Component {
   handleDateChange(event, index, value){
     this.setState({dateOffset: value})
   }
-  
+
 
   // =============================
   // handle event from NcTable component 
   handleSaveGeneratorTime(generator, value) {
-    // this.setSchedulerData(generator, {time: value})
-    const dt = utils.dateStartFromToday(this.state.dateOffset) + ' ' + value + ':00'
-    this.setSchedulerData(generator, {time: utils.dateTimeStringToISO(dt)})
+    const date = utils.dateStartFromToday(this.state.dateOffset)
+    this.setSchedulerData(generator, {time: utils.combineDateHourMinToISO(date, value)})
   }
 
   handleSaveGeneratorCMD(generator, value) {
