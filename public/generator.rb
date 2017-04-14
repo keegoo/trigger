@@ -10,31 +10,54 @@ $LOGGER = Logger.new('generator.log', 2, 1024 * 1000)
 
 class Config
   def update
+    @response_body = nil
     begin
       response = HTTParty.get("http://127.0.0.1:3000/schedulers/active")
-      # task = next_task(JSON.parse(response.body))
-      $LOGGER.debug(response.code)
+      @response_body = response.body
     rescue => err
-      $LOGGER.info("get config failed")
+      $LOGGER.debug("get config failed")
+    end
+
+    unless valid_json?(@response_body)
+      $LOGGER.debug("invalid JSON response: #{@response_body}")
+      @response_body = nil
     end
   end
 
   # ==========================
   # task example:
-  # { cmd: 'ping www.google.com', time: '2017-04-13T19:00:00'}
-  def next_task(schedulers="")
-    # me = Socket.gethostname
-    # me = "SF2-WGROAPP313"
-    
-    # tmp = schedulers.select do |scheduler| 
-    #   scheduler["schedule"].map{|x| x["generator"]}.include?(me) 
-    # end
+  # {
+  #   "generator"=>"CYs-MacBook-Pro.local", 
+  #   "time"=>"2017-04-14T08:00:00Z", 
+  #   "cmd"=>"ping www.google.com -c 30"
+  # }
+  def next_task()
+    if @response_body == nil
+      {}
+    else
+      me = Socket.gethostname
+      tasks = JSON.parse(@response_body)
+      my_tasks = tasks.select do |t|
+        t["schedule"].map{|x| x["generator"]}.include?(me)
+      end
 
-    # tmp == nil ? nil : tmp[0]
-    {
-      cmd: 'ping www.google.com -c 20',
-      time: '2017-04-13T12:03:50Z'
-    }
+      # narrow down my tasks
+      my_tasks.\
+      map{|x| x["schedule"]}.reduce(:+).\
+      select{|x| x["generator"].include?(me)}.\
+      sort_by{|x| x["time"]}[0]
+    end
+  end
+
+  private
+
+  def valid_json?(str)
+    begin
+      JSON.parse(str)
+      return true
+    rescue JSON::ParserError => e
+      return false
+    end
   end
 end
 
@@ -90,24 +113,25 @@ end
 # global var
 $generator = Generator.new
 $config = Config.new
-$task = { cmd: "", time: ""}
+$task = {}
 # ========== Main ==========
 every_n_seconds(6) do
   $config.update
-  $task = $config.next_task
 
   if $generator.status == :running
     $LOGGER.info("#{$task[:cmd]} is running with pid = #{$generator.pid}")
   else
-    if $task[:cmd].empty?
+    if $task.empty?
       $LOGGER.info("no task")
     else
       $LOGGER.info("task: #{$task}")
-      if Time.now.utc.iso8601 >= $task[:time]
-        $LOGGER.info("trigger task #{$task[:cmd]}")
-        $generator.run($task[:cmd])
-        $task = { cmd: "", time: ""}
+      if Time.now.utc.iso8601 >= $task["time"]
+        $LOGGER.info("trigger task #{$task['cmd']}")
+        $generator.run($task["cmd"])
+        $task = {}
       end
     end
   end
+
+  $task = $config.next_task
 end

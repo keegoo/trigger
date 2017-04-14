@@ -15,6 +15,6 @@ class SchedulersController < ApplicationController
 
   def active
     now = Time.now.utc.iso8601
-    render json: Scheduler.where(date: {"$gt" => now})
+    render json: Scheduler.where("schedule.time" => {"$gt" => now})
   end
 end
