@@ -8,6 +8,11 @@ require 'open3'
 # preserve 2 log files, each 1MB at most
 $LOGGER = Logger.new('generator.log', 2, 1024 * 1000)
 
+# log format
+$LOGGER.formatter = proc do |severity, datetime, progname, msg|
+   "[#{severity}] #{datetime}: #{msg}\n"
+end
+
 class Config
   def update
     @response_body = nil
@@ -41,11 +46,15 @@ class Config
         t["schedule"].map{|x| x["generator"]}.include?(me)
       end
 
-      # narrow down my tasks
-      my_tasks.\
-      map{|x| x["schedule"]}.reduce(:+).\
-      select{|x| x["generator"].include?(me)}.\
-      sort_by{|x| x["time"]}[0]
+      if my_tasks.empty?
+        {}
+      else
+        # narrow down my tasks
+        my_tasks.\
+        map{|x| x["schedule"]}.reduce(:+).\
+        select{|x| x["generator"].include?(me)}.\
+        sort_by{|x| x["time"]}[0]
+      end
     end
   end
 
