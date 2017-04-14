@@ -12,7 +12,11 @@ import Config from 'Config'
 
 const styles = {
   width: '60%',
-  margin: 'auto'
+  margin: 'auto',
+  subtitle: {
+    fontSize: '16px',
+    paddingLeft: '30px'
+  }
 }
 
 class App extends React.Component {
@@ -56,7 +60,11 @@ class App extends React.Component {
       <MuiThemeProvider>
         <div>
           <AppBar 
-            title="Trigger" 
+            title={<div>
+                <span>Trigger</span>
+                <span style={styles.subtitle}> A Gatling Controller</span>
+              </div>}
+            showMenuIconButton={false}
             iconElementRight={<FlatButton href="/generator.rb" download>Script</FlatButton>}/>
           <div className="app-body" style={styles}>
             <Scheduler onSave={this.handleSchedulerSave}/>

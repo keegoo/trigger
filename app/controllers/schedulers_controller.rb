@@ -1,6 +1,6 @@
 class SchedulersController < ApplicationController
   def create
-    @params = params.require(:scheduler).permit(:date, schedule: [:generator, :time, :cmd, :status])
+    @params = params.require(:scheduler).permit(schedule: [:generator, :time, :cmd, :status])
     render json: Scheduler.create(@params)
   end
 
