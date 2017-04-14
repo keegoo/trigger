@@ -31,7 +31,7 @@ class SavedSchedulers extends React.Component {
   }
 
   currentPageItems(){
-    console.log(`this props: <schedulers> ${this.props.schedulers[0]}`)
+    // console.log(`this props: <schedulers> ${this.props.schedulers[0]}`)
     const sBegin = (this.state.currentPage - 1) * this.state.itemsEachPage
     const sEnd = sBegin + this.state.itemsEachPage
     return this.props.schedulers.slice(sBegin, sEnd)
@@ -58,7 +58,7 @@ class SavedSchedulers extends React.Component {
               <NavigateBeforeIcon/>
             </IconButton>
             <IconButton 
-              disabled={ this.getTotalPages() == this.state.currentPage ? true : false } 
+              disabled={ [this.state.currentPage, 0].includes(this.getTotalPages()) ? true : false } 
               onClick={ () => this.setState({currentPage: this.state.currentPage + 1}) }>
               <NavigateNextIcon/>
             </IconButton>
