@@ -27,13 +27,12 @@ class HsTable extends React.Component {
         <Table>
           <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
             <TableRow>
-              <TableHeaderColumn colSpan="4" style={{textAlign: 'center'}}>{utils.splitISOToDateTime(nearT)[0]}</TableHeaderColumn>
+              <TableHeaderColumn colSpan="3" style={{textAlign: 'center'}}>{utils.splitISOToDateTime(nearT)[0]}</TableHeaderColumn>
             </TableRow>
             <TableRow>
               <TableHeaderColumn>Name</TableHeaderColumn>
               <TableHeaderColumn>Time</TableHeaderColumn>
               <TableHeaderColumn>Module</TableHeaderColumn>
-              <TableHeaderColumn>Status</TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody displayRowCheckbox={false}>
@@ -44,7 +43,6 @@ class HsTable extends React.Component {
                     <TableRowColumn>{s.generator}</TableRowColumn>
                     <TableRowColumn>{utils.splitISOToDateTime(s.time)[1].substring(0, 5)}</TableRowColumn>
                     <TableRowColumn>{s.cmd}</TableRowColumn>
-                    <TableRowColumn>{s.status}</TableRowColumn>
                   </TableRow>
                 )
               })
