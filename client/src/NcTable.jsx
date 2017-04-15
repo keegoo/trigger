@@ -24,19 +24,22 @@ class NcTable extends React.Component {
         "ping 127.0.0.1 -t",
         "gatling -v -t 600s"
       ],
-      isTimeValid: true
+      isTimeValid: true,
+      timeGroup: {}
     }
   }
 
   handleTextFieldOnBlur(generator, e){
+    let tmp = this.state.timeGroup
     let rightFormat = this.checkTimeFormat(e.target.value)
     let rightRange = this.checkTimeRange(e.target.value)
     if (rightFormat && rightRange){
-      this.setState({isTimeValid: true})
+      tmp[generator] = true
       this.props.saveTime(generator, e.target.value)
     } else {
-      this.setState({isTimeValid: false})
+      tmp[generator] = false
     }
+    this.setState({timeGroup: tmp})
   }
 
   checkTimeFormat(str){
@@ -82,7 +85,7 @@ class NcTable extends React.Component {
           <TextField 
             name=""
             hintText="e.g. 1:9 or 23:11"
-            underlineStyle={ this.state.isTimeValid ? styles.timeValid : styles.timeInvalid }
+            underlineStyle={ [true, undefined].includes(this.state.timeGroup[generator]) ? styles.timeValid : styles.timeInvalid}
             onBlur={this.handleTextFieldOnBlur.bind(this, generator)}
             />
         </TableRowColumn>
