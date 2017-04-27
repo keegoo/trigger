@@ -1,12 +1,13 @@
-import React from 'react'
+import React, {PropTypes} from 'react'
+import { connect } from 'react-redux'
 import GeneratorFilter from './GeneratorFilter.jsx'
 import GeneratorList from './GeneratorList.jsx'
 
 import Config from 'Config'
 
 class GeneratorContainer extends React.Component {
-  constructor (){
-    super()
+  constructor ( props, context ){
+    super(props, context)
 
     this.state = {
       filterStr: "",
@@ -14,6 +15,7 @@ class GeneratorContainer extends React.Component {
     }
 
     this.onFilterChange = this.onFilterChange.bind(this)
+    this.onSelectGenerator = this.onSelectGenerator.bind(this)
   }
 
   componentDidMount(){
@@ -31,16 +33,37 @@ class GeneratorContainer extends React.Component {
     })
   }
 
+  onSelectGenerator(generator){
+    this.props.dispatch({
+      type: 'ADD_GENERATOR',
+      generator: generator.name
+    })
+  }
+
   render(){
+    console.log(`prop -> generatorsSelected: ${this.props.generatorsSelected}`)
     return(
       <div>
-        <GeneratorFilter handleFilterChange={this.onFilterChange} />
+        <GeneratorFilter 
+          handleFilterChange={this.onFilterChange} />
         <GeneratorList 
           generators={this.state.generators.filter( e => e.name.includes(this.state.filterStr))}
-          filterStr={this.state.filterStr} />
+          filterStr={this.state.filterStr}
+          handleSelectGenerator={this.onSelectGenerator} />
       </div>
     )
   }
 }
 
-export default GeneratorContainer
+GeneratorContainer.propTypes = {
+  generatorsSelected: PropTypes.array.isRequired
+}
+
+// todo: what is ??? ownProps ???
+function mapStateToProps(state, ownProps) {
+  return {
+    generatorsSelected: state
+  }
+}
+
+export default connect(mapStateToProps)(GeneratorContainer)

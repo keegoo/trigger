@@ -37,12 +37,12 @@ class GeneratorList extends React.Component {
     return `<span style='font-weight:bold;'>${str}</span>`
   }
 
-  toHtmlTag(generator, index) {
+  wrapWithChip(generator, index) {
     return(
       <Chip 
         key={index} 
         //style={ this.props.generatorsSelected.includes(generator.name) ? this.styles.chipSelect : this.styles.chipUnselect }
-        //onClick={this.handleGeneratorClick.bind(this, generator)} 
+        onClick={this.props.handleSelectGenerator.bind(this, generator)} 
         style={styles.chipSelect}
         >
         <div dangerouslySetInnerHTML={{__html: this.highlightGenerator(generator.name)}}></div>
@@ -53,7 +53,7 @@ class GeneratorList extends React.Component {
   render() {
     return(
       <div style={styles.wrapper} >
-        {this.props.generators.map((generator, index) => this.toHtmlTag(generator, index))}
+        {this.props.generators.map((generator, index) => this.wrapWithChip(generator, index))}
       </div>
     )
   }
