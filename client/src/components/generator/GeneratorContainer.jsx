@@ -34,10 +34,17 @@ class GeneratorContainer extends React.Component {
   }
 
   onSelectGenerator(generator){
-    this.props.dispatch({
-      type: 'ADD_GENERATOR',
-      generator: generator.name
-    })
+    if(this.props.generatorsSelected.includes(generator.name)) {
+      this.props.dispatch({
+        type: 'REMOVE_GENERATOR',
+        generator: generator.name
+      })
+    } else {
+      this.props.dispatch({
+        type: 'ADD_GENERATOR',
+        generator: generator.name
+      })
+    }
   }
 
   render(){
@@ -49,7 +56,8 @@ class GeneratorContainer extends React.Component {
         <GeneratorList 
           generators={this.state.generators.filter( e => e.name.includes(this.state.filterStr))}
           filterStr={this.state.filterStr}
-          handleSelectGenerator={this.onSelectGenerator} />
+          handleSelectGenerator={this.onSelectGenerator}
+          generatorsSelected={this.props.generatorsSelected} />
       </div>
     )
   }

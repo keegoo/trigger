@@ -41,10 +41,8 @@ class GeneratorList extends React.Component {
     return(
       <Chip 
         key={index} 
-        //style={ this.props.generatorsSelected.includes(generator.name) ? this.styles.chipSelect : this.styles.chipUnselect }
-        onClick={this.props.handleSelectGenerator.bind(this, generator)} 
-        style={styles.chipSelect}
-        >
+        style={ this.props.generatorsSelected.includes(generator.name) ? styles.chipSelect : styles.chipUnselect }
+        onClick={this.props.handleSelectGenerator.bind(this, generator)} >
         <div dangerouslySetInnerHTML={{__html: this.highlightGenerator(generator.name)}}></div>
       </Chip>
     )
