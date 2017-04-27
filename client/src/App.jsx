@@ -8,6 +8,8 @@ import FlatButton from 'material-ui/FlatButton'
 import Scheduler from './Scheduler.jsx'
 import SavedSchedulers from './SavedSchedulers.jsx'
 
+import {grey400} from 'material-ui/styles/colors'
+
 import Config from 'Config'
 
 const styles = {
@@ -15,7 +17,8 @@ const styles = {
   margin: 'auto',
   subtitle: {
     fontSize: '16px',
-    paddingLeft: '30px'
+    paddingLeft: '30px',
+    color: grey400
   }
 }
 
