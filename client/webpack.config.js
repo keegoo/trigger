@@ -23,7 +23,7 @@ module.exports = {
     filename: './../public/bundle.js'
   },
   entry: [
-    './src/AppAdvance.jsx'
+    './src/App.jsx'
   ],
   externals: {
     'Config': JSON.stringify({host: "http://127.0.0.1:3000"})

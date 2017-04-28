@@ -1,25 +1,25 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
+import GeneratorContainer from './components/generator/GeneratorContainer.jsx'
+import EditorContainer from './components/editor/EditorContainer.jsx'
+import Menu from './components/menu/Menu.jsx'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import AppBar from 'material-ui/AppBar'
-import FlatButton from 'material-ui/FlatButton'
+import injectTapEventPlugin from 'react-tap-event-plugin'
+injectTapEventPlugin()
 
-import Scheduler from './Scheduler.jsx'
 import SavedSchedulers from './SavedSchedulers.jsx'
-
-import {grey400} from 'material-ui/styles/colors'
 
 import Config from 'Config'
 
+import { Provider } from 'react-redux'
+import configureStore from './store/configureStore.js'
+
+const store = configureStore()
+
 const styles = {
   width: '60%',
-  margin: 'auto',
-  subtitle: {
-    fontSize: '16px',
-    paddingLeft: '30px',
-    color: grey400
-  }
+  margin: 'auto'
 }
 
 class App extends React.Component {
@@ -60,23 +60,24 @@ class App extends React.Component {
 
   render() {
     return (
-      <MuiThemeProvider>
-        <div>
-          <AppBar 
-            title={<div>
-                <span>Trigger</span>
-                <span style={styles.subtitle}> A Gatling Controller</span>
-              </div>}
-            showMenuIconButton={false}
-            iconElementRight={<FlatButton href="/generator.rb" download>Script</FlatButton>}/>
-          <div className="app-body" style={styles}>
-            <Scheduler onSave={this.handleSchedulerSave}/>
-            <SavedSchedulers schedulers={this.state.savedSchedulersData}/>
-          </div>
+      <div>
+        <Menu />
+        <div className="app-body" style={styles}>
+          <GeneratorContainer />
+          <EditorContainer onSave={this.handleSchedulerSave}/>
+          <SavedSchedulers schedulers={this.state.savedSchedulersData}/>
         </div>
-      </MuiThemeProvider>
+      </div>
     )
   }
 }
  
-ReactDOM.render(<App />, document.getElementById("main"))
+// ReactDOM.render(<App />, document.getElementById("main"))
+ReactDOM.render((
+  <MuiThemeProvider>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </MuiThemeProvider>),
+  document.getElementById("main")
+)
