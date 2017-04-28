@@ -120,6 +120,7 @@ class EditorContainer extends React.Component {
   render() {
     return(
       <div>
+        <div style={styles.titleText}><span>Schedule</span></div>
         <div>
           <DatePicker
             value={this.state.dateOffset}
