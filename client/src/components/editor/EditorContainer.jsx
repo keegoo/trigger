@@ -36,10 +36,7 @@ class EditorContainer extends React.Component {
     super()
 
     this.state = {
-      dateOffset: 0,
-
-      // {generator: , time: , cmd: , status: }
-      selected: []
+      dateOffset: 0
     }
 
     this.handleDateChange = this.handleDateChange.bind(this)
@@ -94,7 +91,7 @@ class EditorContainer extends React.Component {
             onClick={ this.handleOnSaveScheduler } />
         </div>
         <Editor 
-          generatorsSelected={this.props.schedule.map((x) => x.generator)}
+          generatorsSelected={this.props.schedule.map((x) => x.generator).sort()}
           saveTime={this.handleSaveGeneratorTime}
           saveCMD={this.handleSaveGeneratorCMD} />
       </div>
