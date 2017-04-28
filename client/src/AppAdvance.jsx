@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import GeneratorContainer from './components/generator/GeneratorContainer.jsx'
 import EditorContainer from './components/editor/EditorContainer.jsx'
+import Menu from './components/menu/Menu.jsx'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
 import injectTapEventPlugin from 'react-tap-event-plugin'
@@ -16,6 +17,7 @@ class App extends React.Component {
   render(){
     return(
       <div>
+        <Menu />
         <GeneratorContainer />
         <EditorContainer />
       </div>
