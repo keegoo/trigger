@@ -6,6 +6,7 @@ import DatePicker from './DatePicker.jsx'
 import Editor from './Editor.jsx'
 import * as utils from './../utils.js'
 import {cyan500} from 'material-ui/styles/colors'
+import Config from 'Config'
 
 const styles = {
   titleText: {
@@ -32,8 +33,8 @@ const styles = {
 }
 
 class EditorContainer extends React.Component {
-  constructor() {
-    super()
+  constructor(props, context) {
+    super(props, context)
 
     this.state = {
       dateOffset: 0
@@ -43,6 +44,7 @@ class EditorContainer extends React.Component {
     this.setSchedulerData = this.setSchedulerData.bind(this)
     this.handleSaveGeneratorTime = this.handleSaveGeneratorTime.bind(this)
     this.handleSaveGeneratorCMD = this.handleSaveGeneratorCMD.bind(this)
+    this.handleOnSaveScheduler = this.handleOnSaveScheduler.bind(this)
   }
 
   handleDateChange (event, index, value){
@@ -72,6 +74,38 @@ class EditorContainer extends React.Component {
         schedule: { generator: generator, cmd: cmd}
       })
     }
+  }
+
+  handleOnSaveScheduler(){
+    console.log("click save button")
+    if (this.props.schedule.length == 0){
+      console.log(`save schedule failed!`)
+    } else {
+      this.saveScheduler()
+    }
+  }
+
+  saveScheduler(){
+    const host = Config.host
+    const x = {
+      // date: utils.dateStartFromToday(this.state.dateOffset),
+      schedule: this.props.schedule
+    }
+
+    fetch(`${host}/schedulers`, {
+      method: 'POST',
+      headers: new Headers({
+          'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify(x)
+    }).then(response => response.json())
+    .then(json => {
+      console.log('schedule is saved: ')
+      console.log(json)
+
+      // tell its father: App
+      this.props.onSave()
+    })
   }
 
   render() {

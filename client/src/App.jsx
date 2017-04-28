@@ -4,11 +4,11 @@ import ReactDOM from 'react-dom'
 import GeneratorContainer from './components/generator/GeneratorContainer.jsx'
 import EditorContainer from './components/editor/EditorContainer.jsx'
 import Menu from './components/menu/Menu.jsx'
+import ScheduleContainer from './components/schedule/ScheduleContainer.jsx'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 injectTapEventPlugin()
 
-import SavedSchedulers from './SavedSchedulers.jsx'
 
 import Config from 'Config'
 
@@ -65,14 +65,13 @@ class App extends React.Component {
         <div className="app-body" style={styles}>
           <GeneratorContainer />
           <EditorContainer onSave={this.handleSchedulerSave}/>
-          <SavedSchedulers schedulers={this.state.savedSchedulersData}/>
+          <ScheduleContainer schedulers={this.state.savedSchedulersData}/>
         </div>
       </div>
     )
   }
 }
- 
-// ReactDOM.render(<App />, document.getElementById("main"))
+
 ReactDOM.render((
   <MuiThemeProvider>
     <Provider store={store}>
