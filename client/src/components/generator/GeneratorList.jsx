@@ -58,8 +58,10 @@ class GeneratorList extends React.Component {
 }
 
 GeneratorList.propTypes = {
-  generators: PropTypes.array.isRequired,
-  filterStr: PropTypes.string.isRequired
+  generators:             PropTypes.array.isRequired,
+  generatorsSelected:     PropTypes.array.isRequired,
+  filterStr:              PropTypes.string.isRequired,
+  handleSelectGenerator:  PropTypes.func.isRequired
 }
 
 export default GeneratorList

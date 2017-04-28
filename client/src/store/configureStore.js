@@ -1,6 +1,6 @@
 import { createStore } from 'redux'
-import generatorReducer from './../reducers/generatorReducer.js'
+import scheduleReducer from './../reducers/scheduleReducer.js'
 
 export default function configureStore(){
-  return createStore(generatorReducer)
+  return createStore(scheduleReducer)
 }

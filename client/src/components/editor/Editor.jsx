@@ -1,6 +1,5 @@
 import React from 'react'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
-import injectTapEventPlugin from 'react-tap-event-plugin'
 import TextField from 'material-ui/TextField'
 import AutoComplete from 'material-ui/AutoComplete'
 
@@ -15,29 +14,24 @@ const styles = {
   }
 }
 
-class NcTable extends React.Component {
-
+class Editor extends React.Component {
   constructor(){
     super()
+
     this.state = {
-      autoComplete: [
-        "ping 127.0.0.1 -t",
-        "gatling -v -t 600s"
-      ],
-      isTimeValid: true,
       timeGroup: {}
     }
   }
 
-  handleTextFieldOnBlur(generator, e){
+  handleTextFieldOnBlur(schedule, e){
     let tmp = this.state.timeGroup
     let rightFormat = this.checkTimeFormat(e.target.value)
     let rightRange = this.checkTimeRange(e.target.value)
     if (rightFormat && rightRange){
-      tmp[generator] = true
-      this.props.saveTime(generator, e.target.value)
+      tmp[schedule.generator] = true
+      this.props.saveTime(schedule, e.target.value)
     } else {
-      tmp[generator] = false
+      tmp[schedule.generator] = false
     }
     this.setState({timeGroup: tmp})
   }
@@ -63,37 +57,26 @@ class NcTable extends React.Component {
     }
   }
 
-  handleAutoCompleteUpdate(generator, value) {
-    this.props.saveCMD(generator, value)
+  handleAutoCompleteUpdate(schedule, value) {
+    this.props.saveCMD(schedule, value)
   }
 
-  toColumnTitle() {
-    return(
-      <TableRow>
-        <TableHeaderColumn>Name</TableHeaderColumn>
-        <TableHeaderColumn>Time</TableHeaderColumn>
-        <TableHeaderColumn>Module</TableHeaderColumn>
-      </TableRow>
-    )
-  }
-
-  toRowTag(generator, index) {
+  toRowTag(schedule, index) {
     return(
       <TableRow key={index} selectable={false}>
-        <TableRowColumn>{generator}</TableRowColumn>
+        <TableRowColumn>{schedule.generator}</TableRowColumn>
         <TableRowColumn>
           <TextField 
             name=""
             hintText="e.g. 01:09 or 23:11"
-            underlineStyle={ [true, undefined].includes(this.state.timeGroup[generator]) ? styles.timeValid : styles.timeInvalid}
-            onBlur={this.handleTextFieldOnBlur.bind(this, generator)}
-            />
+            underlineStyle={ [true, undefined].includes(this.state.timeGroup[schedule.generator]) ? styles.timeValid : styles.timeInvalid}
+            onBlur={this.handleTextFieldOnBlur.bind(this, schedule)} />
         </TableRowColumn>
         <TableRowColumn>
           <AutoComplete
             hintText="any commands"
-            dataSource={this.state.autoComplete}
-            onUpdateInput={this.handleAutoCompleteUpdate.bind(this, generator)}
+            dataSource={["ping www.google.com -c 30", "gatling -c entity"]}
+            onUpdateInput={this.handleAutoCompleteUpdate.bind(this, schedule)}
           />
         </TableRowColumn>
       </TableRow>
@@ -103,13 +86,21 @@ class NcTable extends React.Component {
   render() {
     return(
       <Table>
-        <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
-          {this.toColumnTitle()}
+        <TableHeader 
+          adjustForCheckbox={false} 
+          displaySelectAll={false} >
+          <TableRow>
+            {
+              ["Name", "Time", "Module"].map((title, index) => {
+                return <TableHeaderColumn key={index}>{title}</TableHeaderColumn>
+              })
+            }
+          </TableRow>
         </TableHeader>
-        <TableBody displayRowCheckbox={false}>
+        <TableBody displayRowCheckbox={false} >
           {
-            this.props.generators.map((generator, index) => {
-              return this.toRowTag(generator, index)
+            this.props.generatorsSelected.map((schedule, index) => {
+              return this.toRowTag(schedule, index)
             })
           }
         </TableBody>
@@ -118,4 +109,4 @@ class NcTable extends React.Component {
   }
 }
 
-export default NcTable
+export default Editor

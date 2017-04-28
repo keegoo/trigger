@@ -37,12 +37,12 @@ class GeneratorContainer extends React.Component {
     if(this.props.generatorsSelected.includes(generator.name)) {
       this.props.dispatch({
         type: 'REMOVE_GENERATOR',
-        generator: generator.name
+        schedule: {generator: generator.name}
       })
     } else {
       this.props.dispatch({
         type: 'ADD_GENERATOR',
-        generator: generator.name
+        schedule: {generator: generator.name}
       })
     }
   }
@@ -70,7 +70,7 @@ GeneratorContainer.propTypes = {
 // todo: what is ??? ownProps ???
 function mapStateToProps(state, ownProps) {
   return {
-    generatorsSelected: state
+    generatorsSelected: state.map((x) => x.generator)
   }
 }
 

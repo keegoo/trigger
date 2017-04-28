@@ -1,42 +1,63 @@
 import chai from "chai"
-import generatorReducer from './../src/reducers/generatorReducer.js'
+import scheduleReducer from './../src/reducers/scheduleReducer.js'
 
 let expect = chai.expect
 
-describe("generatorReducer", () => {
-  it('should add generator with action: ADD_GENERATOR', () => {
+describe("scheduleReducer", () => {
+  it('should add generator object with action: ADD_GENERATOR', () => {
     expect(
-      generatorReducer([], {
+      scheduleReducer([], {
         type: 'ADD_GENERATOR',
-        generator: 'abc'
+        schedule: {generator: 'abc'}
       })
-    ).to.eql(["abc"])
+    ).to.deep.equal([{ generator: 'abc', time: '', cmd: '', status: '' }])
   })
 
   it('should remove generator with action: REMOVE_GENERATOR', () => {
+    const state = [{ generator: 'abc', time: '', cmd: '', status: '' }]
     expect(
-      generatorReducer(['abc'], {
+      scheduleReducer(state, {
         type: 'REMOVE_GENERATOR',
-        generator: 'abc'
+        schedule: {generator: 'abc'}
       })
     ).to.eql([])
   })
 
   it('should return default state if action not found', () => {
     expect(
-      generatorReducer(['default'], {
+      scheduleReducer(['default'], {
         type: 'WRONG_ACTION',
-        generator: 'abc'
+        schedule: {generator: 'abc'}
       })
     ).to.eql(['default'])
   })
 
   it('should return default state if data is wrong', () => {
     expect(
-      generatorReducer(['default'], {
+      scheduleReducer(['default'], {
         type: 'ADD_GENERATOR',
-        name: 'abc' 
+        name: {generator: 'abc'}
       })
     ).to.eql(['default'])
+  })
+
+  it('should save time to specific generator with: SAVE_TIME', () => {
+    const state = [{ generator: 'abc', time: '', cmd: '', status: '' }]
+    expect(
+      scheduleReducer(state, {
+        type: 'SAVE_TIME',
+        schedule: {generator: 'abc', time: '20170428T10:10:10Z'}
+      })
+    ).to.deep.equal([{ generator: 'abc', time: '20170428T10:10:10Z', cmd: '', status: '' }])
+  })
+
+  it('should save CMD to specific generator with: SAVE_COMMAND', () => {
+    const state = [{ generator: 'abc', time: '', cmd: '', status: '' }]
+    expect(
+      scheduleReducer(state, {
+        type: 'SAVE_COMMAND',
+        schedule: {generator: 'abc', cmd: 'ping www.g.com'}
+      })
+    ).to.deep.equal([{ generator: 'abc', time: '', cmd: 'ping www.g.com', status: '' }])
   })
 })
