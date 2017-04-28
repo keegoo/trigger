@@ -76,8 +76,7 @@ class Editor extends React.Component {
           <AutoComplete
             hintText="any commands"
             dataSource={["ping www.google.com -c 30", "gatling -c entity"]}
-            onUpdateInput={this.handleAutoCompleteUpdate.bind(this, generator)}
-          />
+            onUpdateInput={this.handleAutoCompleteUpdate.bind(this, generator)} />
         </TableRowColumn>
       </TableRow>
     )

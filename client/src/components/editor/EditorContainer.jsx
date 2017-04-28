@@ -70,7 +70,7 @@ class EditorContainer extends React.Component {
 
     if(cmd){
       this.props.dispatch({
-        type: 'SAVE_CMD',
+        type: 'SAVE_COMMAND',
         schedule: { generator: generator, cmd: cmd}
       })
     }
@@ -105,6 +105,15 @@ class EditorContainer extends React.Component {
 
       // tell its father: App
       this.props.onSave()
+
+      // clear schedule
+      this.props.dispatch({
+        type: 'SCHEDULE_BEEN_SAVED',
+        schedule: {}
+      })
+
+      // reset dateOffset
+      this.setState({dateOffset: 0})
     })
   }
 

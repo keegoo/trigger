@@ -50,6 +50,9 @@ export default function scheduleReducer(state = [], action){
         )
       ]
 
+    case 'SCHEDULE_BEEN_SAVED':
+      return []
+
     default:
       return state
   }

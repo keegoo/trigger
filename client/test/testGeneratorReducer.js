@@ -60,4 +60,13 @@ describe("scheduleReducer", () => {
       })
     ).to.deep.equal([{ generator: 'abc', time: '', cmd: 'ping www.g.com', status: '' }])
   })
+  it('should set state = [] with: SCHEDULE_BEEN_SAVED', () => {
+    const state = [{ generator: 'abc', time: '', cmd: '', status: '' }]
+    expect(
+      scheduleReducer(state, {
+        type: 'SCHEDULE_BEEN_SAVED',
+        schedule: ''
+      })
+    ).to.eql([])
+  })
 })
