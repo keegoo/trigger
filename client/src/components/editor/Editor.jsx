@@ -23,15 +23,15 @@ class Editor extends React.Component {
     }
   }
 
-  handleTextFieldOnBlur(schedule, e){
+  handleTextFieldOnBlur(generator, e){
     let tmp = this.state.timeGroup
     let rightFormat = this.checkTimeFormat(e.target.value)
     let rightRange = this.checkTimeRange(e.target.value)
     if (rightFormat && rightRange){
-      tmp[schedule.generator] = true
-      this.props.saveTime(schedule, e.target.value)
+      tmp[generator] = true
+      this.props.saveTime(generator, e.target.value)
     } else {
-      tmp[schedule.generator] = false
+      tmp[generator] = false
     }
     this.setState({timeGroup: tmp})
   }
@@ -57,26 +57,26 @@ class Editor extends React.Component {
     }
   }
 
-  handleAutoCompleteUpdate(schedule, value) {
-    this.props.saveCMD(schedule, value)
+  handleAutoCompleteUpdate(generator, value) {
+    this.props.saveCMD(generator, value)
   }
 
-  toRowTag(schedule, index) {
+  toRowTag(generator, index) {
     return(
       <TableRow key={index} selectable={false}>
-        <TableRowColumn>{schedule.generator}</TableRowColumn>
+        <TableRowColumn>{generator}</TableRowColumn>
         <TableRowColumn>
           <TextField 
             name=""
             hintText="e.g. 01:09 or 23:11"
-            underlineStyle={ [true, undefined].includes(this.state.timeGroup[schedule.generator]) ? styles.timeValid : styles.timeInvalid}
-            onBlur={this.handleTextFieldOnBlur.bind(this, schedule)} />
+            underlineStyle={ [true, undefined].includes(this.state.timeGroup[generator]) ? styles.timeValid : styles.timeInvalid}
+            onBlur={this.handleTextFieldOnBlur.bind(this, generator)} />
         </TableRowColumn>
         <TableRowColumn>
           <AutoComplete
             hintText="any commands"
             dataSource={["ping www.google.com -c 30", "gatling -c entity"]}
-            onUpdateInput={this.handleAutoCompleteUpdate.bind(this, schedule)}
+            onUpdateInput={this.handleAutoCompleteUpdate.bind(this, generator)}
           />
         </TableRowColumn>
       </TableRow>
@@ -99,8 +99,8 @@ class Editor extends React.Component {
         </TableHeader>
         <TableBody displayRowCheckbox={false} >
           {
-            this.props.generatorsSelected.map((schedule, index) => {
-              return this.toRowTag(schedule, index)
+            this.props.generatorsSelected.map((generator, index) => {
+              return this.toRowTag(generator, index)
             })
           }
         </TableBody>

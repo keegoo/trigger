@@ -52,23 +52,14 @@ class EditorContainer extends React.Component {
     this.setState({dateOffset: value})
   }
 
-  handleSaveGeneratorTime(schedule, value) {
+  handleSaveGeneratorTime(generator, value) {
     const date = utils.dateStartFromToday(this.state.dateOffset)
-    this.setSchedulerData(schedule.generator, {time: utils.combineDateTimeToISO(date, value + ':00')})
+    this.setSchedulerData(generator, {time: utils.combineDateTimeToISO(date, value + ':00')})
   }
 
-  handleSaveGeneratorCMD(schedule, value) {
-    this.setSchedulerData(schedule.generator, {cmd: value})
+  handleSaveGeneratorCMD(generator, value) {
+    this.setSchedulerData(generator, {cmd: value})
   }
-
-  // setSchedulerData(generator, {time, cmd}) {
-  //   let selected = this.state.selected
-  //   const index = selected.map((x) => x.generator).indexOf(generator)
-  //   if(time) {selected[index].time = time}
-  //   if(cmd)  {selected[index].cmd = cmd}
-
-  //   this.setState({selected: selected})
-  // }
 
   setSchedulerData(generator, {time, cmd}) {
     if(time){
@@ -103,7 +94,7 @@ class EditorContainer extends React.Component {
             onClick={ this.handleOnSaveScheduler } />
         </div>
         <Editor 
-          generatorsSelected={this.props.generatorsSelected}
+          generatorsSelected={this.props.schedule.map((x) => x.generator)}
           saveTime={this.handleSaveGeneratorTime}
           saveCMD={this.handleSaveGeneratorCMD} />
       </div>
@@ -114,7 +105,7 @@ class EditorContainer extends React.Component {
 // todo: what is ??? ownProps ???
 function mapStateToProps(state, ownProps) {
   return {
-    generatorsSelected: state
+    schedule: state
   }
 }
 
