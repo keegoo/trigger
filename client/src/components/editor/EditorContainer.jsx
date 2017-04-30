@@ -4,6 +4,7 @@ import SaveIcon from 'material-ui/svg-icons/content/save'
 import DeleteIcon from 'material-ui/svg-icons/action/delete'
 import DatePicker from './DatePicker.jsx'
 import Editor from './Editor.jsx'
+import { NOTIFICATION_RESOURCE } from './../notification/notificationResource.js'
 import * as utils from './../utils.js'
 import {cyan500} from 'material-ui/styles/colors'
 import Config from 'Config'
@@ -80,10 +81,7 @@ class EditorContainer extends React.Component {
     if (this.props.schedule.length == 0){
       this.props.dispatch({
         type: 'PUSH_NOTIFICATION',
-        notification: {
-          type: 'error',
-          msg: 'Please select at least one Generator.'
-        }
+        notification: NOTIFICATION_RESOURCE.ERROR_NO_GENERATOR
       })
     } else {
       this.saveScheduler()

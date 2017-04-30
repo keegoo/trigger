@@ -21,7 +21,7 @@ class Notification extends React.Component {
         <Snackbar
           open={ this.props.notification.length == 0 ? false : true }
           message= { this.props.notification.length == 0 ? 'default message' : this.props.notification[0].msg }
-          autoHideDuration={3000}
+          autoHideDuration={23000}
           onRequestClose={this.handleRequestClose} />
       </div>
     )
