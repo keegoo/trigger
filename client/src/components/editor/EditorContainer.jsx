@@ -77,9 +77,14 @@ class EditorContainer extends React.Component {
   }
 
   handleOnSaveScheduler(){
-    console.log("click save button")
     if (this.props.schedule.length == 0){
-      console.log(`save schedule failed!`)
+      this.props.dispatch({
+        type: 'PUSH_NOTIFICATION',
+        notification: {
+          type: 'error',
+          msg: 'Please select at least one Generator.'
+        }
+      })
     } else {
       this.saveScheduler()
     }
@@ -88,7 +93,6 @@ class EditorContainer extends React.Component {
   saveScheduler(){
     const host = Config.host
     const x = {
-      // date: utils.dateStartFromToday(this.state.dateOffset),
       schedule: this.props.schedule
     }
 
@@ -146,7 +150,8 @@ class EditorContainer extends React.Component {
 // todo: what is ??? ownProps ???
 function mapStateToProps(state, ownProps) {
   return {
-    schedule: state.schedule
+    schedule: state.schedule,
+    notification: state.notification
   }
 }
 
