@@ -71,16 +71,43 @@ class EditorContainer extends React.Component {
     }
   }
 
+  // ==================================
   handleOnSaveScheduler(){
-    if (this.props.schedule.length == 0){
+    if ( this.noneGeneratorsSelected() ){
       this.props.dispatch({
         type: 'PUSH_NOTIFICATION',
         notification: NOTIFICATION_RESOURCE.ERROR_NO_GENERATOR
+      })
+    } else if ( this.invalidScheduleElement() ) {
+      this.props.dispatch({
+        type: 'PUSH_NOTIFICATION',
+        notification: NOTIFICATION_RESOURCE.ERROR_INVALID_SCHEDULE
       })
     } else {
       this.saveScheduler()
     }
   }
+
+  noneGeneratorsSelected() {
+    return this.props.schedule.length === 0 ? true : false
+  }
+
+  invalidScheduleElement() {
+    let invalid = false
+    this.props.schedule.forEach((x) => {
+      if( this.isEmpty(x.generator) || this.isEmpty(x.time) || this.isEmpty(x.cmd) ){
+        invalid = true
+      }
+    })
+    return invalid
+  }
+
+  isEmpty(str) {
+    // falsy: 
+    //    null, undefined, NaN, empty str, 0, false
+    return str ? false : true
+  }
+  // ==================================
 
   saveScheduler(){
     const host = Config.host
