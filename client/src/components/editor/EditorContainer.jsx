@@ -16,17 +16,11 @@ const styles = {
     marginBottom: '10px',
     marginTop: '20px'
   },
-  deleteIcon: {
-    float: 'right',
-    color: 'gray',
-    marginTop: '20px',
-    marginRight: '10px'
-  },
   saveIcon: {
     float: 'right',
     color: 'gray',
     marginTop: '20px',
-    marginRight: '10px'
+    marginRight: '20px'
   },
   filter: {
     width: '200px'
@@ -127,10 +121,6 @@ class EditorContainer extends React.Component {
           <DatePicker
             value={this.state.dateOffset}
             handleDateChange={this.handleDateChange} />
-          <DeleteIcon 
-            style={styles.deleteIcon} 
-            hoverColor={cyan500} 
-            onClick={ this.handleOnSaveScheduler }/>
           <SaveIcon 
             style={styles.saveIcon} 
             hoverColor={cyan500}
