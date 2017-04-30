@@ -6,7 +6,7 @@ import DatePicker from './DatePicker.jsx'
 import Editor from './Editor.jsx'
 import { NOTIFICATION_RESOURCE } from './../notification/notificationResource.js'
 import * as utils from './../utils.js'
-import {cyan500} from 'material-ui/styles/colors'
+import { cyan500 } from 'material-ui/styles/colors'
 import Config from 'Config'
 
 const styles = {
