@@ -146,7 +146,7 @@ class EditorContainer extends React.Component {
 // todo: what is ??? ownProps ???
 function mapStateToProps(state, ownProps) {
   return {
-    schedule: state
+    schedule: state.schedule
   }
 }
 

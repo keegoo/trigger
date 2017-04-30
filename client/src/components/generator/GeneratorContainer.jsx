@@ -70,7 +70,7 @@ GeneratorContainer.propTypes = {
 // todo: what is ??? ownProps ???
 function mapStateToProps(state, ownProps) {
   return {
-    generatorsSelected: state.map((x) => x.generator)
+    generatorsSelected: state.schedule.map((x) => x.generator)
   }
 }
 
