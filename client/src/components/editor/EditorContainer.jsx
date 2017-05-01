@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import SaveIcon from 'material-ui/svg-icons/content/save'
 import DeleteIcon from 'material-ui/svg-icons/action/delete'
+import Paper from 'material-ui/Paper'
 import DatePicker from './DatePicker.jsx'
 import Editor from './Editor.jsx'
 import { NOTIFICATION_RESOURCE } from './../notification/notificationResource.js'
@@ -32,7 +33,8 @@ class EditorContainer extends React.Component {
     super(props, context)
 
     this.state = {
-      dateOffset: 0
+      dateOffset: 0,
+      paperBorderWidth: 0
     }
 
     this.handleDateChange = this.handleDateChange.bind(this)
@@ -144,19 +146,24 @@ class EditorContainer extends React.Component {
     return(
       <div>
         <div style={styles.titleText}><span>Schedule</span></div>
-        <div>
-          <DatePicker
-            value={this.state.dateOffset}
-            handleDateChange={this.handleDateChange} />
-          <SaveIcon 
-            style={styles.saveIcon} 
-            hoverColor={cyan500}
-            onClick={ this.handleOnSaveScheduler } />
-        </div>
-        <Editor 
-          generatorsSelected={this.props.schedule.map((x) => x.generator).sort()}
-          saveTime={this.handleSaveGeneratorTime}
-          saveCMD={this.handleSaveGeneratorCMD} />
+        <Paper
+          zDepth={this.state.paperBorderWidth} 
+          onMouseEnter={ e => this.setState({ paperBorderWidth: 1 })} 
+          onMouseLeave={ e => this.setState({ paperBorderWidth: 0 })} >
+          <div>
+            <DatePicker
+              value={this.state.dateOffset}
+              handleDateChange={this.handleDateChange} />
+            <SaveIcon 
+              style={styles.saveIcon} 
+              hoverColor={cyan500}
+              onClick={ this.handleOnSaveScheduler } />
+          </div>
+          <Editor 
+            generatorsSelected={this.props.schedule.map((x) => x.generator).sort()}
+            saveTime={this.handleSaveGeneratorTime}
+            saveCMD={this.handleSaveGeneratorCMD} />
+        </Paper>
       </div>
     )
   }
