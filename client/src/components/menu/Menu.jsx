@@ -1,13 +1,17 @@
 import React from 'react'
 import AppBar from 'material-ui/AppBar'
 import FlatButton from 'material-ui/FlatButton'
-import {grey200} from 'material-ui/styles/colors'
+import {grey300} from 'material-ui/styles/colors'
 
 const styles = {
   subtitle: {
     fontSize: '16px',
-    paddingLeft: '30px',
-    color: grey200
+    paddingLeft: '30px'
+  },
+
+  linkEmbedded:{ 
+    textDecoration: 'none',
+    color: grey300
   }
 }
 
@@ -19,7 +23,7 @@ class Menu extends React.Component {
           {
             <div>
               <span>Trigger</span>
-              <span style={styles.subtitle}> A Gatling Controller</span>
+              <span style={styles.subtitle}> A <a style={styles.linkEmbedded} href="http://gatling.io/">Gatling</a> Controller</span>
             </div>
           }
         showMenuIconButton={false}
