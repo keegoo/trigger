@@ -20,7 +20,8 @@ const store = configureStore()
 
 const styles = {
   width: '60%',
-  margin: 'auto'
+  margin: 'auto',
+  minWidth: '800px'
 }
 
 class App extends React.Component {
