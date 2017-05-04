@@ -137,6 +137,12 @@ class EditorContainer extends React.Component {
         schedule: {}
       })
 
+      // notification
+      this.props.dispatch({
+        type: 'PUSH_NOTIFICATION',
+        notification: NOTIFICATION_RESOURCE.INFO_SAVE_SCHEDULE
+      })
+
       // reset dateOffset
       this.setState({dateOffset: 0})
     })
