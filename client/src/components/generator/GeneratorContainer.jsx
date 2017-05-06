@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react'
 import { connect } from 'react-redux'
 import GeneratorFilter from './GeneratorFilter.jsx'
 import GeneratorList from './GeneratorList.jsx'
+import * as utils from './../utils.js'
 
 import Config from 'Config'
 
@@ -11,6 +12,9 @@ class GeneratorContainer extends React.Component {
 
     this.state = {
       filterStr: "",
+
+      // data example:
+      // [{ name: "SF2-WGROAPP301", timestamp: "2017-05-05T13:24:32Z" }, ...]
       generators: []
     }
 
@@ -57,6 +61,21 @@ class GeneratorContainer extends React.Component {
     }
   }
 
+  // active within 6 seconds will be regarded as online
+  isOnline(timestamp) {
+    return utils.xSecondsAgoUTC(6) < timestamp ? true : false
+  }
+
+
+  timestampIntoStatus(generators){
+    return this.state.generators.map((x) => { 
+      return {
+        name: x.name, 
+        online: this.isOnline(x.timestamp)
+      } 
+    })
+  }
+
   render(){
     // console.log(`prop -> generatorsSelected: ${this.props.generatorsSelected}`)
     return(
@@ -64,7 +83,7 @@ class GeneratorContainer extends React.Component {
         <GeneratorFilter 
           handleFilterChange={this.onFilterChange} />
         <GeneratorList 
-          generators={this.state.generators.filter( e => e.name.includes(this.state.filterStr))}
+          generators={this.timestampIntoStatus(this.state.generators).filter( e => e.name.includes(this.state.filterStr))}
           filterStr={this.state.filterStr}
           handleSelectGenerator={this.onSelectGenerator}
           generatorsSelected={this.props.generatorsSelected} />

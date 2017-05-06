@@ -1,9 +1,19 @@
 // ==============================
 //
 export function dateStartFromToday(offset) {
-  const oneDay = 24 * 60 * 60 * 1000
-  const t = new Date(Date.now() + oneDay * offset)
+  const secondsInOneDay = 24 * 60 * 60
+  const t = new Date(Date.now() + secondsInOneDay * offset)
   return toString(t).split('T')[0]
+}
+
+// ==============================
+// convert time of x seconds ago
+// into UTC ISO time
+export function xSecondsAgoUTC(x) {
+  const seconds = x * 1000
+  const t = new Date(Date.now() - seconds)
+  const tmp = toString(t).split('T')
+  return combineDateTimeToISO(tmp[0], tmp[1])
 }
 
 // ==============================

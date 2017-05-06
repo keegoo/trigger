@@ -41,6 +41,7 @@ class GeneratorList extends React.Component {
     return(
       <Chip 
         key={index} 
+        backgroundColor={ generator.online ? cyan100 : '' }
         style={ this.props.generatorsSelected.includes(generator.name) ? styles.chipSelect : styles.chipUnselect }
         onClick={this.props.handleSelectGenerator.bind(this, generator)} >
         <div dangerouslySetInnerHTML={{__html: this.highlightGenerator(generator.name)}}></div>
@@ -58,6 +59,8 @@ class GeneratorList extends React.Component {
 }
 
 GeneratorList.propTypes = {
+  // generators example:
+  // [{ name: "SF2-WGROAPP301", online: true }, ...]
   generators:             PropTypes.array.isRequired,
   generatorsSelected:     PropTypes.array.isRequired,
   filterStr:              PropTypes.string.isRequired,
