@@ -1,18 +1,18 @@
 import React, {PropTypes} from 'react'
 import Chip from 'material-ui/Chip'
-import { cyan100, grey300 } from 'material-ui/styles/colors'
+import { cyan100, grey900, grey50 } from 'material-ui/styles/colors'
 
 const styles = {
   chipSelect: {
     margin: '4px',
     border: 'solid 1px',
-    borderColor: cyan100,
+    borderColor: grey900,
     boxSizing: 'border-box'
   },
   chipUnselect: {
     margin: '4px',
     border: 'solid 1px',
-    borderColor: grey300
+    borderColor: grey50
   },
   wrapper: {
     display: 'flex',
