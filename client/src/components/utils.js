@@ -1,7 +1,7 @@
 // ==============================
 //
 export function dateStartFromToday(offset) {
-  const secondsInOneDay = 24 * 60 * 60
+  const secondsInOneDay = 24 * 60 * 60 * 1000
   const t = new Date(Date.now() + secondsInOneDay * offset)
   return toString(t).split('T')[0]
 }
