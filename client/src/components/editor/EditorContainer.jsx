@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import SaveIcon from 'material-ui/svg-icons/content/save'
-import DeleteIcon from 'material-ui/svg-icons/action/delete'
 import Paper from 'material-ui/Paper'
 import DatePicker from './DatePicker.jsx'
 import Editor from './Editor.jsx'
