@@ -73,7 +73,8 @@ class GeneratorContainer extends React.Component {
         name: x.name, 
         online: this.isOnline(x.timestamp)
       } 
-    })
+    // put online ahead
+    }).sort((x, y) => y.online - x.online)
   }
 
   render(){
