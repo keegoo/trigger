@@ -14,7 +14,7 @@
   Generator.create(
     {
       name: "#{prefix[j]}-WGROAPP3#{n}",
-      status: status,
+      timestamp: Time.now.utc.iso8601,
       last_used: "#{i.day.ago.utc.iso8601}",
       frequency: 0
     }
@@ -25,7 +25,7 @@ end
 Generator.create(
   {
       name: "CYs-MacBook-Pro.local",
-      status: "connected",
+      timestamp: Time.now.utc.iso8601,
       last_used: "2017-03-27T07:02:22Z",
       frequency: 0
   }
