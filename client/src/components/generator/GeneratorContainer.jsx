@@ -16,9 +16,19 @@ class GeneratorContainer extends React.Component {
 
     this.onFilterChange = this.onFilterChange.bind(this)
     this.onSelectGenerator = this.onSelectGenerator.bind(this)
+    this.fetchGenerators = this.fetchGenerators.bind(this)
   }
 
-  componentDidMount(){
+  componentDidMount() {
+    this.fetchGenerators()
+    this.interval = setInterval(this.fetchGenerators, 6000)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval)
+  }
+
+  fetchGenerators(){
     const host = Config.host
     fetch(`${host}/generators`)
       .then(response => response.json())
@@ -48,7 +58,7 @@ class GeneratorContainer extends React.Component {
   }
 
   render(){
-    console.log(`prop -> generatorsSelected: ${this.props.generatorsSelected}`)
+    // console.log(`prop -> generatorsSelected: ${this.props.generatorsSelected}`)
     return(
       <div>
         <GeneratorFilter 

@@ -1,6 +1,6 @@
 class GeneratorsController < ApplicationController
   def index
-    render json: Generator.all.only(:name, timestamp)
+    render json: Generator.all.only(:name, :timestamp)
   end
 
   def update_status
