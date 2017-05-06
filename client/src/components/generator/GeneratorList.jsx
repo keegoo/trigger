@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react'
 import Chip from 'material-ui/Chip'
-import {cyan100} from 'material-ui/styles/colors'
+import { cyan100, grey300 } from 'material-ui/styles/colors'
 
 const styles = {
   chipSelect: {
@@ -10,7 +10,9 @@ const styles = {
     boxSizing: 'border-box'
   },
   chipUnselect: {
-    margin: '4px'
+    margin: '4px',
+    border: 'solid 1px',
+    borderColor: grey300
   },
   wrapper: {
     display: 'flex',
@@ -43,7 +45,9 @@ class GeneratorList extends React.Component {
         key={index} 
         backgroundColor={ generator.online ? cyan100 : '' }
         style={ this.props.generatorsSelected.includes(generator.name) ? styles.chipSelect : styles.chipUnselect }
-        onClick={this.props.handleSelectGenerator.bind(this, generator)} >
+        onClick={this.props.handleSelectGenerator.bind(this, generator)} 
+        // wierd: hover won't have effect without onTouchTap ...
+        onTouchTap={ function(){} } > 
         <div dangerouslySetInnerHTML={{__html: this.highlightGenerator(generator.name)}}></div>
       </Chip>
     )
