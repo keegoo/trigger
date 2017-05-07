@@ -1,5 +1,7 @@
 import React from 'react'
+import { Link } from 'react-router'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
+import { grey500 } from 'material-ui/styles/colors'
 import * as utils from './../utils.js'
 
 const styles = {
@@ -7,9 +9,19 @@ const styles = {
     boxShadow: 'rgba(0, 0, 0, 0.2) 0px 0px 10px',
     marginBottom: '10px'
   },
+
   borderActive: {
     boxShadow: 'rgba(0, 188, 212, 1) 0px 0px 10px',
     marginBottom: '10px'
+  },
+
+  monitorLink: {
+    textDecoration: 'none',
+    color: grey500
+  },
+
+  tableTitle: {
+    textAlign: 'center'
   }
 }
 
@@ -26,7 +38,11 @@ class Schedule extends React.Component {
         <Table>
           <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
             <TableRow>
-              <TableHeaderColumn colSpan="3" style={{textAlign: 'center'}}>{utils.splitISOToDateTime(nearT)[0]}</TableHeaderColumn>
+              <TableHeaderColumn colSpan="3" style={styles.tableTitle}>
+                <Link to={`/monitor/${t._id}`} style={styles.monitorLink} >
+                  {utils.splitISOToDateTime(nearT)[0]}
+                </Link>
+              </TableHeaderColumn>
             </TableRow>
             <TableRow>
               <TableHeaderColumn>Name</TableHeaderColumn>

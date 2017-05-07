@@ -36,16 +36,13 @@ class HomePage extends React.Component {
       .then(response => response.json())
       .then(json => { 
         this.setState({savedSchedulersData: json})
+        // console.log(json)
       })
   }
-  // =============================
 
-  // =============================
-  // scheduler component
   handleSchedulerSave (){
     this.fetchHistoricalSchedulers()
   }
-  // =============================
 
   render() {
     return (
