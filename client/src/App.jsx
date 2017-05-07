@@ -1,12 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import { Router, Route, browserHistory, hashHistory } from 'react-router'
 
 import GeneratorContainer from './components/generator/GeneratorContainer.jsx'
 import EditorContainer from './components/editor/EditorContainer.jsx'
 import Menu from './components/menu/Menu.jsx'
 import ScheduleContainer from './components/schedule/ScheduleContainer.jsx'
 import Notification from './components/notification/Notification.jsx'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+
+import MonitorContainer from './components/monitor/MonitorContainer.jsx'
+
 import injectTapEventPlugin from 'react-tap-event-plugin'
 injectTapEventPlugin()
 
@@ -78,7 +82,10 @@ class App extends React.Component {
 ReactDOM.render((
   <MuiThemeProvider>
     <Provider store={store}>
-      <App />
+      <Router history={hashHistory}>
+        <Route path="/" component={App} />
+        <Route path="monitor" component={MonitorContainer} />
+      </Router>
     </Provider>
   </MuiThemeProvider>),
   document.getElementById("main")
