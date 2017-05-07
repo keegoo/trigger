@@ -1,5 +1,6 @@
 import React from 'react'
 import MonitorContainer from './components/monitor/MonitorContainer.jsx'
+import GaugeContainer from './components/gauge/GaugeContainer.jsx'
 
 const styles = {
   width: '60%',
@@ -12,6 +13,7 @@ class MonitorPage extends React.Component {
     return (
       <div style={styles}>
         <MonitorContainer/>
+        <GaugeContainer />
       </div>
     )
   }
