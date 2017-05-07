@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import { Router, Route, browserHistory, hashHistory } from 'react-router'
+import { Router, Route, browserHistory, hashHistory, IndexRoute } from 'react-router'
 
 import GeneratorContainer from './components/generator/GeneratorContainer.jsx'
 import EditorContainer from './components/editor/EditorContainer.jsx'
@@ -67,7 +67,6 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Menu />
         <div className="app-body" style={styles}>
           <GeneratorContainer />
           <EditorContainer onSave={this.handleSchedulerSave}/>
@@ -83,8 +82,10 @@ ReactDOM.render((
   <MuiThemeProvider>
     <Provider store={store}>
       <Router history={hashHistory}>
-        <Route path="/" component={App} />
-        <Route path="monitor" component={MonitorContainer} />
+        <Route path="/" component={Menu}>
+          <IndexRoute component={App} />
+          <Route path="monitor" component={MonitorContainer} />
+        </Route>
       </Router>
     </Provider>
   </MuiThemeProvider>),
