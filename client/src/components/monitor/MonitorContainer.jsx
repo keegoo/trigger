@@ -1,5 +1,6 @@
 import React from 'react'
 import UserStatusTable from './UserStatusTable.jsx'
+import Chart from './Chart.jsx'
 
 const data = [
   {name: 'APC-WGROAPP301', target: 20, running: 20, stopped: 0 },
@@ -11,7 +12,10 @@ const data = [
 class MonitorContainer extends React.Component {
   render() {
     return (
-      <UserStatusTable groups={data}/> 
+      <div>
+        <UserStatusTable groups={data}/> 
+        <Chart />
+      </div>
     )
   }
 }
