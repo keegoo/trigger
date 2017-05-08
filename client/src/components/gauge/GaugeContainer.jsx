@@ -5,7 +5,7 @@ const styles = {
   layout: {
     display: 'grid',
     gridGap: '10px',
-    gridTemplateColumns: '25% 25% 25% 25%',
+    gridTemplateColumns: '1fr 1fr 1fr 1fr',
     marginBottom: '20px'
   }
 }
