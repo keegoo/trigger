@@ -1,5 +1,12 @@
 import React from 'react'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
+import { grey400 } from 'material-ui/styles/colors'
+
+const styles = {
+  border: {
+    boxShadow: `${grey400} 0px 0px 10px`
+  }
+}
 
 class UserStatusTable extends React.Component {
 
@@ -16,26 +23,28 @@ class UserStatusTable extends React.Component {
 
   render() {
     return(
-      <Table>
-        <TableHeader
-          adjustForCheckbox={false} 
-          displaySelectAll={false} >
-          <TableRow>
+      <div style={styles.border}>
+        <Table>
+          <TableHeader
+            adjustForCheckbox={false} 
+            displaySelectAll={false} >
+            <TableRow>
+              {
+                ["Generator", "Target Users", "Running", "Stopped"].map((title, index) => {
+                  return <TableHeaderColumn key={index}>{title}</TableHeaderColumn>
+                })
+              }
+            </TableRow>
+          </TableHeader>
+          <TableBody displayRowCheckbox={false} >
             {
-              ["Generator", "Target Users", "Running", "Stopped"].map((title, index) => {
-                return <TableHeaderColumn key={index}>{title}</TableHeaderColumn>
+              this.props.groups.map((group, index) => {
+                return this.toRowTag(group, index)
               })
             }
-          </TableRow>
-        </TableHeader>
-        <TableBody displayRowCheckbox={false} >
-          {
-            this.props.groups.map((group, index) => {
-              return this.toRowTag(group, index)
-            })
-          }
-        </TableBody>
-      </Table>
+          </TableBody>
+        </Table>
+      </div>
     )
   }
 }

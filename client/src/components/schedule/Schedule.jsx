@@ -1,17 +1,17 @@
 import React from 'react'
 import { Link } from 'react-router'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
-import { grey500 } from 'material-ui/styles/colors'
+import { grey500, grey400, cyan400 } from 'material-ui/styles/colors'
 import * as utils from './../utils.js'
 
 const styles = {
   borderInactive: {
-    boxShadow: 'rgba(0, 0, 0, 0.2) 0px 0px 10px',
+    boxShadow: `${grey400} 0px 0px 10px`,
     marginBottom: '10px'
   },
 
   borderActive: {
-    boxShadow: 'rgba(0, 188, 212, 1) 0px 0px 10px',
+    boxShadow: `${cyan400} 0px 0px 10px`,
     marginBottom: '10px'
   },
 
