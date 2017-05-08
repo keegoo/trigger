@@ -20,14 +20,19 @@ const styles = {
   },
 
   body: {
-    padding: '5px',
+    padding: '10px',
     display: 'flex',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     height: '60px'
   },
 
   icon: {
-    color: grey400
+    color: grey400,
+    marginTop: '15px'
+  },
+
+  textArea: {
+    marginTop: '10px'
   },
 
   sublabel: {
@@ -68,7 +73,7 @@ class Gauge extends React.Component {
         <Divider />
         <div style={styles.body}>
           {this.chooseIcon(this.props.type)}
-          <div>
+          <div style={styles.textArea}>
             <span style={styles.sublabel}>{this.props.sublabel}</span>
             <span style={styles.label}>{this.props.label}</span>
           </div>
