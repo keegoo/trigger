@@ -18,6 +18,10 @@ const styles = {
   linkEmbedded:{ 
     textDecoration: 'none',
     color: grey300
+  },
+
+  menu: {
+    marginBottom: '20px'
   }
 }
 
@@ -25,7 +29,7 @@ class Menu extends React.Component {
   render() {
     return(
       <div>
-      <AppBar 
+      <AppBar style={styles.menu} 
         title=
           {
             <div>
