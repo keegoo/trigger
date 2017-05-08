@@ -4,7 +4,8 @@ import Gauge from './Gauge.jsx'
 const styles = {
   layout: {
     display: 'grid',
-    gridGap: '10px'
+    gridGap: '10px',
+    gridTemplateColumns: '25% 25% 25% 25%'
   }
 }
 

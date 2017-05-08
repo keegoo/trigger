@@ -9,15 +9,25 @@ import { grey400 } from 'material-ui/styles/colors'
 const styles = {
   border: {
     boxShadow: `${grey400} 0px 1px 6px`,
-    borderRadius: '2px'
+    borderRadius: '2px',
+    fontFamily: 'Roboto, sans-serif'
   },
 
   title: {
-    padding: '5px'
+    padding: '5px',
+    textAlign: 'center',
+    color: grey400
   },
 
   body: {
-    padding: '5px'
+    padding: '5px',
+    display: 'flex',
+    justifyContent: 'space-around',
+    height: '60px'
+  },
+
+  icon: {
+    color: grey400
   },
 
   sublabel: {
@@ -39,13 +49,13 @@ class Gauge extends React.Component {
   chooseIcon(type){
     switch(type) {
       case 'users':
-        return(<UserIcon />)
+        return(<UserIcon style={styles.icon} />)
       case 'duration':
-        return(<TimerIcon />)
+        return(<TimerIcon style={styles.icon} />)
       case 'hits':
-        return(<TrendIcon />)
+        return(<TrendIcon style={styles.icon} />)
       case 'errors':
-        return(<ErrorIcon />)
+        return(<ErrorIcon style={styles.icon} />)
       default: 
         return(<div />)
     }
