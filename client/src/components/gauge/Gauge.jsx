@@ -16,7 +16,8 @@ const styles = {
   title: {
     padding: '5px',
     textAlign: 'center',
-    color: grey400
+    color: grey400,
+    fontSize: '12px'
   },
 
   body: {
