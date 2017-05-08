@@ -3,16 +3,29 @@ import TimerIcon from 'material-ui/svg-icons/image/timer'
 import UserIcon from 'material-ui/svg-icons/social/group'
 import TrendIcon from 'material-ui/svg-icons/action/trending-up'
 import ErrorIcon from 'material-ui/svg-icons/alert/error-outline'
-import Paper from 'material-ui/Paper'
-import Divider from 'material-ui/Divider';
+import Divider from 'material-ui/Divider'
+import { grey400 } from 'material-ui/styles/colors'
 
 const styles = {
-  unit: {
-    fontSize: '10px',
-    paddingRight: '5px'
+  border: {
+    boxShadow: `${grey400} 0px 1px 6px`,
+    borderRadius: '2px'
   },
 
-  number: {
+  title: {
+    padding: '5px'
+  },
+
+  body: {
+    padding: '5px'
+  },
+
+  sublabel: {
+    fontSize: '10px',
+    marginRight: '5px'
+  },
+
+  label: {
     fontSize: '30px'
   }
 }
@@ -34,21 +47,23 @@ class Gauge extends React.Component {
       case 'errors':
         return(<ErrorIcon />)
       default: 
-        return(``)
+        return(<div />)
     }
   }
 
   render() {
     return(
-      <Paper>
-        <div>concurrent users</div>
+      <div style={styles.border}>
+        <div style={styles.title}>{this.props.title}</div>
         <Divider />
-        {this.chooseIcon(this.props.type)}
-        <div>
-          <span style={styles.unit}>No.</span>
-          <span style={styles.number}>{this.props.label}</span>
+        <div style={styles.body}>
+          {this.chooseIcon(this.props.type)}
+          <div>
+            <span style={styles.sublabel}>{this.props.sublabel}</span>
+            <span style={styles.label}>{this.props.label}</span>
+          </div>
         </div>
-      </Paper>
+      </div>
     )
   }
 }
