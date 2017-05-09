@@ -51,7 +51,7 @@ class MonitorPage extends React.Component {
   }
 
   render() {
-    
+
     if (this.state.loading) {
       return (
         <div style={styles} >
@@ -61,7 +61,9 @@ class MonitorPage extends React.Component {
     } else {
       return(
         <div style={styles}>
-          <Heading title={utils.splitISOToDateTime(this.state.scheduler.schedule[0].time)[0]} />
+          <Heading 
+            title={utils.splitISOToDateTime(this.state.scheduler.schedule[0].time)[0]}
+            status='waiting' />
           <GaugeContainer />
           <MonitorContainer />
         </div>
