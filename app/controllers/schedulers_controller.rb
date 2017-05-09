@@ -9,6 +9,11 @@ class SchedulersController < ApplicationController
     Scheduler.where(id: id).delete
   end
 
+  def show
+    id = params.require(:id)
+    render json: Scheduler.find(id)
+  end
+
   def index
     render json: Scheduler.order_by("schedule.time" => :desc).limit(30)
   end
