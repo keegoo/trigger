@@ -4,8 +4,8 @@ import Gauge from './Gauge.jsx'
 const styles = {
   layout: {
     display: 'grid',
-    gridGap: '10px',
-    gridTemplateColumns: '1fr 1fr 1fr 1fr',
+    gridGap: '40px',
+    gridTemplateColumns: '1fr 1fr 1fr',
     marginBottom: '20px'
   }
 }
@@ -14,11 +14,6 @@ class GaugeContainer extends React.Component {
   render() {
     return (
       <div style={styles.layout}>
-        <Gauge 
-          title='Concurrent Users'
-          type='users' 
-          sublabel='No.' 
-          label='200' />
         <Gauge 
           title='Duration'
           type='duration' 
