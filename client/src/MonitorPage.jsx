@@ -1,7 +1,8 @@
 import React from 'react'
+import Heading from './components/heading/Heading.jsx'
 import GaugeContainer from './components/gauge/GaugeContainer.jsx'
 import MonitorContainer from './components/monitor/MonitorContainer.jsx'
-import Heading from './components/heading/Heading.jsx'
+import UsersContainer from './components/users/UsersContainer.jsx'
 import CircularProgress from 'material-ui/CircularProgress'
 import * as utils from './components/utils.js'
 import Config from 'Config'
@@ -51,7 +52,6 @@ class MonitorPage extends React.Component {
   }
 
   render() {
-
     if (this.state.loading) {
       return (
         <div style={styles} >
@@ -65,6 +65,8 @@ class MonitorPage extends React.Component {
             title={utils.splitISOToDateTime(this.state.scheduler.schedule[0].time)[0]}
             status='waiting' />
           <GaugeContainer />
+          <UsersContainer
+            generators={this.state.scheduler.schedule.map((x) => x.generator)} />
           <MonitorContainer />
         </div>
       )

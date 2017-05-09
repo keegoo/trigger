@@ -8,7 +8,7 @@ const styles = {
   }
 }
 
-class UserStatusTable extends React.Component {
+class UsersStatusTable extends React.Component {
 
   toRowTag(group, index) {
     return(
@@ -49,4 +49,4 @@ class UserStatusTable extends React.Component {
   }
 }
 
-export default UserStatusTable
+export default UsersStatusTable
