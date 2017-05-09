@@ -9,8 +9,7 @@ import { grey400 } from 'material-ui/styles/colors'
 const styles = {
   border: {
     boxShadow: `${grey400} 0px 1px 6px`,
-    borderRadius: '2px',
-    fontFamily: 'Roboto, sans-serif'
+    borderRadius: '2px'
   },
 
   title: {

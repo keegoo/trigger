@@ -2,8 +2,8 @@ import React from 'react'
 import GaugeContainer from './components/gauge/GaugeContainer.jsx'
 import MonitorContainer from './components/monitor/MonitorContainer.jsx'
 import Heading from './components/heading/Heading.jsx'
-import * as utils from './components/utils.js'
 import CircularProgress from 'material-ui/CircularProgress'
+import * as utils from './components/utils.js'
 import Config from 'Config'
 
 const styles = {
@@ -51,10 +51,10 @@ class MonitorPage extends React.Component {
   }
 
   render() {
-
+    
     if (this.state.loading) {
       return (
-        <div style={styles}>
+        <div style={styles} >
           <CircularProgress />
         </div>
       )
