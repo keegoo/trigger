@@ -1,6 +1,9 @@
 import React from 'react'
 import GaugeContainer from './components/gauge/GaugeContainer.jsx'
 import MonitorContainer from './components/monitor/MonitorContainer.jsx'
+import Heading from './components/heading/Heading.jsx'
+import * as utils from './components/utils.js'
+import CircularProgress from 'material-ui/CircularProgress'
 import Config from 'Config'
 
 const styles = {
@@ -27,13 +30,12 @@ class MonitorPage extends React.Component {
       //     ...
       //   ]
       // }
-      scheduler: {}
+      scheduler: {},
+      loading: true
     }
 
     this.fetchScheduler = this.fetchScheduler.bind(this)
-  }
 
-  componentDidMount() {
     this.fetchScheduler(this.props.params.scheduleId)
   }
 
@@ -43,21 +45,29 @@ class MonitorPage extends React.Component {
       .then(response => response.json())
       .then(json => { 
         this.setState({scheduler: json})
+        this.setState({loading: false})
         // console.log(json)
       })
   }
 
   render() {
 
-    console.log(this.props.params.scheduleId)
-    console.log(this.state.scheduler)
+    if (this.state.loading) {
+      return (
+        <div style={styles}>
+          <CircularProgress />
+        </div>
+      )
+    } else {
+      return(
+        <div style={styles}>
+          <Heading title={utils.splitISOToDateTime(this.state.scheduler.schedule[0].time)[0]} />
+          <GaugeContainer />
+          <MonitorContainer />
+        </div>
+      )
+    }
 
-    return (
-      <div style={styles}>
-        <GaugeContainer />
-        <MonitorContainer/>
-      </div>
-    )
   }
 }
 
