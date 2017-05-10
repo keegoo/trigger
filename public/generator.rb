@@ -15,18 +15,8 @@ end
 
 class Config
   def update
-    @response_body = nil
-    begin
-      response = HTTParty.get("http://127.0.0.1:3000/schedulers/active")
-      @response_body = response.body
-    rescue => err
-      $LOGGER.debug("get config failed")
-    end
-
-    unless valid_json?(@response_body)
-      $LOGGER.debug("invalid JSON response: #{@response_body}")
-      @response_body = nil
-    end
+    update_config()
+    heart_beat()
   end
 
   # ==========================
@@ -66,6 +56,29 @@ class Config
       return true
     rescue JSON::ParserError => e
       return false
+    end
+  end
+
+  def update_config()
+    @response_body = nil
+    begin
+      response = HTTParty.get("http://127.0.0.1:3000/schedulers/active")
+      @response_body = response.body
+    rescue => err
+      $LOGGER.debug("get config failed")
+    end
+
+    unless valid_json?(@response_body)
+      $LOGGER.debug("invalid JSON response: #{@response_body}")
+      @response_body = nil
+    end
+  end
+
+  def heart_beat()
+    begin
+      HTTParty.get("http://127.0.0.1:3000/generators/update_status?generator=#{Socket.gethostname}")
+    rescue => err
+      $LOGGER.debug("send heart beat failed")
     end
   end
 end
