@@ -28,6 +28,15 @@ module Utils
     end
   end
 
+  def send_data(json)
+    begin
+      # HTTParty.get("http://127.0.0.1:3000/generators/notdecide")
+      puts "sending data: #{json}"
+    rescue
+      $LOGGER.debug("send data failed")
+    end
+  end
+
   extend self
 end
 
@@ -205,9 +214,11 @@ end
 #      }
 #
 class PingParser
+  extend Utils
 
   def self.read(str)
-    self.parse(str)
+    json = self.parse(str).to_json
+    self.send_data(json)
   end
 
   def self.parse(str)
@@ -224,9 +235,9 @@ class PingParser
     when /.*?\Wcannot resolve\W.*?\WUnknown host/
       default.merge(nohit)
     when /^PING\W.*data bytes$/
-      default
-    when /icmp_seq=.* ttl=.* time=.*$/
       default.merge(nohit)
+    when /icmp_seq=.* ttl=.* time=.*$/
+      default
     when /^Request timeout for/
       default.merge({error: 1})
     when /^$/
@@ -266,7 +277,7 @@ every_n_seconds(6) do
   if $generator.status == :running
     $LOGGER.info("#{$task[:cmd]} is running with pid = #{$generator.pid}")
     $generator.read_output do |each_line, line_num|
-      puts line_num
+      PingParser.read(each_line)
       Utils.heart_beat
     end
   else
