@@ -149,9 +149,10 @@ class Generator
   end
 
   def read_output()
+    line_num = 1
     @stdout.each_line do |line|
-      puts line
-      yield(line) if block_given?
+      yield(line, line_num) if block_given?
+      line_num += 1
     end
   end
 
@@ -177,9 +178,71 @@ class Generator
 end
 
 
-# class PingParser
-#   include Utils
-# end
+# ==========================
+# PingParser class
+# 
+#   briefly, it deals with the output of Ping.
+#   
+#   Ping's output:
+#     * ping: cannot resolve verywierfsitenamecouldnothave: Unknown host
+#     * PING www.google.com (216.58.221.36): 56 data bytes
+#     * 64 bytes from 216.58.221.36: icmp_seq=0 ttl=53 time=17.695 ms
+#     * Request timeout for icmp_seq 0
+#     * empty line
+#     * --- www.google.com ping statistics ---
+#     * 5 packets transmitted, 5 packets received, 0.0% packet loss
+#     * round-trip min/avg/max/stddev = 17.385/18.388/19.137/0.709 ms
+#
+#   PingParser's input is Ping's output(each line)
+#   PingParser's output is a hash, example:
+#
+#      {
+#        status: "running/stopped/waiting",
+#        hits: 1,    # as one Ping is one hit
+#        error: 0,   # number of Pings which is timeout: 1 or 0
+#        users: 1,   # as Ping is running with one thread, so it's 1
+#        timestamp: "20170511T12:10:10Z"
+#      }
+#
+class PingParser
+
+  def self.read(str)
+    self.parse(str)
+  end
+
+  def self.parse(str)
+    default = {
+      status: :running,
+      hits: 1,
+      error: 0,
+      users: 1,
+      timestamp: Time.now.utc.iso8601
+    }
+    nohit = { hits: 0 }
+
+    case str
+    when /.*?\Wcannot resolve\W.*?\WUnknown host/
+      default.merge(nohit)
+    when /^PING\W.*data bytes$/
+      default
+    when /icmp_seq=.* ttl=.* time=.*$/
+      default.merge(nohit)
+    when /^Request timeout for/
+      default.merge({error: 1})
+    when /^$/
+      default.merge(nohit)
+    when /--- .* statistics ---/
+      default.merge(nohit)
+    when /.* packet loss$/
+      default.merge(nohit)
+    when /round-trip/
+      default.merge(nohit)
+    else
+      $LOGGER.warn("unknown type of Ping's output: #{str}")
+      default.merge(nohit)
+    end
+  end
+end
 
 
 
@@ -202,8 +265,8 @@ every_n_seconds(6) do
 
   if $generator.status == :running
     $LOGGER.info("#{$task[:cmd]} is running with pid = #{$generator.pid}")
-    # $generator.read_output
-    $generator.read_output do |each_line|
+    $generator.read_output do |each_line, line_num|
+      puts line_num
       Utils.heart_beat
     end
   else
