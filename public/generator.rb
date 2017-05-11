@@ -13,6 +13,25 @@ $LOGGER.formatter = proc do |severity, datetime, progname, msg|
    "[#{severity}] #{datetime}: #{msg}\n"
 end
 
+
+# ==========================
+# Utils module
+#   
+#   Provide utilities for other class.
+# 
+module Utils
+  def heart_beat()
+    begin
+      HTTParty.get("http://127.0.0.1:3000/generators/update_status?generator=#{Socket.gethostname}")
+    rescue => err
+      $LOGGER.debug("send heart beat failed")
+    end
+  end
+
+  extend self
+end
+
+
 # ==========================
 # Config class
 # 
@@ -21,6 +40,7 @@ end
 #     * send heart beat request to Trigger.
 #
 class Config
+  include Utils
   # ==========================
   # task example:
   # {
@@ -83,15 +103,8 @@ class Config
       @response_body = nil
     end
   end
-
-  def heart_beat()
-    begin
-      HTTParty.get("http://127.0.0.1:3000/generators/update_status?generator=#{Socket.gethostname}")
-    rescue => err
-      $LOGGER.debug("send heart beat failed")
-    end
-  end
 end
+
 
 
 # ==========================
@@ -138,6 +151,7 @@ class Generator
   def read_output()
     @stdout.each_line do |line|
       puts line
+      yield(line) if block_given?
     end
   end
 
@@ -163,6 +177,11 @@ class Generator
 end
 
 
+# class PingParser
+#   include Utils
+# end
+
+
 
 def every_n_seconds(n)
   loop do
@@ -183,14 +202,17 @@ every_n_seconds(6) do
 
   if $generator.status == :running
     $LOGGER.info("#{$task[:cmd]} is running with pid = #{$generator.pid}")
-    $generator.read_output
+    # $generator.read_output
+    $generator.read_output do |each_line|
+      Utils.heart_beat
+    end
   else
     if $task.empty?
       $LOGGER.info("no task")
     else
       $LOGGER.info("task: #{$task}")
-      # if true
-      if Time.now.utc.iso8601 >= $task["time"]
+      if true
+      # if Time.now.utc.iso8601 >= $task["time"]
         $LOGGER.info("trigger task #{$task['cmd']}")
         $generator.run($task["cmd"])
         $task = {}
