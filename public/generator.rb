@@ -13,12 +13,14 @@ $LOGGER.formatter = proc do |severity, datetime, progname, msg|
    "[#{severity}] #{datetime}: #{msg}\n"
 end
 
+# ==========================
+# Config class
+# 
+#   It did two things presently:
+#     * get all schedules from Trigger and filter out the one for this generator.
+#     * send heart beat request to Trigger.
+#
 class Config
-  def update
-    update_config()
-    heart_beat()
-  end
-
   # ==========================
   # task example:
   # {
@@ -27,10 +29,13 @@ class Config
   #   "cmd"=>"ping www.google.com -c 30"
   # }
   def next_task()
+    all_active_tasks()
+    heart_beat()
+
     if @response_body == nil
       {}
     else
-      me = Socket.gethostname
+      me = Socket.gethostname.upcase
       tasks = JSON.parse(@response_body)
       my_tasks = tasks.select do |t|
         t["schedule"].map{|x| x["generator"]}.include?(me)
@@ -59,7 +64,12 @@ class Config
     end
   end
 
-  def update_config()
+  # to-do
+  def valid_json_content?(str)
+    true
+  end
+
+  def all_active_tasks()
     @response_body = nil
     begin
       response = HTTParty.get("http://127.0.0.1:3000/schedulers/active")
@@ -68,7 +78,7 @@ class Config
       $LOGGER.debug("get config failed")
     end
 
-    unless valid_json?(@response_body)
+    unless valid_json?(@response_body) && valid_json_content?(@response_body)
       $LOGGER.debug("invalid JSON response: #{@response_body}")
       @response_body = nil
     end
@@ -83,6 +93,20 @@ class Config
   end
 end
 
+
+# ==========================
+# Generator class
+# 
+#   It controls the execution of sub process. You can:
+#   
+#     * `run` and `stop` a sub process
+#     * `read_output` from a sub process
+#     * check `status` of a sub process
+#
+#   Note: when you `read_output` from a sub process, `read_output`
+#           would keep running till sub process finished.
+#         I think fork was needed here.
+#
 class Generator
   attr_accessor :cmd
   attr_reader   :pid
@@ -100,17 +124,33 @@ class Generator
   end
 
   def run(cmd)
-    stdin, stdout, stderr, wait_thr = Open3.popen3(cmd)
+    @stdin, @stdout, @stderr, wait_thr = Open3.popen3(cmd)
     @pid = wait_thr.pid
   end
 
   def stop
+    safe_exit()
     if status == :running
       Process.kill(0, @pid) rescue false
     end
   end
 
+  def read_output()
+    @stdout.each_line do |line|
+      puts line
+    end
+  end
+
   private
+
+  def safe_exit()
+    begin 
+      @stdin.close
+      @stdout.close
+      @stderr.close
+    rescue => err
+    end
+  end
 
   def processExist?(pid)
     begin
@@ -121,6 +161,8 @@ class Generator
     end
   end
 end
+
+
 
 def every_n_seconds(n)
   loop do
@@ -138,15 +180,16 @@ $config = Config.new
 $task = {}
 # ========== Main ==========
 every_n_seconds(6) do
-  $config.update
 
   if $generator.status == :running
     $LOGGER.info("#{$task[:cmd]} is running with pid = #{$generator.pid}")
+    $generator.read_output
   else
     if $task.empty?
       $LOGGER.info("no task")
     else
       $LOGGER.info("task: #{$task}")
+      # if true
       if Time.now.utc.iso8601 >= $task["time"]
         $LOGGER.info("trigger task #{$task['cmd']}")
         $generator.run($task["cmd"])
