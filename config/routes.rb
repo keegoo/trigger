@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   get 'generators/update_status', to: 'generators#update_status'
   
   resources :generators, only: [:index]
-  resources :schedulers, only: [:show, :index, :create, :destroy]
-  resources :executions, only: [:create]
+  resources :schedulers, only: [:show, :index, :create, :destroy] do 
+    resources :executions, only: [:create]
+  end
 end
