@@ -5,4 +5,5 @@ Rails.application.routes.draw do
   
   resources :generators, only: [:index]
   resources :schedulers, only: [:show, :index, :create, :destroy]
+  resources :executions, only: [:create]
 end
