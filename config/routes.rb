@@ -5,6 +5,6 @@ Rails.application.routes.draw do
   
   resources :generators, only: [:index]
   resources :schedulers, only: [:show, :index, :create, :destroy] do 
-    resources :executions, only: [:create]
+    resources :executions, only: [:create, :update]
   end
 end

@@ -1,11 +1,11 @@
 class Execution
   include Mongoid::Document
 
+  field :hour,          type: String
   field :total_hits,    type: Integer
   field :total_users,   type: Integer
   field :total_errors,  type: Integer 
-  field :hour,          type: String
-  field :values,          type: Hash
+  field :values,        type: Hash
 
   # values: {
   #   0: {
@@ -25,5 +25,18 @@ class Execution
   #   ...
   #   59:{ }
   # }
+
+  belongs_to :scheduler
+
+  def self.create_with_default_values(execution_hourly, scheduler_id)
+    execution = self.create(
+      hour: execution_hourly,
+      total_hits: 0,
+      total_users: 0,
+      total_errors: 0,
+      scheduler_id: scheduler_id,
+      values: {}
+    )
+  end
 
 end
