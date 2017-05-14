@@ -49,6 +49,12 @@ class RoutesTest < ActionDispatch::IntegrationTest
       action: "create",
       scheduler_id: "1"
     }
+    assert_generates "schedulers/1/executions/2", {
+      controller: "executions",
+      action: "show",
+      scheduler_id: "1",
+      id: "2"
+    }
     assert_generates "schedulers/1/executions/update", {
       controller: "executions",
       action: "update",
