@@ -56,9 +56,9 @@ class Execution
 
     if [:total_hits, :total_errors, :total_users].include?(field)
       v = doc.send(field)
-      doc.set({"#{field}" => (v + value)})
+      doc.set({"#{field}" => (v + value)}) if v > 0
     else
-      # do nothing
+      doc
     end
   end
 

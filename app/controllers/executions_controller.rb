@@ -15,15 +15,14 @@ class ExecutionsController < ApplicationController
   end
 
   def update
-    @params = params.permit([:status, :hits, :error, :users, :scheduler_id])
-    hits = @params[:hits]
+    @params = params.permit([:status, :hits, :errors, :users, :scheduler_id])
     scheduler_id = @params[:scheduler_id]
     hourly, min, second = get_present_hourly_min_second
 
-    Execution.insert(min, second, hits, scheduler_id, hourly)
-    Execution.add_to_summary(:total_hits, 1, scheduler_id, hourly)
-    Execution.add_to_summary(:total_errors, 1, scheduler_id, hourly)
-    render json: Execution.add_to_summary(:total_users, 1, scheduler_id, hourly)
+    Execution.insert(min, second, @params[:hits], scheduler_id, hourly)
+    Execution.add_to_summary(:total_hits, @params[:hits], scheduler_id, hourly)
+    Execution.add_to_summary(:total_errors, @params[:errors], scheduler_id, hourly)
+    render json: Execution.add_to_summary(:total_users, @params[:users], scheduler_id, hourly)
   end
 
   private
