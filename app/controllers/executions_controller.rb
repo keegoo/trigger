@@ -1,12 +1,17 @@
 class ExecutionsController < ApplicationController
   def create
     @params = params.require(:execution).permit([:total_hits, :total_users, :total_errors, :hour])
-    @values = params[:values]
-    @scheduler_id = params[:scheduler_id]
+    scheduler_id = @params[:scheduler_id]
+    hourly = get_present_hourly
+    
+    render json: Execution.create_with_default_values(hourly, scheduler_id)
+  end
 
-    hourly = Time.now.utc.iso8601.split(':')[0] + ':00:00Z'
-
-    render json: Execution.create_with_default_values(hourly, @scheduler_id)
+  def show 
+    scheduler_id = params[:scheduler_id]
+    id = params[:id]
+    
+    render json: Execution.find(id)
   end
 
   def update
@@ -15,7 +20,10 @@ class ExecutionsController < ApplicationController
     scheduler_id = @params[:scheduler_id]
     hourly, min, second = get_present_hourly_min_second
 
-    render json: Execution.insert(hourly, min, second, hits, scheduler_id)
+    Execution.insert(min, second, hits, scheduler_id, hourly)
+    Execution.add_to_summary(:total_hits, 1, scheduler_id, hourly)
+    Execution.add_to_summary(:total_errors, 1, scheduler_id, hourly)
+    render json: Execution.add_to_summary(:total_users, 1, scheduler_id, hourly)
   end
 
   private
@@ -27,5 +35,10 @@ class ExecutionsController < ApplicationController
     second  = t.split(':')[2].chomp('Z')
 
     return hourly, min, second
+  end
+
+  def get_present_hourly
+    hourly, min, second = get_present_hourly_min_second
+    return hourly
   end
 end

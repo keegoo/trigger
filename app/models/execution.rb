@@ -39,11 +39,35 @@ class Execution
     )
   end
 
-  def self.insert(hourly, min, second, value, scheduler_id)
-    unless self.where({ hour: hourly, scheduler_id: scheduler_id }).exists?
+  def self.insert(min, second, value, scheduler_id, hourly)
+    doc = self.where({ hour: hourly, scheduler_id: scheduler_id })
+    unless doc.exists?
       self.create_with_default_values(hourly, scheduler_id)
     end
-      
-    self.where({ hour: hourly, scheduler_id: scheduler_id }).set("values.#{min}.#{second}" => value)
+    
+    a_min, a_sec = self.get_adjusted_min_second(min, second)
+    v = doc.first.values.fetch(a_min){ {} }.fetch(a_sec){ 0 }
+
+    doc.set("values.#{a_min}.#{a_sec}" => value + v)
+  end
+
+  def self.add_to_summary(field, value, scheduler_id, hourly)
+    doc = self.where({ hour: hourly, scheduler_id: scheduler_id }).first
+
+    if [:total_hits, :total_errors, :total_users].include?(field)
+      v = doc.send(field)
+      doc.set({"#{field}" => (v + value)})
+    else
+      # do nothing
+    end
+  end
+
+  private
+
+  def self.get_adjusted_min_second(min, second)
+    total = min.to_i * 60 + second.to_i
+    # increase to base of six
+    adjusted_total = (6 - total % 6) + total
+    return (adjusted_total / 60).to_s, (adjusted_total % 60).to_s
   end
 end
