@@ -39,4 +39,11 @@ class Execution
     )
   end
 
+  def self.insert(hourly, min, second, value, scheduler_id)
+    unless self.where({ hour: hourly, scheduler_id: scheduler_id }).exists?
+      self.create_with_default_values(hourly, scheduler_id)
+    end
+      
+    self.where({ hour: hourly, scheduler_id: scheduler_id }).set("values.#{min}.#{second}" => value)
+  end
 end
