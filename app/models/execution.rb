@@ -3,10 +3,15 @@ class Execution
 
   field :hour,          type: String
   field :total_hits,    type: Integer
-  field :total_users,   type: Integer
   field :total_errors,  type: Integer 
+  field :users,         type: Hash
   field :values,        type: Hash
 
+  # users: {
+  #   "APC-WGROAPP301": { "running": 12, "stopped": 8},
+  #   ...
+  # }
+  # ==================
   # values: {
   #   0: {
   #      0: 12, 
@@ -32,8 +37,8 @@ class Execution
     execution = self.create(
       hour: execution_hourly,
       total_hits: 0,
-      total_users: 0,
       total_errors: 0,
+      users: {},
       scheduler_id: scheduler_id,
       values: {}
     )
@@ -51,12 +56,26 @@ class Execution
     doc.set("values.#{a_min}.#{a_sec}" => value + v)
   end
 
+  def self.add_to_users(generator, type, value, scheduler_id, hourly)
+    doc = self.where({ hour: hourly, scheduler_id: scheduler_id }).first
+
+    if value > 0
+      running = doc.users.fetch("#{generator}"){ {} }.fetch("running"){ 0 }
+      stopped = doc.users.fetch("#{generator}"){ {} }.fetch("stopped"){ 0 }
+
+      doc.set({"users.#{generator}.running": running + value}) if type == :running
+      doc.set({"users.#{generator}.stopped": stopped + value}) if type == :stopped
+    else
+      doc
+    end
+  end
+
   def self.add_to_summary(field, value, scheduler_id, hourly)
     doc = self.where({ hour: hourly, scheduler_id: scheduler_id }).first
 
-    if [:total_hits, :total_errors, :total_users].include?(field)
+    if [:total_hits, :total_errors].include?(field)
       v = doc.send(field)
-      doc.set({"#{field}" => (v + value)}) if v > 0
+      doc.set({"#{field}" => (v + value)}) if value > 0
     else
       doc
     end

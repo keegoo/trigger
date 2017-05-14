@@ -1,6 +1,6 @@
 class ExecutionsController < ApplicationController
   def create
-    @params = params.require(:execution).permit([:total_hits, :total_users, :total_errors, :hour])
+    @params = params.require(:execution).permit([:total_hits, :users, :total_errors, :hour])
     scheduler_id = @params[:scheduler_id]
     hourly = get_present_hourly
     
@@ -15,14 +15,16 @@ class ExecutionsController < ApplicationController
   end
 
   def update
-    @params = params.permit([:status, :hits, :errors, :users, :scheduler_id])
+    @params = params.permit([:status, :hits, :errors, :generator, :running, :stopped, :scheduler_id])
     scheduler_id = @params[:scheduler_id]
     hourly, min, second = get_present_hourly_min_second
 
     Execution.insert(min, second, @params[:hits], scheduler_id, hourly)
     Execution.add_to_summary(:total_hits, @params[:hits], scheduler_id, hourly)
     Execution.add_to_summary(:total_errors, @params[:errors], scheduler_id, hourly)
-    render json: Execution.add_to_summary(:total_users, @params[:users], scheduler_id, hourly)
+
+    Execution.add_to_users(@params[:generator], :running, @params[:running], scheduler_id, hourly)
+    render json: Execution.add_to_users(@params[:generator], :stopped, @params[:stopped], scheduler_id, hourly)
   end
 
   private
