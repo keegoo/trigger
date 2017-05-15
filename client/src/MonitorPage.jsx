@@ -18,6 +18,7 @@ class MonitorPage extends React.Component {
     super(props)
     this.state = {
 
+      // ==================================
       // scheduler example:
       // {
       //   "_id": "59105c068fb2380203e11023",
@@ -32,11 +33,37 @@ class MonitorPage extends React.Component {
       //   ]
       // }
       scheduler: {},
+
+      // ==================================
+      // execution example:
+      // {
+      //   "_id": "59193db18fb2380224bda165",
+      //   "hour": "2017-05-15T05:00:00Z",
+      //   "scheduler_id": "591469bb8fb238054bf1e5e7",
+      //   "total_errors": 0,
+      //   "total_hits": 84,
+      //   "users": {
+      //     "CYS-MACBOOK-PRO": {
+      //       "LOCAL": {
+      //         "started": 3,
+      //         "stopped": 2
+      //       }
+      //     }
+      //   },
+      //   "values": {
+      //     "1": {},
+      //     "2": {}
+      //     ...
+      //   }
+      // }
+      execution: {},
+      
       finishLoadScheduler: false,
       finishLoadExecution: false
     }
 
     this.fetchScheduler = this.fetchScheduler.bind(this)
+    this.fetchExecution = this.fetchExecution.bind(this)
 
     this.fetchScheduler(this.props.params.scheduleId)
     this.fetchExecution(this.props.params.scheduleId)
