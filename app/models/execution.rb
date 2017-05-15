@@ -51,20 +51,15 @@ class Execution
     end
     
     a_min, a_sec = self.get_adjusted_min_second(min, second)
-    v = doc.first.values.fetch(a_min){ {} }.fetch(a_sec){ 0 }
-
-    doc.set("values.#{a_min}.#{a_sec}" => value + v)
+    doc.inc("values.#{a_min}.#{a_sec}" => value)
   end
 
   def self.add_to_users(generator, type, value, scheduler_id, hourly)
     doc = self.where({ hour: hourly, scheduler_id: scheduler_id }).first
 
     if value > 0
-      running = doc.users.fetch("#{generator}"){ {} }.fetch("running"){ 0 }
-      stopped = doc.users.fetch("#{generator}"){ {} }.fetch("stopped"){ 0 }
-
-      doc.set({"users.#{generator}.running": running + value}) if type == :running
-      doc.set({"users.#{generator}.stopped": stopped + value}) if type == :stopped
+      doc.inc("users.#{generator}.running" => value) if type == :running
+      doc.inc("users.#{generator}.stopped" => value) if type == :stopped
     else
       doc
     end
@@ -74,8 +69,7 @@ class Execution
     doc = self.where({ hour: hourly, scheduler_id: scheduler_id }).first
 
     if [:total_hits, :total_errors].include?(field)
-      v = doc.send(field)
-      doc.set({"#{field}" => (v + value)}) if value > 0
+      doc.inc("#{field}" => value) if value > 0
     else
       doc
     end
