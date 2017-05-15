@@ -1,12 +1,4 @@
 class ExecutionsController < ApplicationController
-  def create
-    @params = params.require(:execution).permit([:total_hits, :users, :total_errors, :hour])
-    scheduler_id = @params[:scheduler_id]
-    hourly = get_present_hourly
-    
-    render json: Execution.create_with_default_values(hourly, scheduler_id)
-  end
-
   def show 
     scheduler_id = params[:scheduler_id]
     id = params[:id]
@@ -14,7 +6,7 @@ class ExecutionsController < ApplicationController
     render json: Execution.find(id)
   end
 
-  def update
+  def upsert
     @params = params.permit([:status, :hits, :errors, :generator, :running, :stopped, :scheduler_id])
     scheduler_id = @params[:scheduler_id]
     hourly, min, second = get_present_hourly_min_second
