@@ -51,6 +51,10 @@ class MonitorPage extends React.Component {
       })
   }
 
+  fetchExecution() {
+    const host = Config.host
+  }
+
   render() {
     if (this.state.loading) {
       return (

@@ -6,7 +6,7 @@ const styles = {
   title: {
     color: cyan500,
     fontSize: '24px',
-    margin: '10px 0 10px 0'
+    margin: '20px 0 10px 0'
   }
 }
 
