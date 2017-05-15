@@ -48,7 +48,7 @@ class ScheduleContainer extends React.Component {
   render() {
     return(
       <div>
-        <div style={styles.titleText}><span>Saved Schedules: </span></div>
+        <div style={styles.titleText}><span>Saved Schedules</span></div>
         <div>
           {
             this.currentPageItems().map((t, index) => {

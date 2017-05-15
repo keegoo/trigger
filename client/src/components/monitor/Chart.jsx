@@ -15,7 +15,7 @@ const data = [
 
 const styles = {
   border: {
-    marginTop: '20px',
+    margin: '10px 0 10px 0',
     boxShadow: `${grey400} 0px 0px 10px`,
     padding: '10px'
   },
