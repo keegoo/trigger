@@ -1,9 +1,8 @@
 class ExecutionsController < ApplicationController
-  def show 
+  def all 
     scheduler_id = params[:scheduler_id]
-    id = params[:id]
     
-    render json: Execution.find(id)
+    render json: Execution.where({ scheduler_id: scheduler_id })
   end
 
   def upsert
