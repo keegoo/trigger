@@ -22,19 +22,30 @@ end
 module Utils
   def heart_beat()
     begin
-      HTTParty.get("http://127.0.0.1:3000/generators/update_status?generator=#{Socket.gethostname}")
+      HTTParty.get( host + "/generators/update_status?generator=#{whoami}")
     rescue => err
       $LOGGER.debug("send heart beat failed")
     end
   end
 
-  def send_data(json)
+  def send_data(jsonstr)
     begin
-      # HTTParty.get("http://127.0.0.1:3000/generators/notdecide")
-      puts "sending data: #{json}"
+      HTTParty.post( 
+        host + "/schedulers/591469bb8fb238054bf1e5e7/executions/upsert",
+        body: jsonstr
+      )
+      puts "sending data: #{jsonstr}"
     rescue
       $LOGGER.debug("send data failed")
     end
+  end
+
+  def whoami
+    Socket.gethostname.upcase
+  end
+
+  def host
+    "http://127.0.0.1:3000"
   end
 
   extend self
@@ -64,10 +75,9 @@ class Config
     if @response_body == nil
       {}
     else
-      me = Socket.gethostname.upcase
       tasks = JSON.parse(@response_body)
       my_tasks = tasks.select do |t|
-        t["schedule"].map{|x| x["generator"]}.include?(me)
+        t["schedule"].map{|x| x["generator"]}.include?(whoami)
       end
 
       if my_tasks.empty?
@@ -76,7 +86,7 @@ class Config
         # narrow down my tasks
         my_tasks.\
         map{|x| x["schedule"]}.reduce(:+).\
-        select{|x| x["generator"].include?(me)}.\
+        select{|x| x["generator"].include?(whoami)}.\
         sort_by{|x| x["time"]}[0]
       end
     end
@@ -217,25 +227,28 @@ class PingParser
   extend Utils
 
   def self.read(str)
-    json = self.parse(str).to_json
-    self.send_data(json)
+    jsonstr = self.parse(str).to_json
+    self.send_data(jsonstr)
   end
 
   def self.parse(str)
     default = {
+      generator: whoami,
       status: :running,
       hits: 1,
       error: 0,
-      users: 1,
-      timestamp: Time.now.utc.iso8601
+      ustart: 0,
+      ustop: 0
     }
-    nohit = { hits: 0 }
+    nohit       = { hits: 0 }
+    user_start  = { ustart: 1 }
+    user_stop   = { ustop: 1 }
 
     case str
     when /.*?\Wcannot resolve\W.*?\WUnknown host/
       default.merge(nohit)
     when /^PING\W.*data bytes$/
-      default.merge(nohit)
+      default.merge(nohit).merge(user_start)
     when /icmp_seq=.* ttl=.* time=.*$/
       default
     when /^Request timeout for/
@@ -247,7 +260,7 @@ class PingParser
     when /.* packet loss$/
       default.merge(nohit)
     when /round-trip/
-      default.merge(nohit)
+      default.merge(nohit).merge(user_stop)
     else
       $LOGGER.warn("unknown type of Ping's output: #{str}")
       default.merge(nohit)

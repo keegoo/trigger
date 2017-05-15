@@ -58,8 +58,8 @@ class Execution
     doc = self.where({ hour: hourly, scheduler_id: scheduler_id }).first
 
     if value > 0
-      doc.inc("users.#{generator}.running" => value) if type == :running
-      doc.inc("users.#{generator}.stopped" => value) if type == :stopped
+      doc.inc("users.#{generator}.started" => value) if type == :ustart
+      doc.inc("users.#{generator}.stopped" => value) if type == :ustop
     else
       doc
     end

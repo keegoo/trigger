@@ -7,7 +7,7 @@ class ExecutionsController < ApplicationController
   end
 
   def upsert
-    @params = params.permit([:status, :hits, :errors, :generator, :running, :stopped, :scheduler_id])
+    @params = params.permit([:status, :hits, :errors, :generator, :ustart, :ustop, :scheduler_id])
     scheduler_id = @params[:scheduler_id]
     hourly, min, second = get_present_hourly_min_second
 
@@ -15,8 +15,8 @@ class ExecutionsController < ApplicationController
     Execution.add_to_summary(:total_hits, @params[:hits], scheduler_id, hourly)
     Execution.add_to_summary(:total_errors, @params[:errors], scheduler_id, hourly)
 
-    Execution.add_to_users(@params[:generator], :running, @params[:running], scheduler_id, hourly)
-    render json: Execution.add_to_users(@params[:generator], :stopped, @params[:stopped], scheduler_id, hourly)
+    Execution.add_to_users(@params[:generator], :ustart, @params[:ustart], scheduler_id, hourly)
+    render json: Execution.add_to_users(@params[:generator], :ustop, @params[:ustop], scheduler_id, hourly)
   end
 
   private
