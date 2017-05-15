@@ -57,16 +57,32 @@ class MonitorPage extends React.Component {
       //   }
       // }
       execution: {},
-      
+
       finishLoadScheduler: false,
       finishLoadExecution: false
     }
 
     this.fetchScheduler = this.fetchScheduler.bind(this)
     this.fetchExecution = this.fetchExecution.bind(this)
+    this.refreshExecutionData = this.refreshExecutionData.bind(this)
 
     this.fetchScheduler(this.props.params.scheduleId)
     this.fetchExecution(this.props.params.scheduleId)
+  }
+
+  componentDidMount() {
+    this.interval = setInterval(this.refreshExecutionData, 6000)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval)
+  }
+
+  refreshExecutionData() {
+    let executionIsRunning = false
+    if(executionIsRunning){
+      this.fetchExecution(this.props.params.scheduleId)
+    }
   }
 
   fetchScheduler(id) {
