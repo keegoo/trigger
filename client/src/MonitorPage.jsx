@@ -32,12 +32,14 @@ class MonitorPage extends React.Component {
       //   ]
       // }
       scheduler: {},
-      loading: true
+      finishLoadScheduler: false,
+      finishLoadExecution: false
     }
 
     this.fetchScheduler = this.fetchScheduler.bind(this)
 
     this.fetchScheduler(this.props.params.scheduleId)
+    this.fetchExecution(this.props.params.scheduleId)
   }
 
   fetchScheduler(id) {
@@ -46,23 +48,23 @@ class MonitorPage extends React.Component {
       .then(response => response.json())
       .then(json => { 
         this.setState({scheduler: json})
-        this.setState({loading: false})
+        this.setState({finishLoadScheduler: true})
         // console.log(json)
       })
   }
 
-  fetchExecution() {
+  fetchExecution(id) {
     const host = Config.host
+    fetch(`${host}/schedulers/${id}/executions/all`)
+      .then(response => response.json())
+      .then(json => { 
+        this.setState({finishLoadExecution: true})
+        // console.log(json)
+      })
   }
 
   render() {
-    if (this.state.loading) {
-      return (
-        <div style={styles} >
-          <CircularProgress />
-        </div>
-      )
-    } else {
+    if (this.state.finishLoadScheduler && this.state.finishLoadExecution) {
       return(
         <div style={styles}>
           <Heading 
@@ -74,8 +76,13 @@ class MonitorPage extends React.Component {
           <MonitorContainer />
         </div>
       )
+    } else {
+      return (
+        <div style={styles} >
+          <CircularProgress />
+        </div>
+      )
     }
-
   }
 }
 
