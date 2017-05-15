@@ -51,7 +51,7 @@ class Execution
     end
     
     a_min, a_sec = self.get_adjusted_min_second(min, second)
-    doc.inc("values.#{a_min}.#{a_sec}" => value)
+    doc.first.inc("values.#{a_min}.#{a_sec}" => value) if value > 0
   end
 
   def self.add_to_users(generator, type, value, scheduler_id, hourly)

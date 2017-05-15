@@ -32,9 +32,9 @@ module Utils
     begin
       HTTParty.post( 
         host + "/schedulers/591469bb8fb238054bf1e5e7/executions/upsert",
-        body: jsonstr
+        body: jsonstr,
+        headers: { 'Content-Type' => 'application/json' }
       )
-      puts "sending data: #{jsonstr}"
     rescue
       $LOGGER.debug("send data failed")
     end
@@ -236,13 +236,14 @@ class PingParser
       generator: whoami,
       status: :running,
       hits: 1,
-      error: 0,
+      errors: 0,
       ustart: 0,
       ustop: 0
     }
     nohit       = { hits: 0 }
     user_start  = { ustart: 1 }
     user_stop   = { ustop: 1 }
+    error       = { errors: 1 }
 
     case str
     when /.*?\Wcannot resolve\W.*?\WUnknown host/
@@ -252,7 +253,7 @@ class PingParser
     when /icmp_seq=.* ttl=.* time=.*$/
       default
     when /^Request timeout for/
-      default.merge({error: 1})
+      default.merge(error)
     when /^$/
       default.merge(nohit)
     when /--- .* statistics ---/
