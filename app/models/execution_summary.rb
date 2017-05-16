@@ -65,7 +65,9 @@ class ExecutionSummary
   end
 
   def self.progress(scheduler_id)
-    progress = self.where({ scheduler_id: scheduler_id }).first.status
+    any = self.where({ scheduler_id: scheduler_id }).first
+    return "waiting" if any == nil
+    progress = any.status
     status_ary = progress.map{|x| x["status"]}
     if status_ary.include?("running")
       return "running"
