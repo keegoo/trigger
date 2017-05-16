@@ -2,7 +2,7 @@ class ExecutionsController < ApplicationController
   def all 
     scheduler_id = params[:scheduler_id]
     
-    render json: Execution.where({ scheduler_id: scheduler_id })
+    render json: ExecutionTunnel.where({ scheduler_id: scheduler_id })
   end
 
   def upsert
@@ -10,12 +10,18 @@ class ExecutionsController < ApplicationController
     scheduler_id = @params[:scheduler_id]
     hourly, min, second = get_present_hourly_min_second
 
-    Execution.insert(min, second, @params[:hits], scheduler_id, hourly)
-    Execution.add_to_summary(:total_hits, @params[:hits], scheduler_id, hourly)
-    Execution.add_to_summary(:total_errors, @params[:errors], scheduler_id, hourly)
+    ExecutionTunnel.insert(min, second, @params[:hits], scheduler_id, hourly)
 
-    Execution.add_to_users(@params[:generator], :ustart, @params[:ustart], scheduler_id, hourly)
-    render json: Execution.add_to_users(@params[:generator], :ustop, @params[:ustop], scheduler_id, hourly)
+    ExecutionSummary.update(scheduler_id, {
+      generator:  @params[:generator],
+      status:     @params[:status],
+      hits:       @params[:hits],
+      errors:     @params[:errors],
+      ustart:     @params[:ustart],
+      ustop:      @params[:ustop]
+    })
+
+    render json: {msg: "handle return message later"}
   end
 
   private

@@ -242,7 +242,7 @@ class PingParser
     }
     nohit       = { hits: 0 }
     user_start  = { ustart: 1 }
-    user_stop   = { ustop: 1 }
+    user_stop   = { ustop: 1, status: :stopped }
     error       = { errors: 1 }
 
     case str
