@@ -9,6 +9,9 @@ const styles = {
 }
 
 class UsersStatusTable extends React.Component {
+  constructor(props) {
+    super(props)
+  }
 
   toRowTag(group, index) {
     return(

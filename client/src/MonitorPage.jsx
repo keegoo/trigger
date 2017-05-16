@@ -2,7 +2,7 @@ import React from 'react'
 import Heading from './components/heading/Heading.jsx'
 import GaugeContainer from './components/gauge/GaugeContainer.jsx'
 import MonitorContainer from './components/monitor/MonitorContainer.jsx'
-import UsersContainer from './components/users/UsersContainer.jsx'
+import MonitorPanelContainer from './components/users/MonitorPanelContainer.jsx'
 import CircularProgress from 'material-ui/CircularProgress'
 import * as utils from './components/utils.js'
 import Config from 'Config'
@@ -57,32 +57,18 @@ class MonitorPage extends React.Component {
       //   }
       // }
       execution: {},
-
       finishLoadScheduler: false,
-      finishLoadExecution: false
+      finishLoadExecution: false,
+      finishLoadProgress: false,
+      progress: "stopped"
+
     }
 
     this.fetchScheduler = this.fetchScheduler.bind(this)
-    this.fetchExecution = this.fetchExecution.bind(this)
-    this.refreshExecutionData = this.refreshExecutionData.bind(this)
+    this.fetchSchedulerProgress = this.fetchSchedulerProgress.bind(this)
 
     this.fetchScheduler(this.props.params.scheduleId)
-    this.fetchExecution(this.props.params.scheduleId)
-  }
-
-  componentDidMount() {
-    this.interval = setInterval(this.refreshExecutionData, 6000)
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.interval)
-  }
-
-  refreshExecutionData() {
-    let executionIsRunning = false
-    if(executionIsRunning){
-      this.fetchExecution(this.props.params.scheduleId)
-    }
+    this.fetchSchedulerProgress(this.props.params.scheduleId)
   }
 
   fetchScheduler(id) {
@@ -96,26 +82,29 @@ class MonitorPage extends React.Component {
       })
   }
 
-  fetchExecution(id) {
+
+
+  fetchSchedulerProgress(id) {
     const host = Config.host
-    fetch(`${host}/schedulers/${id}/executions/all`)
+    fetch(`${host}/schedulers/${id}/executions/progress`)
       .then(response => response.json())
       .then(json => { 
-        this.setState({finishLoadExecution: true})
+        this.setState({progress: json.progress})
+        this.setState({finishLoadProgress: true})
         // console.log(json)
       })
   }
 
   render() {
-    if (this.state.finishLoadScheduler && this.state.finishLoadExecution) {
+    if (this.state.finishLoadScheduler && this.state.finishLoadProgress) {
       return(
         <div style={styles}>
           <Heading 
             title={utils.splitISOToDateTime(this.state.scheduler.schedule[0].time)[0]}
-            status='waiting' />
-          <GaugeContainer />
-          <UsersContainer
-            generators={this.state.scheduler.schedule.map((x) => x.generator)} />
+            status={this.state.progress} />
+          <MonitorPanelContainer
+            schedulerId={this.props.params.scheduleId}
+            status={this.state.progress} />
           <MonitorContainer />
         </div>
       )
