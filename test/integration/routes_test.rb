@@ -44,9 +44,15 @@ class RoutesTest < ActionDispatch::IntegrationTest
   end
 
   test "executions routes test" do
-    assert_generates "schedulers/1/executions/all", {
+    assert_generates "schedulers/1/executions/summary_data", {
       controller: "executions",
-      action: "all",
+      action: "summary_data",
+      scheduler_id: "1"
+    }
+
+    assert_generates "schedulers/1/executions/tunnel_data", {
+      controller: "executions",
+      action: "tunnel_data",
       scheduler_id: "1"
     }
 
