@@ -64,6 +64,24 @@ class ExecutionSummary
     }).set("status.$.status": status)
   end
 
+  def self.progress(scheduler_id)
+    progress = self.where({ scheduler_id: scheduler_id }).first.status
+    status_ary = progress.map{|x| x["status"]}
+    if status_ary.include?("running")
+      return "running"
+    else
+      uniq_ary = status_ary.uniq
+      if uniq_ary.size == 1
+        return uniq_ary[0] == "waiting" ? "waiting" : "stopped"
+      else
+        puts "warning: doesn't expect this state."
+        puts "warning: progress array is: #{progress.inspect}"
+        return "waiting"
+      end
+    end
+        
+  end
+
   private
 
   def self.create_if_not_exist(scheduler_id)

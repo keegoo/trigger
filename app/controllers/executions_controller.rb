@@ -11,6 +11,12 @@ class ExecutionsController < ApplicationController
     render json: ExecutionSummary.where({ scheduler_id: scheduler_id }).first
   end
 
+  def progress
+    scheduler_id = params[:scheduler_id]
+
+    render json: {progress: ExecutionSummary.progress(scheduler_id)}
+  end
+
   def upsert
     @params = params.permit([:status, :hits, :errors, :generator, :ustart, :ustop, :scheduler_id])
     scheduler_id = @params[:scheduler_id]

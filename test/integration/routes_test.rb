@@ -61,5 +61,11 @@ class RoutesTest < ActionDispatch::IntegrationTest
       action: "upsert",
       scheduler_id: "1"
     }
+
+    assert_generates "schedulers/1/executions/progress", {
+      controller: "executions",
+      action: "progress",
+      scheduler_id: "1"
+    }
   end
 end

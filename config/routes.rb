@@ -8,5 +8,6 @@ Rails.application.routes.draw do
     get   'executions/summary_data',  to: 'executions#summary_data'
     get   'executions/tunnel_data',   to: 'executions#tunnel_data'
     post  'executions/upsert',        to: 'executions#upsert'
+    get   'executions/progress',      to: 'executions#progress'
   end
 end
