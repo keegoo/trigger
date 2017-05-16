@@ -1,6 +1,5 @@
 import React from 'react'
 import Heading from './components/heading/Heading.jsx'
-import GaugeContainer from './components/gauge/GaugeContainer.jsx'
 import MonitorContainer from './components/monitor/MonitorContainer.jsx'
 import MonitorPanelContainer from './components/users/MonitorPanelContainer.jsx'
 import CircularProgress from 'material-ui/CircularProgress'
@@ -81,8 +80,6 @@ class MonitorPage extends React.Component {
         // console.log(json)
       })
   }
-
-
 
   fetchSchedulerProgress(id) {
     const host = Config.host

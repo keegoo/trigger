@@ -1,5 +1,6 @@
 import React from 'react'
 import UsersStatusTable from './UsersStatusTable.jsx'
+import GaugeContainer from './GaugeContainer.jsx'
 import CircularProgress from 'material-ui/CircularProgress'
 import { cyan500 } from 'material-ui/styles/colors'
 import Config from 'Config'
@@ -70,10 +71,10 @@ class MonitorPanelContainer extends React.Component {
   }
 
   render() {
-    debugger
     if (this.state.finishLoadSummary) {
       return(
         <div>
+          <GaugeContainer />
           <div style={styles.title}>User Allocation</div>
           <UsersStatusTable groups={this.state.executionSummary.status}/> 
         </div>
