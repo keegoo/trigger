@@ -1,7 +1,10 @@
 class SchedulersController < ApplicationController
   def create
     @params = params.require(:scheduler).permit(schedule: [:generator, :time, :cmd, :status])
-    render json: Scheduler.create(@params)
+    s = Scheduler.create(@params)
+    generators_ary = s.schedule.map{|x| x["generator"]}
+    ExecutionSummary.create_with_status(s._id, generators_ary)
+    render json: s
   end
 
   def destroy

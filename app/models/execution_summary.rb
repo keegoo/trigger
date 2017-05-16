@@ -18,6 +18,16 @@ class ExecutionSummary
   #   {name: "APC-WGROAPP301", status: "running/waiting/stopped"},
   #   ...
   # ]
+  def self.create_with_status(scheduler_id, generators_ary)
+    if generators_ary.empty?
+      self.create( scheduler_id: scheduler_id )
+    else
+      self.create(
+        scheduler_id: scheduler_id,
+        status: generators_ary.map{|x| {name: x, status: "waiting"} }
+      )
+    end 
+  end
 
   def self.update(scheduler_id, ahash)
     self.create_if_not_exist(scheduler_id)
