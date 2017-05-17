@@ -13,40 +13,34 @@ const styles = {
   }
 }
 
-const defaultGaugeData = [
-  { title: 'Duration',    iconType: 'duration', sublabel:'Time.', label: '00:00:00' },
-  { title: 'Total Hits',  iconType: 'hits',     sublabel: 'No.',  label: '0' },
-  { title: 'Errors',      iconType: 'errors',   sublabel: 'No.',  label: '0' }
-]
-
 class MonitorPanelContainer extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
-    // ==================================
-    // executionSummary example:
-    // {
-    //   "_id": "591ad79d8fb238037416b836",
-    //   "scheduler_id": "591469bb8fb238054bf1e5e7",
-    //   "status": [
-    //     { "name": "CYS-MACBOOK-PRO.LOCAL", "status": "stopped" }
-    //   ],
-    //   "total_errors": 33,
-    //   "total_hits": 37,
-    //   "users": [
-    //     { "name": "apc-wgroapp301", "running": 2, "stopped": 2 },
-    //     { "name": "CYS-MACBOOK-PRO.LOCAL", "running": 11, "stopped": 14 }
-    //   ]
-    // }
+      // ==================================
+      // executionSummary example:
+      // {
+      //   "_id": "591ad79d8fb238037416b836",
+      //   "scheduler_id": "591469bb8fb238054bf1e5e7",
+      //   "status": [
+      //     { "name": "CYS-MACBOOK-PRO.LOCAL", "status": "stopped" }
+      //   ],
+      //   "total_errors": 33,
+      //   "total_hits": 37,
+      //   "users": [
+      //     { "name": "apc-wgroapp301", "running": 2, "stopped": 2 },
+      //     { "name": "CYS-MACBOOK-PRO.LOCAL", "running": 11, "stopped": 14 }
+      //   ]
+      // }
       executionSummary: {},
-      finishLoadSummary: false,
-      gaugeData: defaultGaugeData
+      finishLoadSummary: false
     }
 
     this.doEverySixSeconds = this.doEverySixSeconds.bind(this)
     this.doXSecondsLater = this.doXSecondsLater.bind(this)
     this.fetchExecutionSummary = this.fetchExecutionSummary.bind(this)
+    this.mapToGaugeData = this.mapToGaugeData.bind(this)
 
     this.fetchExecutionSummary(this.props.schedulerId)
   }
@@ -64,7 +58,6 @@ class MonitorPanelContainer extends React.Component {
       case 'missed':
         return
       case 'stopped':
-        console.log('load historial data')
         return
       default:
         console.log('are you kidding from MonitorPanelContainer')
@@ -101,12 +94,19 @@ class MonitorPanelContainer extends React.Component {
       })
   }
 
+  mapToGaugeData(execSum){
+    return [
+      { title: 'Total Hits',  iconType: 'hits',     sublabel: 'No.',  label: execSum.total_hits },
+      { title: 'Errors',      iconType: 'errors',   sublabel: 'No.',  label: execSum.total_errors }
+    ]
+  }
+
   render() {
     if (this.state.finishLoadSummary) {
       return(
         <div>
           <GaugeContainer 
-            data={this.state.gaugeData} />
+            data={this.mapToGaugeData(this.state.executionSummary)} />
           <div style={styles.title}>User Allocation</div>
           <UsersStatusTable groups={this.state.executionSummary.status}/> 
         </div>
