@@ -101,7 +101,8 @@ class MonitorPage extends React.Component {
             status={this.state.progress} />
           <MonitorPanelContainer
             schedulerId={this.props.params.scheduleId}
-            status={this.state.progress} />
+            taskExecutionTime={this.state.scheduler.schedule[0].time}
+            progress={this.state.progress} />
           <MonitorContainer />
         </div>
       )

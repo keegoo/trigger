@@ -37,26 +37,52 @@ class MonitorPanelContainer extends React.Component {
       finishLoadSummary: false
     }
 
-    this.refreshExecutionSummary = this.refreshExecutionSummary.bind(this)
+    this.doEverySixSeconds = this.doEverySixSeconds.bind(this)
+    this.doXSecondsLater = this.doXSecondsLater.bind(this)
     this.fetchExecutionSummary = this.fetchExecutionSummary.bind(this)
 
     this.fetchExecutionSummary(this.props.schedulerId)
   }
 
   componentDidMount() {
-    if(this.props.progress === "stopped") {
-      this.interval = setInterval(this.refreshExecutionSummary, 6000)
+    switch(this.props.progress) {
+      case 'waiting':
+        let now = new Date()
+        let taskTime = new Date(this.props.taskExecutionTime)
+        this.timeOut = setTimeout(this.doXSecondsLater, taskTime - now )
+        return
+      case 'running':
+        this.interval = setInterval(this.doEverySixSeconds, 6000)
+        return
+      case 'missed':
+        console.log('load defult data')
+        return
+      case 'stopped':
+        console.log('load historial data')
+        return
+      default:
+        console.log('are you kidding from MonitorPanelContainer')
+        return
+
     }
   }
 
   componentWillUnmount() {
-    if(this.interval === undefined) {
+    if(!this.interval === undefined) {
       clearInterval(this.interval)
+    }
+
+    if(!this.timeOut === undefined) {
+      clearTimeout(this.timeOut)
     }
   }
 
-  refreshExecutionSummary() {
-    this.fetchExecutionSummary(this.props.params.schedulerId)
+  doEverySixSeconds() {
+    this.fetchExecutionSummary(this.props.schedulerId)
+  }
+
+  doXSecondsLater() {
+    console.log("time to do some thing!")
   }
 
   fetchExecutionSummary(id) {

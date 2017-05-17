@@ -17,7 +17,6 @@ class UsersStatusTable extends React.Component {
     return(
       <TableRow key={index} selectable={false} >
         <TableRowColumn>{group.name}</TableRowColumn>
-        <TableRowColumn>{group.target}</TableRowColumn>
         <TableRowColumn>{group.running}</TableRowColumn>
         <TableRowColumn>{group.stopped}</TableRowColumn>
       </TableRow>
@@ -33,7 +32,7 @@ class UsersStatusTable extends React.Component {
             displaySelectAll={false} >
             <TableRow>
               {
-                ["Generator", "Target Users", "Running", "Stopped"].map((title, index) => {
+                ["Generator", "Running", "Stopped"].map((title, index) => {
                   return <TableHeaderColumn key={index}>{title}</TableHeaderColumn>
                 })
               }
