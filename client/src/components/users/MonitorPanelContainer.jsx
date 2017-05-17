@@ -41,6 +41,7 @@ class MonitorPanelContainer extends React.Component {
     this.doXSecondsLater = this.doXSecondsLater.bind(this)
     this.fetchExecutionSummary = this.fetchExecutionSummary.bind(this)
     this.mapToGaugeData = this.mapToGaugeData.bind(this)
+    this.mapToUsersData = this.mapToUsersData.bind(this)
 
     this.fetchExecutionSummary(this.props.schedulerId)
   }
@@ -94,11 +95,15 @@ class MonitorPanelContainer extends React.Component {
       })
   }
 
-  mapToGaugeData(execSum){
+  mapToGaugeData(execSum) {
     return [
       { title: 'Total Hits',iconType: 'hits',   sublabel: 'No.', label: execSum.total_hits },
       { title: 'Errors',    iconType: 'errors', sublabel: 'No.', label: execSum.total_errors }
     ]
+  }
+
+  mapToUsersData(execSum) {
+    return execSum.users.map((x) => Object.assign({}, {running: 0, stopped: 0}, x))
   }
 
   render() {
@@ -108,7 +113,8 @@ class MonitorPanelContainer extends React.Component {
           <GaugeContainer 
             data={this.mapToGaugeData(this.state.executionSummary)} />
           <div style={styles.title}>User Allocation</div>
-          <UsersStatusTable groups={this.state.executionSummary.status}/> 
+          <UsersStatusTable 
+            groups={this.mapToUsersData(this.state.executionSummary)} /> 
         </div>
       )
     } else {    
