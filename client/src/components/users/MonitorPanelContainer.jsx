@@ -66,11 +66,11 @@ class MonitorPanelContainer extends React.Component {
   }
 
   componentWillUnmount() {
-    if(!this.interval === undefined) {
-      clearInterval(this.interval)
-    }
+    if(!(this.interval === undefined)) {
+      clearInterval(this.interval) 
+    } 
 
-    if(!this.timeOut === undefined) {
+    if(!(this.timeOut === undefined)) {
       clearTimeout(this.timeOut)
     }
   }
@@ -96,8 +96,8 @@ class MonitorPanelContainer extends React.Component {
 
   mapToGaugeData(execSum){
     return [
-      { title: 'Total Hits',  iconType: 'hits',     sublabel: 'No.',  label: execSum.total_hits },
-      { title: 'Errors',      iconType: 'errors',   sublabel: 'No.',  label: execSum.total_errors }
+      { title: 'Total Hits',iconType: 'hits',   sublabel: 'No.', label: execSum.total_hits },
+      { title: 'Errors',    iconType: 'errors', sublabel: 'No.', label: execSum.total_errors }
     ]
   }
 
