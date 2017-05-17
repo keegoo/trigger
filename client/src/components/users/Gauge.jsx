@@ -72,7 +72,7 @@ class Gauge extends React.Component {
         <div style={styles.title}>{this.props.title}</div>
         <Divider />
         <div style={styles.body}>
-          {this.chooseIcon(this.props.type)}
+          {this.chooseIcon(this.props.iconType)}
           <div style={styles.textArea}>
             <span style={styles.sublabel}>{this.props.sublabel}</span>
             <span style={styles.label}>{this.props.label}</span>

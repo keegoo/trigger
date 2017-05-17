@@ -11,24 +11,24 @@ const styles = {
 }
 
 class GaugeContainer extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+
   render() {
     return (
       <div style={styles.layout}>
-        <Gauge 
-          title='Duration'
-          type='duration' 
-          sublabel='Time.' 
-          label='23:20:16' />
-        <Gauge 
-          title='Total Hits'
-          type='hits' 
-          sublabel='No.' 
-          label='98,120' />
-        <Gauge 
-          title='Errors'
-          type='errors' 
-          sublabel='No.' 
-          label='7' />
+      {
+        this.props.data.map((x, index) => {
+          return(
+            <Gauge key={index}
+              title={x.title}
+              iconType={x.iconType}
+              sublabel={x.sublabel}
+              label={x.label} />
+          )
+        })
+      }
       </div>
     )
   }

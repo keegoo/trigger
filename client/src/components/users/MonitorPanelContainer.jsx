@@ -13,6 +13,12 @@ const styles = {
   }
 }
 
+const defaultGaugeData = [
+  { title: 'Duration',    iconType: 'duration', sublabel:'Time.', label: '00:00:00' },
+  { title: 'Total Hits',  iconType: 'hits',     sublabel: 'No.',  label: '0' },
+  { title: 'Errors',      iconType: 'errors',   sublabel: 'No.',  label: '0' }
+]
+
 class MonitorPanelContainer extends React.Component {
   constructor(props) {
     super(props)
@@ -34,7 +40,8 @@ class MonitorPanelContainer extends React.Component {
     //   ]
     // }
       executionSummary: {},
-      finishLoadSummary: false
+      finishLoadSummary: false,
+      gaugeData: defaultGaugeData
     }
 
     this.doEverySixSeconds = this.doEverySixSeconds.bind(this)
@@ -55,7 +62,6 @@ class MonitorPanelContainer extends React.Component {
         this.interval = setInterval(this.doEverySixSeconds, 6000)
         return
       case 'missed':
-        console.log('load defult data')
         return
       case 'stopped':
         console.log('load historial data')
@@ -63,7 +69,6 @@ class MonitorPanelContainer extends React.Component {
       default:
         console.log('are you kidding from MonitorPanelContainer')
         return
-
     }
   }
 
@@ -100,7 +105,8 @@ class MonitorPanelContainer extends React.Component {
     if (this.state.finishLoadSummary) {
       return(
         <div>
-          <GaugeContainer />
+          <GaugeContainer 
+            data={this.state.gaugeData} />
           <div style={styles.title}>User Allocation</div>
           <UsersStatusTable groups={this.state.executionSummary.status}/> 
         </div>
