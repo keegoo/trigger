@@ -75,23 +75,18 @@ class ExecutionSummary
   end
 
   def self.progress(scheduler_id)
-    any = self.where({ scheduler_id: scheduler_id }).first
-    return "waiting" if any == nil
-    progress = any.status
-    status_ary = progress.map{|x| x["status"]}
-    if status_ary.include?("running")
-      return "running"
+    doc = self.where({ scheduler_id: scheduler_id }).first
+    status_ary = doc.status.map{|x| x["status"]}
+    return "running" if status_ary.include?("running")
+
+    uniq_ary = status_ary.uniq
+    if uniq_ary.size == 1
+      return uniq_ary[0]  # waiting/stopped/missed
     else
-      uniq_ary = status_ary.uniq
-      if uniq_ary.size == 1
-        return uniq_ary[0] == "waiting" ? "waiting" : "stopped"
-      else
-        puts "warning: doesn't expect this state."
-        puts "warning: progress array is: #{progress.inspect}"
-        return "waiting"
-      end
+      puts "warning: doesn't expect this state."
+      puts "warning: progress array is: #{progress.inspect}"
+      return "dead missed"
     end
-        
   end
 
   private
