@@ -24,22 +24,11 @@ class Heading extends React.Component {
     super(props)
   }
 
-  statusToString(status) {
-    switch(status){
-      case 'running':
-        return 'is running'
-      case 'finished':
-        return 'is finished'
-      case 'waiting':
-        return 'is waiting'
-    }
-  }
-
   render() {
     return(
       <div style={styles.layout} >
         <span style={styles.title}>Schedule {this.props.title}</span>
-        <span style={styles.sub}>{this.statusToString(this.props.status)}</span>
+        <span style={styles.sub}>{`is ${this.props.status}`}</span>
       </div>
     )
   }
