@@ -1,8 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
+import FlatButton from 'material-ui/FlatButton'
 import { grey500, grey400, cyan400 } from 'material-ui/styles/colors'
 import * as utils from './../utils.js'
+
+const white = '#FFFFFF'
 
 const styles = {
   borderInactive: {
@@ -26,6 +29,9 @@ const styles = {
 }
 
 class Schedule extends React.Component {
+  constructor(props){
+    super(props)
+  }
 
   render (){
     const t = this.props.historicalInfo
@@ -40,7 +46,9 @@ class Schedule extends React.Component {
             <TableRow>
               <TableHeaderColumn colSpan="3" style={styles.tableTitle}>
                 <Link to={`/monitor/${t._id}`} style={styles.monitorLink} >
-                  {utils.splitISOToDateTime(nearT)[0]}
+                  <FlatButton fullWidth={true} hoverColor={white}>
+                    {utils.splitISOToDateTime(nearT)[0]}
+                  </FlatButton>
                 </Link>
               </TableHeaderColumn>
             </TableRow>
