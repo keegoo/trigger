@@ -2,7 +2,9 @@ class ExecutionTunnel
   include Mongoid::Document
 
   field :hour,          type: String
-  field :values,        type: Hash
+  field :values,        type: Hash,     default: {}
+
+  belongs_to :scheduler
 
   # ==================
   # values: {
@@ -23,8 +25,6 @@ class ExecutionTunnel
   #   ...
   #   59:{ }
   # }
-
-  belongs_to :scheduler
 
   def self.insert(min, second, hits, scheduler_id, hourly)
     self.create_if_not_exist(hourly, scheduler_id)

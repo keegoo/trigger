@@ -18,8 +18,8 @@ class ExecutionsController < ApplicationController
   end
 
   def upsert
-    @params = params.permit([:status, :hits, :errors, :generator, :ustart, :ustop, :scheduler_id])
-    scheduler_id = @params[:scheduler_id]
+    @params = params.require(:execution).permit([:status, :hits, :errors, :generator, :ustart, :ustop])
+    scheduler_id = params[:scheduler_id]
     hourly, min, second = get_present_hourly_min_second
 
     ExecutionTunnel.insert(min, second, @params.fetch(:hits){0}.to_i, scheduler_id, hourly)

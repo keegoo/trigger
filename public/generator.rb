@@ -28,10 +28,10 @@ module Utils
     end
   end
 
-  def send_data(jsonstr)
+  def send_data(schedule_id, jsonstr)
     begin
       HTTParty.post( 
-        host + "/schedulers/591469bb8fb238054bf1e5e7/executions/upsert",
+        host + "/schedulers/#{schedule_id}/executions/upsert",
         body: jsonstr,
         headers: { 'Content-Type' => 'application/json' }
       )
@@ -64,32 +64,30 @@ class Config
   # ==========================
   # task example:
   # {
-  #   "generator"=>"CYs-MacBook-Pro.local", 
-  #   "time"=>"2017-04-14T08:00:00Z", 
-  #   "cmd"=>"ping www.google.com -c 30"
+  #   "generator"=> "CYs-MacBook-Pro.local", 
+  #   "time"=>      "2017-04-14T08:00:00Z", 
+  #   "cmd"=>       "ping www.google.com -c 30",
+  #   "_id" =>      "591ec2358fb2380a31292223"
   # }
   def next_task()
-    all_active_tasks()
     heart_beat()
+    task = {}
 
-    if @response_body == nil
-      {}
-    else
-      tasks = JSON.parse(@response_body)
-      my_tasks = tasks.select do |t|
-        t["schedule"].map{|x| x["generator"]}.include?(whoami)
-      end
+    response_body = all_active_tasks()
+    unless response_body == ''
+      active_tasks = JSON.parse(response_body)
+      return {} if active_tasks.empty?
 
-      if my_tasks.empty?
-        {}
-      else
-        # narrow down my tasks
-        my_tasks.\
-        map{|x| x["schedule"]}.reduce(:+).\
-        select{|x| x["generator"].include?(whoami)}.\
-        sort_by{|x| x["time"]}[0]
-      end
+      task = active_tasks.map do |x| 
+        t = my_first_task_in_schedule(x["schedule"])
+        if t == nil
+          return {}
+        else
+          t.merge("_id" => x["_id"])
+        end
+      end.sort_by{|x| x["time"]}[0]
     end
+    return task
   end
 
   private
@@ -108,19 +106,44 @@ class Config
     true
   end
 
+  # ==========================
+  # task example:
+  # [
+  #   {
+  #     "_id": "591ec2358fb2380a31292223",
+  #     "schedule": [
+  #       { "generator": "APC-WGROAPP302", "time": "2017-05-19T12:00:00Z", "cmd": "ping www.google.com -c 30"},
+  #       { "generator": "APC-WGROAPP301", "time": "2017-05-19T12:00:00Z", "cmd": "ping www.google.com -c 30"}
+  #     ]
+  #   },
+  #   ...
+  # ]
   def all_active_tasks()
-    @response_body = nil
+    response_body = ''
     begin
       response = HTTParty.get("http://127.0.0.1:3000/schedulers/active")
-      @response_body = response.body
+      response_body = response.body
     rescue => err
       $LOGGER.debug("get config failed")
     end
 
-    unless valid_json?(@response_body) && valid_json_content?(@response_body)
+    unless valid_json?(response_body) && valid_json_content?(response_body)
       $LOGGER.debug("invalid JSON response: #{@response_body}")
-      @response_body = nil
+      response_body = ''
     end
+    response_body
+  end
+
+  # ==========================
+  # given: [
+  #   {"generator": "me", time:"00:00:20", cmd: "ping"},
+  #   {"generator": "me", time:"00:00:10", cmd: "ping"},
+  #   {"generator": "notme", time:"00:00:00", cmd: "ping"},
+  #   {"generator": "notme", time:"00:00:00", cmd: "ping"},
+  # ]
+  # return: {"generator": "me", time: "00:00:10", cmd: "ping"}
+  def my_first_task_in_schedule(tasks)
+    tasks.select{|x| x["generator"] == whoami}.sort_by{|x| x["time"]}[0]
   end
 end
 
@@ -226,9 +249,9 @@ end
 class PingParser
   extend Utils
 
-  def self.read(str)
+  def self.read(schedule_id, str)
     jsonstr = self.parse(str).to_json
-    self.send_data(jsonstr)
+    self.send_data(schedule_id, jsonstr)
   end
 
   def self.parse(str)
@@ -285,13 +308,14 @@ end
 $generator = Generator.new
 $config = Config.new
 $task = {}
+$schedule_id = ''
 # ========== Main ==========
 every_n_seconds(6) do
 
   if $generator.status == :running
     $LOGGER.info("#{$task[:cmd]} is running with pid = #{$generator.pid}")
     $generator.read_output do |each_line, line_num|
-      PingParser.read(each_line)
+      PingParser.read($schedule_id, each_line)
       Utils.heart_beat
     end
   else
@@ -299,10 +323,10 @@ every_n_seconds(6) do
       $LOGGER.info("no task")
     else
       $LOGGER.info("task: #{$task}")
-      if true
-      # if Time.now.utc.iso8601 >= $task["time"]
+      if Time.now.utc.iso8601 >= $task["time"]
         $LOGGER.info("trigger task #{$task['cmd']}")
         $generator.run($task["cmd"])
+        $schedule_id = $task["_id"]
         $task = {}
       end
     end

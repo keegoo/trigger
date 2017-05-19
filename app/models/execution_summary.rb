@@ -30,7 +30,7 @@ class ExecutionSummary
   end
 
   def self.update(scheduler_id, ahash)
-    self.create_if_not_exist(scheduler_id)
+    # document must exist!
     doc = self.where( scheduler_id: scheduler_id ).first
     generator = ahash[:generator]
 
@@ -86,14 +86,6 @@ class ExecutionSummary
       puts "warning: doesn't expect this state."
       puts "warning: progress array is: #{progress.inspect}"
       return "dead missed"
-    end
-  end
-
-  private
-
-  def self.create_if_not_exist(scheduler_id)
-    unless self.where(scheduler_id: scheduler_id).exists?
-      self.create(scheduler_id: scheduler_id)
     end
   end
 
