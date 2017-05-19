@@ -9,7 +9,7 @@ const white = '#FFFFFF'
 
 const styles = {
   borderInactive: {
-    boxShadow: `${grey400} 0px 0px 10px`,
+    boxShadow: `${grey400} 0px 0px 5px`,
     marginBottom: '10px'
   },
 

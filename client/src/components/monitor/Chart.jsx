@@ -1,7 +1,7 @@
 import React from 'react'
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Legend, ResponsiveContainer } from 'recharts'
 import { fetchColor } from './colorDistributor.js'
-import { grey400 } from 'material-ui/styles/colors'
+import { grey400, grey500 } from 'material-ui/styles/colors'
 
 const data = [
   {name: 'Page A', uv: 40, pv: 24},
@@ -16,13 +16,13 @@ const data = [
 const styles = {
   border: {
     margin: '10px 0 10px 0',
-    boxShadow: `${grey400} 0px 0px 10px`,
+    boxShadow: `${grey400} 0px 0px 5px`,
     padding: '10px'
   },
   title: {
     textAlign: 'center',
     fontSize: '12px',
-    color: grey400,
+    color: grey500,
     margin: '10px'
   }
 }

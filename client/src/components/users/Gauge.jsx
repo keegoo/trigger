@@ -4,7 +4,7 @@ import UserIcon from 'material-ui/svg-icons/social/group'
 import TrendIcon from 'material-ui/svg-icons/action/trending-up'
 import ErrorIcon from 'material-ui/svg-icons/alert/error-outline'
 import Divider from 'material-ui/Divider'
-import { grey300, grey400, red500 } from 'material-ui/styles/colors'
+import { grey300, grey500, red500 } from 'material-ui/styles/colors'
 
 const black = '#000000'
 
@@ -17,7 +17,7 @@ const styles = {
   title: {
     padding: '5px',
     textAlign: 'center',
-    color: grey400,
+    color: grey500,
     fontSize: '12px'
   },
 
@@ -29,7 +29,7 @@ const styles = {
   },
 
   icon: {
-    color: grey400,
+    color: grey500,
     marginTop: '15px'
   },
 
