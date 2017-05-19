@@ -3,16 +3,6 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis, Legend, ResponsiveContain
 import { fetchColor } from './colorDistributor.js'
 import { grey400, grey500 } from 'material-ui/styles/colors'
 
-const data = [
-  {name: 'Page A', uv: 40, pv: 24},
-  {name: 'Page B', uv: 30, pv: 13},
-  {name: 'Page C', uv: 20, pv: 98},
-  {name: 'Page D', uv: 27, pv: 39},
-  {name: 'Page E', uv: 18, pv: 48},
-  {name: 'Page F', uv: 23, pv: 38},
-  {name: 'Page G', uv: 34, pv: 43},
-]
-
 const styles = {
   border: {
     margin: '10px 0 10px 0',
@@ -28,17 +18,20 @@ const styles = {
 }
 
 class Chart extends React.Component {
+  constructor(props){
+    super(props)
+  }
+
   render() {
     return(
       <div style={styles.border} >
-        <div style={styles.title}>Hits per Second</div>
+        <div style={styles.title}>{this.props.chartTitle}</div>
         <ResponsiveContainer width='100%' aspect={5.0/2.0} >
-          <LineChart data={data}>
-            <Line type="monotone" dataKey="uv" stroke={ fetchColor(0) } />
-            <Line type="monotone" dataKey="pv" stroke={ fetchColor(1) } />
+          <LineChart data={this.props.data}>
+            <Line type="monotone" dataKey="v" stroke={ fetchColor(0) } />
             <Legend />
             <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-            <XAxis dataKey="name" tick={<CustomizedXAxisTick/>} />
+            <XAxis dataKey="t" tick={<CustomizedXAxisTick/>} />
             <YAxis tick={<CustomizedYAxisTick/>} />
           </LineChart>
         </ResponsiveContainer>
@@ -66,4 +59,5 @@ class CustomizedYAxisTick extends React.Component {
     )
   }
 }
+
 export default Chart

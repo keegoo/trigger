@@ -1,6 +1,6 @@
 import React from 'react'
 import Heading from './components/heading/Heading.jsx'
-import MonitorContainer from './components/monitor/MonitorContainer.jsx'
+import MonitorChartContainer from './components/monitor/MonitorChartContainer.jsx'
 import MonitorPanelContainer from './components/users/MonitorPanelContainer.jsx'
 import CircularProgress from 'material-ui/CircularProgress'
 import * as utils from './components/utils.js'
@@ -103,7 +103,9 @@ class MonitorPage extends React.Component {
             schedulerId={this.props.params.scheduleId}
             taskExecutionTime={this.state.scheduler.schedule[0].time}
             progress={this.state.progress} />
-          <MonitorContainer />
+          <MonitorChartContainer 
+            scheduleId={this.props.params.scheduleId}
+            progress={this.state.progress} />
         </div>
       )
     } else {
