@@ -10,6 +10,11 @@ const styles = {
     color: cyan500,
     fontSize: '24px',
     margin: '20px 0 10px 0'
+  },
+  layout: {
+    display: 'grid',
+    gridGap: '15px',
+    gridTemplateColumns: '3fr 1fr'
   }
 }
 
@@ -109,12 +114,11 @@ class MonitorPanelContainer extends React.Component {
   render() {
     if (this.state.finishLoadSummary) {
       return(
-        <div>
-          <GaugeContainer 
-            data={this.mapToGaugeData(this.state.executionSummary)} />
-          <div style={styles.title}>User Allocation</div>
+        <div style={styles.layout}>
           <UsersStatusTable 
             groups={this.mapToUsersData(this.state.executionSummary)} /> 
+          <GaugeContainer 
+            data={this.mapToGaugeData(this.state.executionSummary)} />
         </div>
       )
     } else {    

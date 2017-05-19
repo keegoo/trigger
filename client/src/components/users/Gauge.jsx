@@ -4,11 +4,13 @@ import UserIcon from 'material-ui/svg-icons/social/group'
 import TrendIcon from 'material-ui/svg-icons/action/trending-up'
 import ErrorIcon from 'material-ui/svg-icons/alert/error-outline'
 import Divider from 'material-ui/Divider'
-import { grey400 } from 'material-ui/styles/colors'
+import { grey300, grey400, red500 } from 'material-ui/styles/colors'
+
+const black = '#000000'
 
 const styles = {
   border: {
-    boxShadow: `${grey400} 0px 1px 6px`,
+    border: `solid 1px ${grey300}`,
     borderRadius: '2px'
   },
 
@@ -41,8 +43,13 @@ const styles = {
   },
 
   label: {
-    fontSize: '30px'
-  }
+    fontSize: '30px',
+    color: black
+  },
+
+  // labelColor: {
+  //   color: red500
+  // }
 }
 
 class Gauge extends React.Component {

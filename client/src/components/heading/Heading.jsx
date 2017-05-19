@@ -15,7 +15,9 @@ const styles = {
   sub: {
     fontSize: '16px',
     background: grey300,
-    borderRadius: '2px'
+    borderRadius: '2px',
+    display: 'inline',
+    padding: '0px 4px 0px 4px'
   }
 }
 
@@ -28,7 +30,7 @@ class Heading extends React.Component {
     return(
       <div style={styles.layout} >
         <span style={styles.title}>Schedule {this.props.title}</span>
-        <span style={styles.sub}>{`is ${this.props.status}`}</span>
+        <div style={styles.sub}>{`is ${this.props.status}`}</div>
       </div>
     )
   }
