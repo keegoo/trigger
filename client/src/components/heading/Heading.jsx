@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { cyan500, grey300 } from 'material-ui/styles/colors'
 
 const styles = {
@@ -34,6 +35,11 @@ class Heading extends React.Component {
       </div>
     )
   }
+}
+
+Heading.propTypes = {
+  title:    PropTypes.string.isRequired,
+  status:   PropTypes.string.isRequired
 }
 
 export default Heading

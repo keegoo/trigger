@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import TimerIcon from 'material-ui/svg-icons/image/timer'
 import UserIcon from 'material-ui/svg-icons/social/group'
 import TrendIcon from 'material-ui/svg-icons/action/trending-up'
@@ -88,6 +89,13 @@ class Gauge extends React.Component {
       </div>
     )
   }
+}
+
+Gauge.propTypes = {
+  title:      PropTypes.string.isRequired,
+  iconType:   PropTypes.string.isRequired,
+  sublabel:   PropTypes.string.isRequired,
+  label:      PropTypes.string.isRequired
 }
 
 export default Gauge

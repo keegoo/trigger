@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Schedule from './Schedule.jsx'
 import Pagination from './Pagination.jsx'
 import {cyan500} from 'material-ui/styles/colors'
@@ -64,6 +65,10 @@ class ScheduleContainer extends React.Component {
       </div>
     )
   }
+}
+
+ScheduleContainer.propTypes = {
+  schedulers:   PropTypes.array.isRequired
 }
 
 export default ScheduleContainer

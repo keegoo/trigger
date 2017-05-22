@@ -1,7 +1,7 @@
 import React from 'react'
 import Heading from './components/heading/Heading.jsx'
-import MonitorChartContainer from './components/monitor/MonitorChartContainer.jsx'
-import MonitorPanelContainer from './components/users/MonitorPanelContainer.jsx'
+import MonitorChartContainer from './components/charts/MonitorChartContainer.jsx'
+import MonitorPanelContainer from './components/panel/MonitorPanelContainer.jsx'
 import CircularProgress from 'material-ui/CircularProgress'
 import * as utils from './components/utils.js'
 import Config from 'Config'
@@ -31,7 +31,7 @@ class MonitorPage extends React.Component {
       //     ...
       //   ]
       // }
-      scheduler: {},
+      schedule: {},
 
       // ==================================
       // execution example:
@@ -39,16 +39,6 @@ class MonitorPage extends React.Component {
       //   "_id": "59193db18fb2380224bda165",
       //   "hour": "2017-05-15T05:00:00Z",
       //   "scheduler_id": "591469bb8fb238054bf1e5e7",
-      //   "total_errors": 0,
-      //   "total_hits": 84,
-      //   "users": {
-      //     "CYS-MACBOOK-PRO": {
-      //       "LOCAL": {
-      //         "started": 3,
-      //         "stopped": 2
-      //       }
-      //     }
-      //   },
       //   "values": {
       //     "1": {},
       //     "2": {}
@@ -56,34 +46,34 @@ class MonitorPage extends React.Component {
       //   }
       // }
       execution: {},
-      finishLoadScheduler: false,
+      finishLoadschedule: false,
       finishLoadExecution: false,
       finishLoadProgress: false,
       progress: "stopped"
 
     }
 
-    this.fetchScheduler = this.fetchScheduler.bind(this)
-    this.fetchSchedulerProgress = this.fetchSchedulerProgress.bind(this)
+    this.fetchschedule = this.fetchschedule.bind(this)
+    this.fetchscheduleProgress = this.fetchscheduleProgress.bind(this)
 
-    this.fetchScheduler(this.props.params.scheduleId)
-    this.fetchSchedulerProgress(this.props.params.scheduleId)
+    this.fetchschedule(this.props.params.scheduleId)
+    this.fetchscheduleProgress(this.props.params.scheduleId)
   }
 
-  fetchScheduler(id) {
+  fetchschedule(id) {
     const host = Config.host
     fetch(`${host}/schedulers/${id}`)
       .then(response => response.json())
       .then(json => { 
-        this.setState({scheduler: json})
-        this.setState({finishLoadScheduler: true})
+        this.setState({schedule: json})
+        this.setState({finishLoadschedule: true})
         // console.log(json)
       })
   }
 
-  fetchSchedulerProgress(id) {
+  fetchscheduleProgress(id) {
     const host = Config.host
-    fetch(`${host}/schedulers/${id}/executions/progress`)
+    fetch(`${host}/schedulers/${id}/progress`)
       .then(response => response.json())
       .then(json => { 
         this.setState({progress: json.progress})
@@ -93,15 +83,15 @@ class MonitorPage extends React.Component {
   }
 
   render() {
-    if (this.state.finishLoadScheduler && this.state.finishLoadProgress) {
+    if (this.state.finishLoadschedule && this.state.finishLoadProgress) {
       return(
         <div style={styles}>
           <Heading 
-            title={utils.splitISOToDateTime(this.state.scheduler.schedule[0].time)[0]}
+            title={utils.splitISOToDateTime(this.state.schedule.tasks[0].time)[0]}
             status={this.state.progress} />
           <MonitorPanelContainer
-            schedulerId={this.props.params.scheduleId}
-            taskExecutionTime={this.state.scheduler.schedule[0].time}
+            scheduleId={this.props.params.scheduleId}
+            taskExecutionTime={this.state.schedule.tasks[0].time}
             progress={this.state.progress} />
           <MonitorChartContainer 
             scheduleId={this.props.params.scheduleId}

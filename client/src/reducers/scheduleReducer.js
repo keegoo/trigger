@@ -1,11 +1,11 @@
-// schedule structure example:
-// schedule = [
-//   {generator: , time: , cmd: , status: },
+// tasks structure example:
+// tasks = [
+//   { generator: , time: , cmd: },
 //   ...
 // ]
 
 export default function scheduleReducer(state = [], action){
-  if(!action.hasOwnProperty('schedule')){
+  if(!action.hasOwnProperty('task')){
     return state
   }
 
@@ -16,37 +16,36 @@ export default function scheduleReducer(state = [], action){
       return [
         ...state,
         { 
-          generator: action.schedule.generator, 
+          generator: action.task.generator, 
           time: '', 
-          cmd: '', 
-          status: '' 
+          cmd: ''
         }
       ]
 
     case 'REMOVE_GENERATOR':
-      return state.filter((x) => x.generator != action.schedule.generator)
+      return state.filter((x) => x.generator != action.task.generator)
 
     case 'SAVE_TIME':
-      a = state.filter((x) => x.generator != action.schedule.generator)
-      b = state.filter((x) => x.generator == action.schedule.generator)
+      a = state.filter((x) => x.generator != action.task.generator)
+      b = state.filter((x) => x.generator == action.task.generator)
       return [
         ...a,
         Object.assign(
           {},
           b[0],
-          {time: action.schedule.time}
+          {time: action.task.time}
         )
       ]
 
     case 'SAVE_COMMAND':
-      a = state.filter((x) => x.generator != action.schedule.generator)
-      b = state.filter((x) => x.generator == action.schedule.generator)
+      a = state.filter((x) => x.generator != action.task.generator)
+      b = state.filter((x) => x.generator == action.task.generator)
       return [
         ...a,
         Object.assign(
           {},
           b[0],
-          {cmd: action.schedule.cmd}
+          {cmd: action.task.cmd}
         )
       ]
 

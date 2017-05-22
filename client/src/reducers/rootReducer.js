@@ -3,7 +3,7 @@ import notificationReducer from './notificationReducer.js'
 
 export default function rootReducer(state = {}, action) {
   return {
-    schedule: scheduleReducer(state.schedule, action),
+    tasks: scheduleReducer(state.tasks, action),
     notification: notificationReducer(state.notification, action)
   }
 }

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Gauge from './Gauge.jsx'
 
 const styles = {
@@ -36,6 +37,10 @@ class GaugeContainer extends React.Component {
       </div>
     )
   }
+}
+
+GaugeContainer.propTypes = {
+  data:   PropTypes.array.isRequired
 }
 
 export default GaugeContainer

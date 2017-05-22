@@ -20,6 +20,15 @@ class HomePage extends React.Component {
     this.fetchHistoricalSchedulers = this.fetchHistoricalSchedulers.bind(this)
 
     this.state = {
+
+      // =============================
+      // exmpale:
+      // {
+      //   "tasks":[
+      //     {"generator":"SF1-WGROAPP311","time":"2017-05-22T08:00:00Z","cmd":"ping www.google.com -c 30","status":""},
+      //     {"generator":"SF1-WGROAPP310","time":"2017-05-22T08:00:00Z","cmd":"ping www.google.com -c 30","status":""}
+      //    ]
+      // }
       savedSchedulersData: []
     }
   }

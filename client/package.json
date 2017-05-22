@@ -26,7 +26,8 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "mocha": "^3.3.0"
+    "mocha": "^3.3.0",
+    "prop-types": "^15.5.10"
   },
   "babel": {
     "presets": [

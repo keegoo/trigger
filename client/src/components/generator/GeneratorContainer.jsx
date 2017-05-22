@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import GeneratorFilter from './GeneratorFilter.jsx'
 import GeneratorList from './GeneratorList.jsx'
@@ -51,12 +52,12 @@ class GeneratorContainer extends React.Component {
     if(this.props.generatorsSelected.includes(generator.name)) {
       this.props.dispatch({
         type: 'REMOVE_GENERATOR',
-        schedule: {generator: generator.name}
+        task: {generator: generator.name}
       })
     } else {
       this.props.dispatch({
         type: 'ADD_GENERATOR',
-        schedule: {generator: generator.name}
+        task: {generator: generator.name}
       })
     }
   }
@@ -100,7 +101,7 @@ GeneratorContainer.propTypes = {
 // todo: what is ??? ownProps ???
 function mapStateToProps(state, ownProps) {
   return {
-    generatorsSelected: state.schedule.map((x) => x.generator)
+    generatorsSelected: state.tasks.map((x) => x.generator)
   }
 }
 

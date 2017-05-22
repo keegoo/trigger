@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Legend, ResponsiveContainer } from 'recharts'
 import { fetchColor } from './colorDistributor.js'
 import { grey400, grey500 } from 'material-ui/styles/colors'
@@ -58,6 +59,11 @@ class CustomizedYAxisTick extends React.Component {
       <text x={x} y={y} dx={-16} textAnchor="end" fill="#666" fontSize={12} >{payload.value}</text>
     )
   }
+}
+
+Chart.propTypes = {
+  chartTitle:   PropTypes.string.isRequired,
+  data:         PropTypes.array.isRequired
 }
 
 export default Chart

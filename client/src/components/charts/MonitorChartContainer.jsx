@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Chart from './Chart.jsx'
 import CircularProgress from 'material-ui/CircularProgress'
 import { cyan500 } from 'material-ui/styles/colors'
@@ -31,7 +32,7 @@ class MonitorChartContainer extends React.Component {
 
   fetchExecutionTunnels(id) {
     const host = Config.host
-    fetch(`${host}/schedulers/${id}/executions/tunnel_data`)
+    fetch(`${host}/schedulers/${id}/tunnel_data`)
       .then(response => response.json())
       .then(json => { 
         this.setState({ executionTunnel: this.joinHourlyData(json) })
@@ -106,6 +107,11 @@ class MonitorChartContainer extends React.Component {
       )
     }
   }
+}
+
+MonitorChartContainer.propTypes = {
+  scheduleId:   PropTypes.string.isRequired,
+  progress:     PropTypes.string.isRequired
 }
 
 export default MonitorChartContainer

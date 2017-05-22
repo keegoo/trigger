@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import Chip from 'material-ui/Chip'
 import { cyan100, grey900, grey50 } from 'material-ui/styles/colors'
 

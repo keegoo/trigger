@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 import TextField from 'material-ui/TextField'
 import AutoComplete from 'material-ui/AutoComplete'
@@ -106,6 +107,12 @@ class Editor extends React.Component {
       </Table>
     )
   }
+}
+
+Editor.propTypes = {
+  generatorsSelected:   PropTypes.array.isRequired,
+  saveTime:             PropTypes.func.isRequired,
+  saveCMD:              PropTypes.func.isRequired
 }
 
 export default Editor

@@ -31,7 +31,7 @@ module Utils
   def send_data(schedule_id, jsonstr)
     begin
       HTTParty.post( 
-        host + "/schedulers/#{schedule_id}/executions/upsert",
+        host + "/schedulers/#{schedule_id}/update_status",
         body: jsonstr,
         headers: { 'Content-Type' => 'application/json' }
       )

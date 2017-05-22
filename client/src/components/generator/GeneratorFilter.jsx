@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import TextField from 'material-ui/TextField'
 import {cyan500} from 'material-ui/styles/colors'
 
@@ -27,6 +28,10 @@ class GeneratorFilter extends React.Component {
       </div>
     )
   }
+}
+
+GeneratorFilter.propTypes = {
+  handleFilterChange:   PropTypes.func.isRequired
 }
 
 export default GeneratorFilter

@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import IconButton from 'material-ui/IconButton'
 import NavigateBeforeIcon from 'material-ui/svg-icons/image/navigate-before'
 import NavigateNextIcon from 'material-ui/svg-icons/image/navigate-next'

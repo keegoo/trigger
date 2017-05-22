@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import SaveIcon from 'material-ui/svg-icons/content/save'
 import Paper from 'material-ui/Paper'
@@ -60,14 +61,14 @@ class EditorContainer extends React.Component {
     if(time){
       this.props.dispatch({
         type: 'SAVE_TIME',
-        schedule: { generator: generator, time: time}
+        task: { generator: generator, time: time}
       })
     } 
 
     if(cmd){
       this.props.dispatch({
         type: 'SAVE_COMMAND',
-        schedule: { generator: generator, cmd: cmd}
+        task: { generator: generator, cmd: cmd}
       })
     }
   }
@@ -90,12 +91,12 @@ class EditorContainer extends React.Component {
   }
 
   noneGeneratorsSelected() {
-    return this.props.schedule.length === 0 ? true : false
+    return this.props.tasks.length === 0 ? true : false
   }
 
   invalidScheduleElement() {
     let invalid = false
-    this.props.schedule.forEach((x) => {
+    this.props.tasks.forEach((x) => {
       if( this.isEmpty(x.generator) || this.isEmpty(x.time) || this.isEmpty(x.cmd) ){
         invalid = true
       }
@@ -113,7 +114,7 @@ class EditorContainer extends React.Component {
   saveScheduler(){
     const host = Config.host
     const x = {
-      schedule: this.props.schedule
+      tasks: this.props.tasks
     }
 
     fetch(`${host}/schedulers`, {
@@ -124,8 +125,8 @@ class EditorContainer extends React.Component {
       body: JSON.stringify(x)
     }).then(response => response.json())
     .then(json => {
-      console.log('schedule is saved: ')
-      console.log(json)
+      // console.log('schedule is saved: ')
+      // console.log(json)
 
       // tell its father: App
       this.props.onSave()
@@ -133,7 +134,7 @@ class EditorContainer extends React.Component {
       // clear schedule
       this.props.dispatch({
         type: 'SCHEDULE_BEEN_SAVED',
-        schedule: {}
+        task: {}
       })
 
       // notification
@@ -165,7 +166,7 @@ class EditorContainer extends React.Component {
               onClick={ this.handleOnSaveScheduler } />
           </div>
           <Editor 
-            generatorsSelected={this.props.schedule.map((x) => x.generator).sort()}
+            generatorsSelected={this.props.tasks.map((x) => x.generator).sort()}
             saveTime={this.handleSaveGeneratorTime}
             saveCMD={this.handleSaveGeneratorCMD} />
         </Paper>
@@ -174,10 +175,14 @@ class EditorContainer extends React.Component {
   }
 }
 
+EditorContainer.propTypes = {
+  onSave:   PropTypes.func.isRequired
+}
+
 // todo: what is ??? ownProps ???
 function mapStateToProps(state, ownProps) {
   return {
-    schedule: state.schedule,
+    tasks: state.tasks,
     notification: state.notification
   }
 }

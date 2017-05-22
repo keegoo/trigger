@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 import { grey400, grey300 } from 'material-ui/styles/colors'
 
@@ -49,6 +50,10 @@ class UsersStatusTable extends React.Component {
       </div>
     )
   }
+}
+
+UsersStatusTable.propTypes = {
+  groups:   PropTypes.array.isRequired
 }
 
 export default UsersStatusTable

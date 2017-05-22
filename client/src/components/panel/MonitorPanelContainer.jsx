@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import UsersStatusTable from './UsersStatusTable.jsx'
 import GaugeContainer from './GaugeContainer.jsx'
 import CircularProgress from 'material-ui/CircularProgress'
@@ -24,31 +25,37 @@ class MonitorPanelContainer extends React.Component {
 
     this.state = {
       // ==================================
-      // executionSummary example:
+      // schedule example:
       // {
       //   "_id": "591ad79d8fb238037416b836",
-      //   "scheduler_id": "591469bb8fb238054bf1e5e7",
-      //   "status": [
-      //     { "name": "CYS-MACBOOK-PRO.LOCAL", "status": "stopped" }
-      //   ],
-      //   "total_errors": 33,
-      //   "total_hits": 37,
-      //   "users": [
-      //     { "name": "apc-wgroapp301", "running": 2, "stopped": 2 },
-      //     { "name": "CYS-MACBOOK-PRO.LOCAL", "running": 11, "stopped": 14 }
+      //   "tasks": [
+      //     {
+      //       "generator": "APC-WGROAPP301",
+      //       "status": "disconnected",
+      //       "running": 0,
+      //       "stopped": 0
+      //     },
+      //     {
+      //       "generator": "APC-WGROAPP302",
+      //       "status": "disconnected",
+      //       "running": 0,
+      //       "stopped": 0
+      //     },
       //   ]
+      //   "total_errors": 0,
+      //   "total_hits": 0
       // }
-      executionSummary: {},
+      schedule: {},
       finishLoadSummary: false
     }
 
     this.doEverySixSeconds = this.doEverySixSeconds.bind(this)
     this.doXSecondsLater = this.doXSecondsLater.bind(this)
-    this.fetchExecutionSummary = this.fetchExecutionSummary.bind(this)
+    this.fetchSchedule = this.fetchSchedule.bind(this)
     this.mapToGaugeData = this.mapToGaugeData.bind(this)
     this.mapToUsersData = this.mapToUsersData.bind(this)
 
-    this.fetchExecutionSummary(this.props.schedulerId)
+    this.fetchSchedule(this.props.scheduleId)
   }
 
   componentDidMount() {
@@ -65,8 +72,10 @@ class MonitorPanelContainer extends React.Component {
         return
       case 'stopped':
         return
+      case 'disconnected':
+        return
       default:
-        console.log('are you kidding from MonitorPanelContainer')
+        console.log('warning: are you kidding from MonitorPanelContainer')
         return
     }
   }
@@ -82,33 +91,39 @@ class MonitorPanelContainer extends React.Component {
   }
 
   doEverySixSeconds() {
-    this.fetchExecutionSummary(this.props.schedulerId)
+    this.fetchSchedule(this.props.scheduleId)
   }
 
   doXSecondsLater() {
     console.log("time to do some thing!")
   }
 
-  fetchExecutionSummary(id) {
+  fetchSchedule(id) {
     const host = Config.host
-    fetch(`${host}/schedulers/${id}/executions/summary_data`)
+    fetch(`${host}/schedulers/${id}`)
       .then(response => response.json())
       .then(json => { 
-        this.setState({executionSummary: json})
+        this.setState({schedule: json})
         this.setState({finishLoadSummary: true})
         // console.log(json)
       })
   }
 
-  mapToGaugeData(execSum) {
+  mapToGaugeData(schedule) {
     return [
-      { title: 'Total Hits',iconType: 'hits',   sublabel: 'No.', label: execSum.total_hits },
-      { title: 'Errors',    iconType: 'errors', sublabel: 'No.', label: execSum.total_errors }
+      { title: 'Total Hits',iconType: 'hits',   sublabel: 'No.', label: `${schedule.total_hits}` },
+      { title: 'Errors',    iconType: 'errors', sublabel: 'No.', label: `${schedule.total_errors}` }
     ]
   }
 
-  mapToUsersData(execSum) {
-    return execSum.users.map((x) => Object.assign({}, {running: 0, stopped: 0}, x))
+  mapToUsersData(schedule) {
+    return schedule.tasks.map((x) => { 
+      return { 
+          name: x.generator, 
+          running: x.running, 
+          stopped: x.stopped
+        } 
+    })
   }
 
   render() {
@@ -116,9 +131,9 @@ class MonitorPanelContainer extends React.Component {
       return(
         <div style={styles.layout}>
           <UsersStatusTable 
-            groups={this.mapToUsersData(this.state.executionSummary)} /> 
+            groups={this.mapToUsersData(this.state.schedule)} /> 
           <GaugeContainer 
-            data={this.mapToGaugeData(this.state.executionSummary)} />
+            data={this.mapToGaugeData(this.state.schedule)} />
         </div>
       )
     } else {    
@@ -127,6 +142,12 @@ class MonitorPanelContainer extends React.Component {
       )
     }
   }
+}
+
+MonitorPanelContainer.propTypes = {
+  scheduleId:         PropTypes.string.isRequired,
+  taskExecutionTime:  PropTypes.string.isRequired,
+  progress:           PropTypes.string.isRequired
 }
 
 export default MonitorPanelContainer

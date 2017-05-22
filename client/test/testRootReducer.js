@@ -8,10 +8,10 @@ describe('rootReducer', () => {
     expect(
       rootReducer({}, {
         type: 'ADD_GENERATOR',
-        schedule: {generator: 'abc'}
+        task: {generator: 'abc'}
       })
     ).to.deep.equal({
-      schedule: [{ generator: 'abc', time: '', cmd: '', status: '' }],
+      tasks: [{ generator: 'abc', time: '', cmd: '' }],
       notification: []
     })
   })
@@ -23,7 +23,7 @@ describe('rootReducer', () => {
         notification: {type: 'info', msg: 'an info message'}
       })
     ).to.deep.equal({
-      schedule: [],
+      tasks: [],
       notification: [{type: 'info', msg: 'an info message'}]
     })
   })
