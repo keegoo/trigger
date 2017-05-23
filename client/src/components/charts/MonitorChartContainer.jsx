@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Chart from './Chart.jsx'
-import CircularProgress from 'material-ui/CircularProgress'
+//import CircularProgress from 'material-ui/CircularProgress'
+import Loading from '../loading/Loading.jsx'
 import { cyan500 } from 'material-ui/styles/colors'
 import Config from 'Config'
 
@@ -103,7 +104,7 @@ class MonitorChartContainer extends React.Component {
       )
     } else {
       return(
-        <CircularProgress />
+        <Loading />
       )
     }
   }

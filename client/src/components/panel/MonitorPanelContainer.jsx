@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import UsersStatusTable from './UsersStatusTable.jsx'
 import GaugeContainer from './GaugeContainer.jsx'
-import CircularProgress from 'material-ui/CircularProgress'
+import Loading from '../loading/Loading.jsx'
 import { cyan500 } from 'material-ui/styles/colors'
 import Config from 'Config'
 
@@ -138,7 +138,7 @@ class MonitorPanelContainer extends React.Component {
       )
     } else {    
       return( 
-        <CircularProgress /> 
+        <Loading /> 
       )
     }
   }
