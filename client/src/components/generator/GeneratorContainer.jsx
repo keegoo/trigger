@@ -12,34 +12,11 @@ class GeneratorContainer extends React.Component {
     super(props, context)
 
     this.state = {
-      filterStr: "",
-
-      // data example:
-      // [{ name: "SF2-WGROAPP301", timestamp: "2017-05-05T13:24:32Z" }, ...]
-      generators: []
+      filterStr: ""
     }
 
     this.onFilterChange = this.onFilterChange.bind(this)
     this.onSelectGenerator = this.onSelectGenerator.bind(this)
-    this.fetchGenerators = this.fetchGenerators.bind(this)
-  }
-
-  componentDidMount() {
-    this.fetchGenerators()
-    this.interval = setInterval(this.fetchGenerators, 6000)
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.interval)
-  }
-
-  fetchGenerators(){
-    const host = Config.host
-    fetch(`${host}/generators`)
-      .then(response => response.json())
-      .then(json => {
-        this.setState({generators: json})
-      })
   }
 
   onFilterChange(event){
@@ -67,9 +44,8 @@ class GeneratorContainer extends React.Component {
     return utils.xSecondsAgoUTC(6) < timestamp ? true : false
   }
 
-
   timestampIntoStatus(generators){
-    return this.state.generators.map((x) => { 
+    return generators.map((x) => { 
       return {
         name: x.name, 
         online: this.isOnline(x.timestamp)
@@ -85,7 +61,7 @@ class GeneratorContainer extends React.Component {
         <GeneratorFilter 
           handleFilterChange={this.onFilterChange} />
         <GeneratorList 
-          generators={this.timestampIntoStatus(this.state.generators).filter( e => e.name.includes(this.state.filterStr))}
+          generators={this.timestampIntoStatus(this.props.generators).filter( e => e.name.includes(this.state.filterStr))}
           filterStr={this.state.filterStr}
           handleSelectGenerator={this.onSelectGenerator}
           generatorsSelected={this.props.generatorsSelected} />
@@ -95,6 +71,7 @@ class GeneratorContainer extends React.Component {
 }
 
 GeneratorContainer.propTypes = {
+  generators:         PropTypes.array.isRequired,
   generatorsSelected: PropTypes.array.isRequired
 }
 
