@@ -3,6 +3,7 @@ import GeneratorContainer from './components/generator/GeneratorContainer.jsx'
 import EditorContainer from './components/editor/EditorContainer.jsx'
 import ScheduleContainer from './components/schedule/ScheduleContainer.jsx'
 import Notification from './components/notification/Notification.jsx'
+import Loading from './components/loading/Loading.jsx'
 import Config from 'Config'
 
 const styles = {
@@ -35,7 +36,10 @@ class HomePage extends React.Component {
 
       // data example:
       // [{ name: "SF2-WGROAPP301", timestamp: "2017-05-05T13:24:32Z" }, ...]
-      generators: []
+      generators: [],
+
+      finishLoadGeneratorComponent: false,
+      finishLoadSchedulerComponent: false
     }
 
     this.fetchHistoricalSchedulers()
@@ -63,6 +67,7 @@ class HomePage extends React.Component {
       .then(response => response.json())
       .then(json => { 
         this.setState({savedSchedulersData: json})
+        this.setState({finishLoadSchedulerComponent: true})
         // console.log(json)
       })
   }
@@ -73,6 +78,7 @@ class HomePage extends React.Component {
       .then(response => response.json())
       .then(json => {
         this.setState({generators: json})
+        this.setState({finishLoadGeneratorComponent: true})
         // console.log(json)
       })
   }
@@ -82,14 +88,20 @@ class HomePage extends React.Component {
   }
 
   render() {
-    return (
-      <div style={styles}>
-        <GeneratorContainer generators={this.state.generators} />
-        <EditorContainer onSave={this.handleSchedulerSave} />
-        <ScheduleContainer schedulers={this.state.savedSchedulersData} />
-        <Notification />
-      </div>
-    )
+    if (this.state.finishLoadGeneratorComponent && this.state.finishLoadSchedulerComponent) {
+      return (
+        <div style={styles}>
+          <GeneratorContainer generators={this.state.generators} />
+          <EditorContainer onSave={this.handleSchedulerSave} />
+          <ScheduleContainer schedulers={this.state.savedSchedulersData} />
+          <Notification />
+        </div>
+      )
+    } else {
+      return(
+        <Loading />
+      )
+    }
   }
 }
 
