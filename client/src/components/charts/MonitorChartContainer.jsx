@@ -1,9 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Chart from './Chart.jsx'
-import Loading from '../loading/Loading.jsx'
 import { cyan500 } from 'material-ui/styles/colors'
-import Config from 'Config'
 
 const styles = {
   title: {
@@ -17,28 +15,9 @@ class MonitorChartContainer extends React.Component {
   constructor(props){
     super(props)
 
-    this.state = {
-      executionTunnel: {},
-      finishLoadTunnel: false
-    }
-
-    this.fetchExecutionTunnels = this.fetchExecutionTunnels.bind(this)
     this.flatTunnelData = this.flatTunnelData.bind(this)
     this.doubleDigit = this.doubleDigit.bind(this)
     this.joinHourlyData = this.joinHourlyData.bind(this)
-
-    this.fetchExecutionTunnels(this.props.scheduleId)
-  }
-
-  fetchExecutionTunnels(id) {
-    const host = Config.host
-    fetch(`${host}/schedulers/${id}/tunnel_data`)
-      .then(response => response.json())
-      .then(json => { 
-        this.setState({ executionTunnel: this.joinHourlyData(json) })
-        this.setState({ finishLoadTunnel: true })
-        // console.log(json)
-      })
   }
 
   // convert 
@@ -92,26 +71,19 @@ class MonitorChartContainer extends React.Component {
   }
 
   render() {
-    if (this.state.finishLoadTunnel) {
-      return (
-        <div>
-          <div style={styles.title}>Monitor</div>
-          <Chart
-            chartTitle="Hits per Second"
-            data={this.state.executionTunnel} />
-        </div>
-      )
-    } else {
-      return(
-        <Loading />
-      )
-    }
+    return (
+      <div>
+        <div style={styles.title}>Monitor</div>
+        <Chart
+          chartTitle="Hits per Second"
+          data={this.joinHourlyData(this.props.tunnelData)} />
+      </div>
+    )
   }
 }
 
 MonitorChartContainer.propTypes = {
-  scheduleId:   PropTypes.string.isRequired,
-  progress:     PropTypes.string.isRequired
+  tunnelData:   PropTypes.array.isRequired
 }
 
 export default MonitorChartContainer

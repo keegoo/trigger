@@ -2,7 +2,7 @@ import React from 'react'
 import Heading from './components/heading/Heading.jsx'
 import MonitorChartContainer from './components/charts/MonitorChartContainer.jsx'
 import MonitorPanelContainer from './components/panel/MonitorPanelContainer.jsx'
-import CircularProgress from 'material-ui/CircularProgress'
+import Loading from './components/loading/Loading.jsx'
 import * as utils from './components/utils.js'
 import Config from 'Config'
 
@@ -18,60 +18,95 @@ class MonitorPage extends React.Component {
     this.state = {
 
       // ==================================
-      // scheduler example:
+      // schedule example:
       // {
-      //   "_id": "59105c068fb2380203e11023",
-      //   "schedule": [
+      //   "_id": "591ad79d8fb238037416b836",
+      //   "tasks": [
       //     {
       //       "generator": "APC-WGROAPP301",
-      //       "time": "2017-05-09T12:20:00Z",
-      //       "cmd": "ping www.google.com -c 30",
-      //       "status": ""
-      //     }
-      //     ...
+      //       "status": "disconnected",
+      //       "running": 0,
+      //       "stopped": 0
+      //     },
+      //     {
+      //       "generator": "APC-WGROAPP302",
+      //       "status": "disconnected",
+      //       "running": 0,
+      //       "stopped": 0
+      //     },
       //   ]
+      //   "total_errors": 0,
+      //   "total_hits": 0
       // }
       schedule: {},
 
       // ==================================
       // execution example:
-      // {
+      // [{
       //   "_id": "59193db18fb2380224bda165",
       //   "hour": "2017-05-15T05:00:00Z",
-      //   "scheduler_id": "591469bb8fb238054bf1e5e7",
       //   "values": {
-      //     "1": {},
-      //     "2": {}
-      //     ...
-      //   }
-      // }
-      execution: {},
-      finishLoadschedule: false,
-      finishLoadExecution: false,
+      //     "52": {
+      //       "12": 11,
+      //       "18": 6,
+      //       "24": 6,
+      //       "30": 6,
+      //       "36": 1
+      //       }
+      //     }
+      //   },
+      //   ...
+      // ]
+      tunnelData: {},
+
+      finishLoadSchedule: false,
+      finishLoadTunnelData: false,
       finishLoadProgress: false,
       progress: "stopped"
 
     }
 
-    this.fetchschedule = this.fetchschedule.bind(this)
-    this.fetchscheduleProgress = this.fetchscheduleProgress.bind(this)
+    this.doEverySixSeconds = this.doEverySixSeconds.bind(this)
+    this.fetchSchedule = this.fetchSchedule.bind(this)
+    this.fetchScheduleProgress = this.fetchScheduleProgress.bind(this)
+    this.fetchTunnelData = this.fetchTunnelData.bind(this)
 
-    this.fetchschedule(this.props.params.scheduleId)
-    this.fetchscheduleProgress(this.props.params.scheduleId)
+    this.fetchSchedule(this.props.params.scheduleId)
+    this.fetchScheduleProgress(this.props.params.scheduleId)
+    this.fetchTunnelData(this.props.params.scheduleId)
   }
 
-  fetchschedule(id) {
+  componentDidMount() {
+    this.interval = setInterval(this.doEverySixSeconds, 6000)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval)
+  }
+
+  doEverySixSeconds() {
+    const sheduleId = this.props.params.scheduleId
+
+    if(this.state.progress === 'running') {
+      this.fetchSchedule(sheduleId)
+      this.fetchTunnelData(sheduleId)
+    }
+
+    this.fetchScheduleProgress(sheduleId)
+  }
+
+  fetchSchedule(id) {
     const host = Config.host
     fetch(`${host}/schedulers/${id}`)
       .then(response => response.json())
       .then(json => { 
         this.setState({schedule: json})
-        this.setState({finishLoadschedule: true})
+        this.setState({finishLoadSchedule: true})
         // console.log(json)
       })
   }
 
-  fetchscheduleProgress(id) {
+  fetchScheduleProgress(id) {
     const host = Config.host
     fetch(`${host}/schedulers/${id}/progress`)
       .then(response => response.json())
@@ -82,27 +117,33 @@ class MonitorPage extends React.Component {
       })
   }
 
+  fetchTunnelData(id) {
+    const host = Config.host
+    fetch(`${host}/schedulers/${id}/tunnel_data`)
+      .then(response => response.json())
+      .then(json => { 
+        this.setState({ tunnelData: json })
+        this.setState({ finishLoadTunnelData: true })
+        // console.log(json)
+      })
+  }
+
   render() {
-    if (this.state.finishLoadschedule && this.state.finishLoadProgress) {
+    if (this.state.finishLoadSchedule && this.state.finishLoadProgress && this.state.finishLoadTunnelData) {
       return(
         <div style={styles}>
           <Heading 
             title={utils.splitISOToDateTime(this.state.schedule.tasks[0].time)[0]}
             status={this.state.progress} />
           <MonitorPanelContainer
-            scheduleId={this.props.params.scheduleId}
-            taskExecutionTime={this.state.schedule.tasks[0].time}
-            progress={this.state.progress} />
+            schedule={this.state.schedule} />
           <MonitorChartContainer 
-            scheduleId={this.props.params.scheduleId}
-            progress={this.state.progress} />
+            tunnelData={this.state.tunnelData} />
         </div>
       )
     } else {
       return (
-        <div style={styles} >
-          <CircularProgress />
-        </div>
+        <Loading />
       )
     }
   }

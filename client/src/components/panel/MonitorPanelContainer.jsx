@@ -2,16 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import UsersStatusTable from './UsersStatusTable.jsx'
 import GaugeContainer from './GaugeContainer.jsx'
-import Loading from '../loading/Loading.jsx'
-import { cyan500 } from 'material-ui/styles/colors'
-import Config from 'Config'
 
 const styles = {
-  title: {
-    color: cyan500,
-    fontSize: '24px',
-    margin: '20px 0 10px 0'
-  },
   layout: {
     display: 'grid',
     gridGap: '15px',
@@ -23,90 +15,8 @@ class MonitorPanelContainer extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      // ==================================
-      // schedule example:
-      // {
-      //   "_id": "591ad79d8fb238037416b836",
-      //   "tasks": [
-      //     {
-      //       "generator": "APC-WGROAPP301",
-      //       "status": "disconnected",
-      //       "running": 0,
-      //       "stopped": 0
-      //     },
-      //     {
-      //       "generator": "APC-WGROAPP302",
-      //       "status": "disconnected",
-      //       "running": 0,
-      //       "stopped": 0
-      //     },
-      //   ]
-      //   "total_errors": 0,
-      //   "total_hits": 0
-      // }
-      schedule: {},
-      finishLoadSummary: false
-    }
-
-    this.doEverySixSeconds = this.doEverySixSeconds.bind(this)
-    this.doXSecondsLater = this.doXSecondsLater.bind(this)
-    this.fetchSchedule = this.fetchSchedule.bind(this)
     this.mapToGaugeData = this.mapToGaugeData.bind(this)
     this.mapToUsersData = this.mapToUsersData.bind(this)
-
-    this.fetchSchedule(this.props.scheduleId)
-  }
-
-  componentDidMount() {
-    switch(this.props.progress) {
-      case 'waiting':
-        let now = new Date()
-        let taskTime = new Date(this.props.taskExecutionTime)
-        this.timeOut = setTimeout(this.doXSecondsLater, taskTime - now )
-        return
-      case 'running':
-        this.interval = setInterval(this.doEverySixSeconds, 6000)
-        return
-      case 'missed':
-        return
-      case 'stopped':
-        return
-      case 'disconnected':
-        return
-      default:
-        console.log('warning: are you kidding from MonitorPanelContainer')
-        return
-    }
-  }
-
-  componentWillUnmount() {
-    if(!(this.interval === undefined)) {
-      clearInterval(this.interval) 
-    } 
-
-    if(!(this.timeOut === undefined)) {
-      clearTimeout(this.timeOut)
-    }
-  }
-
-  doEverySixSeconds() {
-    this.fetchSchedule(this.props.scheduleId)
-  }
-
-  doXSecondsLater() {
-    console.log("time to do some thing!")
-  }
-
-  fetchSchedule(id) {
-    const host = Config.host
-    fetch(`${host}/schedulers/${id}`)
-      .then(response => response.json())
-      .then(json => { 
-        this.setState({schedule: json})
-        this.setState({finishLoadSummary: true})
-        // console.log(json)
-      })
   }
 
   mapToGaugeData(schedule) {
@@ -127,27 +37,19 @@ class MonitorPanelContainer extends React.Component {
   }
 
   render() {
-    if (this.state.finishLoadSummary) {
-      return(
-        <div style={styles.layout}>
-          <UsersStatusTable 
-            groups={this.mapToUsersData(this.state.schedule)} /> 
-          <GaugeContainer 
-            data={this.mapToGaugeData(this.state.schedule)} />
-        </div>
-      )
-    } else {    
-      return( 
-        <Loading /> 
-      )
-    }
+    return(
+      <div style={styles.layout}>
+        <UsersStatusTable 
+          groups={this.mapToUsersData(this.props.schedule)} /> 
+        <GaugeContainer 
+          data={this.mapToGaugeData(this.props.schedule)} />
+      </div>
+    )
   }
 }
 
 MonitorPanelContainer.propTypes = {
-  scheduleId:         PropTypes.string.isRequired,
-  taskExecutionTime:  PropTypes.string.isRequired,
-  progress:           PropTypes.string.isRequired
+  schedule:     PropTypes.object.isRequired
 }
 
 export default MonitorPanelContainer
