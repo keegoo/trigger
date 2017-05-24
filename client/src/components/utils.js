@@ -33,6 +33,19 @@ export function splitISOToDateTime(iso){
 }
 
 // ==============================
+// convert '1' to '01'.
+// number with double digits won't change
+export function leadingZero(n) {
+  if(typeof(n) === 'number'){
+    return ('0' + `${n}`).slice(-2)
+  } else if(typeof(n) === 'string') {
+    return ('0' + n).slice(-2)
+  } else {
+    return n
+  }
+}
+
+// ==============================
 // private
 // parameter should be a Date Object
 function toString(dateObj) {
@@ -44,12 +57,4 @@ ${leadingZero(dateObj.getHours())}:\
 ${leadingZero(dateObj.getMinutes())}:\
 ${leadingZero(dateObj.getSeconds())}\
 `
-}
-
-// ==============================
-// private
-// convert '1' to '01'.
-// number with double digits won't change
-function leadingZero(n) {
-  return ('0' + n).slice(-2)
 }

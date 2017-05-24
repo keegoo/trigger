@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Chart from './Chart.jsx'
+import * as utils from './../utils.js'
 import { cyan500 } from 'material-ui/styles/colors'
 
 const styles = {
@@ -16,7 +17,6 @@ class MonitorChartContainer extends React.Component {
     super(props)
 
     this.flatTunnelData = this.flatTunnelData.bind(this)
-    this.doubleDigit = this.doubleDigit.bind(this)
     this.joinHourlyData = this.joinHourlyData.bind(this)
   }
 
@@ -46,7 +46,7 @@ class MonitorChartContainer extends React.Component {
       let sortedK = Object.keys(valuesInMinute).map(x => parseInt(x)).sort()
       sortedK.forEach((intK) => {
         let unit = {
-          t: hour + ':' + this.doubleDigit(intKey.toString()) + ':' + this.doubleDigit(intK.toString()) + 'Z',
+          t: hour + ':' + utils.leadingZero(intKey.toString()) + ':' + utils.leadingZero(intK.toString()) + 'Z',
           v: valuesInMinute[intK.toString()]
         }
         data.push(unit)
@@ -63,11 +63,6 @@ class MonitorChartContainer extends React.Component {
       data = data.concat(this.flatTunnelData(x.values, hour))
     })
     return data
-  }
-
-  // change '6' into '06'
-  doubleDigit(str) {
-    return str.length === 1 ? '0' + str : str
   }
 
   render() {
