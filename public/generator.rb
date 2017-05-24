@@ -79,7 +79,7 @@ class Config
       return {} if active_tasks.empty?
 
       task = active_tasks.map do |x| 
-        t = my_first_task_in_schedule(x["schedule"])
+        t = my_first_task_in_schedule(x["tasks"])
         if t == nil
           return {}
         else

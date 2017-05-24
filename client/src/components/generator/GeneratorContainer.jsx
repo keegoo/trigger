@@ -40,15 +40,15 @@ class GeneratorContainer extends React.Component {
   }
 
   // active within 6 seconds will be regarded as online
-  isOnline(timestamp) {
-    return utils.xSecondsAgoUTC(6) < timestamp ? true : false
+  isOnline(lastUsed) {
+    return utils.xSecondsAgoUTC(12) < lastUsed ? true : false
   }
 
   timestampIntoStatus(generators){
     return generators.map((x) => { 
       return {
         name: x.name, 
-        online: this.isOnline(x.timestamp)
+        online: this.isOnline(x.last_used)
       } 
     // put online ahead
     }).sort((x, y) => y.online - x.online)

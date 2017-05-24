@@ -35,7 +35,13 @@ class HomePage extends React.Component {
       savedSchedulersData: [],
 
       // data example:
-      // [{ name: "SF2-WGROAPP301", timestamp: "2017-05-05T13:24:32Z" }, ...]
+      // [
+      //  { 
+      //    name: "SF2-WGROAPP301", 
+      //    last_used: "2017-05-06T04:52:23Z" 
+      //  },
+      //  ...
+      // ]
       generators: [],
 
       finishLoadGeneratorComponent: false,
