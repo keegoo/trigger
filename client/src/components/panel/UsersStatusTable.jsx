@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
-import { grey400, grey300 } from 'material-ui/styles/colors'
+import { grey400 } from 'material-ui/styles/colors'
 
 const styles = {
   border: {
-    border: `solid 1px ${grey300}`
+    boxShadow: `${grey400} 0px 0px 5px`
   }
 }
 
@@ -33,7 +33,7 @@ class UsersStatusTable extends React.Component {
             displaySelectAll={false} >
             <TableRow>
               {
-                ["Generator", "Running", "Stopped"].map((title, index) => {
+                ["Generator", "Running Users", "Stopped Users"].map((title, index) => {
                   return <TableHeaderColumn key={index}>{title}</TableHeaderColumn>
                 })
               }

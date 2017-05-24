@@ -5,13 +5,13 @@ import UserIcon from 'material-ui/svg-icons/social/group'
 import TrendIcon from 'material-ui/svg-icons/action/trending-up'
 import ErrorIcon from 'material-ui/svg-icons/alert/error-outline'
 import Divider from 'material-ui/Divider'
-import { grey300, grey500, red500 } from 'material-ui/styles/colors'
+import { grey400, grey500, red500 } from 'material-ui/styles/colors'
 
 const black = '#000000'
 
 const styles = {
   border: {
-    border: `solid 1px ${grey300}`,
+    boxShadow: `${grey400} 0px 0px 5px`,
     borderRadius: '2px'
   },
 
