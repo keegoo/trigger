@@ -15,7 +15,7 @@ const styles = {
   },
 
   borderActive: {
-    boxShadow: `${cyan400} 0px 0px 10px`,
+    boxShadow: `${cyan400} 0px 0px 5px`,
     marginBottom: '20px'
   },
 

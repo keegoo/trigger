@@ -29,7 +29,7 @@ class Chart extends React.Component {
         <div style={styles.title}>{this.props.chartTitle}</div>
         <ResponsiveContainer width='100%' aspect={5.0/2.0} >
           <LineChart data={this.props.data}>
-            <Line type="monotone" dataKey="v" stroke={ fetchColor(0) } />
+            <Line isAnimationActive={false} type="monotone" dataKey="v" stroke={ fetchColor(0) } />
             <Legend />
             <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
             <XAxis dataKey="t" tick={<CustomizedXAxisTick/>} />
