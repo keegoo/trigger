@@ -58,18 +58,19 @@ class MonitorPage extends React.Component {
       //   ...
       // ]
       tunnelData: {},
+      progress: "stopped",
 
       finishLoadSchedule: false,
       finishLoadTunnelData: false,
-      finishLoadProgress: false,
-      progress: "stopped"
-
+      finishLoadProgress: false
     }
 
     this.doEverySixSeconds = this.doEverySixSeconds.bind(this)
     this.fetchSchedule = this.fetchSchedule.bind(this)
     this.fetchScheduleProgress = this.fetchScheduleProgress.bind(this)
     this.fetchTunnelData = this.fetchTunnelData.bind(this)
+    this.getExecutionFinishTime = this.getExecutionFinishTime.bind(this)
+    this.getBaseTime = this.getBaseTime.bind(this)
 
     this.fetchSchedule(this.props.params.scheduleId)
     this.fetchScheduleProgress(this.props.params.scheduleId)
@@ -121,11 +122,41 @@ class MonitorPage extends React.Component {
     const host = Config.host
     fetch(`${host}/schedulers/${id}/tunnel_data`)
       .then(response => response.json())
-      .then(json => { 
+      .then(json => {
         this.setState({ tunnelData: json })
-        this.setState({ finishLoadTunnelData: true })
-        // console.log(json)
       })
+      .then(json => {
+        this.setState({ finishLoadTunnelData: true })
+      })
+  }
+
+  getExecutionFinishTime(values, hour) {
+    const sortedMinutes = Object.keys(values).map(x => parseInt(x)).sort((a, b) => a < b)
+    const maxMinute = sortedMinutes[0]
+    const sortedSeconds = Object.keys(values[maxMinute.toString()]).sort((a, b) => a < b)
+    const maxSecond = sortedSeconds[0]
+    
+    // turn 2017-05-21T14:00:00Z into 2017-05-21T14,
+    // and concat 2017-05-21T14 + MM + SS
+    return `${hour.split(':')[0]}:${utils.leadingZero(maxMinute)}:${utils.leadingZero(maxSecond)}Z`
+  }
+
+  getBaseTime() {
+    const status = this.state.progress
+    const a = new Date(this.state.schedule.tasks[0].time)
+    let b = 0
+    if(status === 'running') {
+      b = new Date(Date.now())
+    } else if(status === 'stopped') {
+      const latest = this.state.tunnelData.sort((x, y) => x.hour < y.hour)[0]
+      b = new Date(this.getExecutionFinishTime(latest.values, latest.hour))
+    } else {
+      b = a
+    }
+    console.log(`a: ${a.toString()}`)
+    console.log(`b: ${b.toString()}`)
+    console.log(`getBaseTime: ${Math.round( (b - a) / 1000 )}`)
+    return Math.round( (b - a) / 1000 )
   }
 
   render() {
@@ -136,7 +167,9 @@ class MonitorPage extends React.Component {
             title={utils.splitISOToDateTime(this.state.schedule.tasks[0].time)[0]}
             status={this.state.progress} />
           <MonitorPanelContainer
-            schedule={this.state.schedule} />
+            schedule={this.state.schedule} 
+            baseTimeAsSeconds={this.getBaseTime()}
+            enableTimerTick={this.state.progress === 'running' ? true : false} />
           <MonitorChartContainer 
             tunnelData={this.state.tunnelData} />
         </div>

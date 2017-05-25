@@ -16,7 +16,7 @@ class GaugeContainer extends React.Component {
     super(props)
 
     this.state = {
-      secondsPassed: 18201
+      secondsPassed: 0
     }
 
     this.dida = this.dida.bind(this)
@@ -32,10 +32,13 @@ class GaugeContainer extends React.Component {
   }
 
   dida() {
-    this.setState({secondsPassed: this.state.secondsPassed + 1})
+    if(this.props.enableTimerTick) {
+      this.setState({ secondsPassed: this.state.secondsPassed + 1 })
+    }
   }
 
   secondsToHHMMSS(sec=0) {
+    console.log(`secondsToHHMMSS: ${sec}`)
     const ss = sec % 60
     const leftSeconds = sec - ss
     const leftMinutes = leftSeconds / 60
@@ -45,14 +48,14 @@ class GaugeContainer extends React.Component {
     return `${utils.leadingZero(hh)}:${utils.leadingZero(mm)}:${utils.leadingZero(ss)}`
   }
 
-  render() {
+  render() { 
     return (
       <div style={styles.layout}>
         <Gauge 
           title='Duration'
           iconType='duration'
           sublabel='Time.'
-          label={this.secondsToHHMMSS(this.state.secondsPassed)} />
+          label={this.secondsToHHMMSS(this.state.secondsPassed  + this.props.baseTimeAsSeconds)} />
         {
           this.props.data.map((x, index) => {
             return(
@@ -70,7 +73,9 @@ class GaugeContainer extends React.Component {
 }
 
 GaugeContainer.propTypes = {
-  data:   PropTypes.array.isRequired
+  data:               PropTypes.array.isRequired,
+  enableTimerTick:    PropTypes.bool.isRequired,
+  baseTimeAsSeconds:  PropTypes.number.isRequired
 }
 
 export default GaugeContainer

@@ -26,7 +26,7 @@ class MonitorPanelContainer extends React.Component {
     ]
   }
 
-  mapToUsersData(schedule) {
+  mapToUsersData(schedule) { 
     return schedule.tasks.map((x) => { 
       return { 
           name: x.generator, 
@@ -42,14 +42,18 @@ class MonitorPanelContainer extends React.Component {
         <UsersStatusTable 
           groups={this.mapToUsersData(this.props.schedule)} /> 
         <GaugeContainer 
-          data={this.mapToGaugeData(this.props.schedule)} />
+          data={this.mapToGaugeData(this.props.schedule)}
+          enableTimerTick={this.props.enableTimerTick}
+          baseTimeAsSeconds={this.props.baseTimeAsSeconds} />
       </div>
     )
   }
 }
 
 MonitorPanelContainer.propTypes = {
-  schedule:     PropTypes.object.isRequired
+  schedule:           PropTypes.object.isRequired,
+  baseTimeAsSeconds:  PropTypes.number.isRequired,
+  enableTimerTick:    PropTypes.bool.isRequired
 }
 
 export default MonitorPanelContainer

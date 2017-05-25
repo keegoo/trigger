@@ -40,10 +40,10 @@ class MonitorChartContainer extends React.Component {
   // ]
   flatTunnelData(values, hour) {
     let data = []
-    let sortedKeys = Object.keys(values).map(x => parseInt(x)).sort()
+    let sortedKeys = Object.keys(values).map(x => parseInt(x)).sort((a, b) => a > b)
     sortedKeys.forEach((intKey) => {
       let valuesInMinute = values[intKey.toString()]
-      let sortedK = Object.keys(valuesInMinute).map(x => parseInt(x)).sort()
+      let sortedK = Object.keys(valuesInMinute).map(x => parseInt(x)).sort((a, b) => a > b)
       sortedK.forEach((intK) => {
         let unit = {
           t: hour + ':' + utils.leadingZero(intKey.toString()) + ':' + utils.leadingZero(intK.toString()) + 'Z',
