@@ -73,8 +73,9 @@ class HomePage extends React.Component {
       .then(response => response.json())
       .then(json => { 
         this.setState({savedSchedulersData: json})
+      })
+      .then(json => {
         this.setState({finishLoadSchedulerComponent: true})
-        // console.log(json)
       })
   }
 
@@ -84,8 +85,9 @@ class HomePage extends React.Component {
       .then(response => response.json())
       .then(json => {
         this.setState({generators: json})
+      })
+      .then(json => {
         this.setState({finishLoadGeneratorComponent: true})
-        // console.log(json)
       })
   }
 

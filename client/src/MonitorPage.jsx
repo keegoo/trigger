@@ -102,8 +102,9 @@ class MonitorPage extends React.Component {
       .then(response => response.json())
       .then(json => { 
         this.setState({schedule: json})
+      })
+      .then(json => {
         this.setState({finishLoadSchedule: true})
-        // console.log(json)
       })
   }
 
@@ -113,8 +114,9 @@ class MonitorPage extends React.Component {
       .then(response => response.json())
       .then(json => { 
         this.setState({progress: json.progress})
+      })
+      .then(json => {
         this.setState({finishLoadProgress: true})
-        // console.log(json)
       })
   }
 

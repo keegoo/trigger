@@ -119,33 +119,29 @@ class EditorContainer extends React.Component {
 
     fetch(`${host}/schedulers`, {
       method: 'POST',
-      headers: new Headers({
-          'Content-Type': 'application/json'
-      }),
+      headers: new Headers({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(x)
-    }).then(response => response.json())
-    .then(json => {
-      // console.log('schedule is saved: ')
-      // console.log(json)
-
-      // tell its father: App
-      this.props.onSave()
-
-      // clear schedule
-      this.props.dispatch({
-        type: 'SCHEDULE_BEEN_SAVED',
-        task: {}
       })
+      .then(response => response.json())
+      .then(json => {
+        // tell its father: App
+        this.props.onSave()
 
-      // notification
-      this.props.dispatch({
-        type: 'PUSH_NOTIFICATION',
-        notification: NOTIFICATION_RESOURCE.INFO_SAVE_SCHEDULE
+        // clear schedule
+        this.props.dispatch({
+          type: 'SCHEDULE_BEEN_SAVED',
+          task: {}
+        })
+
+        // notification
+        this.props.dispatch({
+          type: 'PUSH_NOTIFICATION',
+          notification: NOTIFICATION_RESOURCE.INFO_SAVE_SCHEDULE
+        })
+
+        // reset dateOffset
+        this.setState({dateOffset: 0})
       })
-
-      // reset dateOffset
-      this.setState({dateOffset: 0})
-    })
   }
 
   render() {
