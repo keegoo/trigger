@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Schedule from './Schedule.jsx'
 import Pagination from './Pagination.jsx'
 import {cyan500} from 'material-ui/styles/colors'
+import * as utils from './../utils.js'
 
 const styles = {
   titleText: {
@@ -27,7 +28,7 @@ class ScheduleContainer extends React.Component {
     this.handleNextPage = this.handleNextPage.bind(this)
   }  
 
-  currentPageItems(){
+  currentPageSchedules(){
     // console.log(`this props: <schedulers> ${this.props.schedulers[0]}`)
     const sBegin = (this.state.currentPage - 1) * this.state.itemsEachPage
     const sEnd = sBegin + this.state.itemsEachPage
@@ -36,6 +37,10 @@ class ScheduleContainer extends React.Component {
 
   getTotalPages(){
     return Math.ceil(this.props.schedulers.length / this.state.itemsEachPage)
+  }
+
+  isScheduleRunning(schedule) {
+    return schedule.tasks.map((x) => x.time).sort()[0] < utils.xSecondsAgoUTC(6) ? false : false 
   }
 
   handlePreviousPage(){
@@ -52,8 +57,11 @@ class ScheduleContainer extends React.Component {
         <div style={styles.titleText}><span>Saved Schedules</span></div>
         <div>
           {
-            this.currentPageItems().map((t, index) => {
-              return <Schedule historicalInfo={t} key={index}/>
+            this.currentPageSchedules().map((schedule, index) => {
+              return <Schedule 
+                historicalInfo={schedule} 
+                key={index}
+                isRunning={this.isScheduleRunning(schedule)} />
             })
           }
         </div>

@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
+import LinearProgress from 'material-ui/LinearProgress'
 import FlatButton from 'material-ui/FlatButton'
 import { grey500, grey400, cyan400 } from 'material-ui/styles/colors'
 import * as utils from './../utils.js'
@@ -34,6 +35,14 @@ class Schedule extends React.Component {
     super(props)
   }
 
+  statusBar(isRunning) {
+    if(isRunning) {
+      return <LinearProgress mode="indeterminate" />
+    } else {
+      return <LinearProgress mode="determinate" value={100} color={'#FFFFFF'} />
+    }
+  }
+
   render (){
     const t = this.props.historicalInfo
     // get the nearest task
@@ -42,6 +51,7 @@ class Schedule extends React.Component {
 
     return(
       <div style={isoToday < nearT ? styles.borderActive : styles.borderInactive}>
+        {this.statusBar()}
         <Table>
           <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
             <TableRow>
@@ -81,7 +91,8 @@ class Schedule extends React.Component {
 }
 
 Schedule.propTypes = {
-  historicalInfo:    PropTypes.object.isRequired
+  historicalInfo:   PropTypes.object.isRequired,
+  isRunning:        PropTypes.bool.isRequired
 }
 
 export default Schedule
