@@ -1,8 +1,7 @@
 class SchedulersController < ApplicationController
   def create
     @params = params.require(:scheduler).permit(tasks: [:generator, :time, :cmd, :status])
-    # puts @params.inspect
-    # #
+
     render json: Scheduler.create_with_defaults(@params)
   end
 
@@ -19,11 +18,6 @@ class SchedulersController < ApplicationController
   def progress
     id = params[:id]
     render json: {progress: Scheduler.progress(id)}
-  end
-
-  def all_progresses
-    @params = params[:_json]
-    render json: Scheduler.progresses(@params)
   end
 
   def tunnel_data

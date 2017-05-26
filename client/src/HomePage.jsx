@@ -18,10 +18,9 @@ class HomePage extends React.Component {
     super(props, context)
 
     this.handleSchedulerSave = this.handleSchedulerSave.bind(this)
-    this.fetchAll = this.fetchAll.bind(this)
+    this.doEverySixSeconds = this.doEverySixSeconds.bind(this)
     this.fetchHistoricalSchedulers = this.fetchHistoricalSchedulers.bind(this)
     this.fetchGenerators = this.fetchGenerators.bind(this)
-
     this.state = {
 
       // =============================
@@ -32,7 +31,7 @@ class HomePage extends React.Component {
       //     {"generator":"SF1-WGROAPP310","time":"2017-05-22T08:00:00Z","cmd":"ping www.google.com -c 30","status":""}
       //    ]
       // }
-      savedSchedulersData: [],
+      savedSchedulers: [],
 
       // data example:
       // [
@@ -53,45 +52,45 @@ class HomePage extends React.Component {
   }
 
   componentDidMount(){
-    this.interval = setInterval(this.fetchAll, 6000)
+    this.interval = setInterval(this.doEverySixSeconds, 6000)
   }
 
   componentWillUnmount() {
     clearInterval(this.interval)
   }
 
-  fetchAll() {
+  doEverySixSeconds() {
     this.fetchGenerators()
     this.fetchHistoricalSchedulers()
   }
 
   // =============================
   // savedSchedulers component
-  fetchHistoricalSchedulers(){
+  fetchHistoricalSchedulers() {
     const host = Config.host
     return fetch(`${host}/schedulers`)
       .then(response => response.json())
       .then(json => { 
-        this.setState({savedSchedulersData: json})
+        this.setState({savedSchedulers: json})
       })
-      .then(json => {
+      .then(() => {
         this.setState({finishLoadSchedulerComponent: true})
       })
   }
 
-  fetchGenerators(){
+  fetchGenerators() {
     const host = Config.host
     return fetch(`${host}/generators`)
       .then(response => response.json())
       .then(json => {
         this.setState({generators: json})
       })
-      .then(json => {
+      .then(() => {
         this.setState({finishLoadGeneratorComponent: true})
       })
   }
 
-  handleSchedulerSave (){
+  handleSchedulerSave() {
     this.fetchHistoricalSchedulers()
   }
 
@@ -101,7 +100,7 @@ class HomePage extends React.Component {
         <div style={styles}>
           <GeneratorContainer generators={this.state.generators} />
           <EditorContainer onSave={this.handleSchedulerSave} />
-          <ScheduleContainer schedulers={this.state.savedSchedulersData} />
+          <ScheduleContainer schedulers={this.state.savedSchedulers} />
           <Notification />
         </div>
       )

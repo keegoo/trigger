@@ -38,7 +38,6 @@ class GaugeContainer extends React.Component {
   }
 
   secondsToHHMMSS(sec=0) {
-    console.log(`secondsToHHMMSS: ${sec}`)
     const ss = sec % 60
     const leftSeconds = sec - ss
     const leftMinutes = leftSeconds / 60

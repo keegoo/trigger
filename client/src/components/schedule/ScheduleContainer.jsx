@@ -40,7 +40,7 @@ class ScheduleContainer extends React.Component {
   }
 
   isScheduleRunning(schedule) {
-    return schedule.tasks.map((x) => x.time).sort()[0] < utils.xSecondsAgoUTC(6) ? false : false 
+    return schedule.tasks.map((x) => x.status).includes('running') ? true : false
   }
 
   handlePreviousPage(){
@@ -59,7 +59,7 @@ class ScheduleContainer extends React.Component {
           {
             this.currentPageSchedules().map((schedule, index) => {
               return <Schedule 
-                historicalInfo={schedule} 
+                schedule={schedule} 
                 key={index}
                 isRunning={this.isScheduleRunning(schedule)} />
             })

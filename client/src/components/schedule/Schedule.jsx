@@ -37,26 +37,26 @@ class Schedule extends React.Component {
 
   statusBar(isRunning) {
     if(isRunning) {
-      return <LinearProgress mode="indeterminate" />
+      return( <LinearProgress mode="indeterminate" /> )
     } else {
-      return <LinearProgress mode="determinate" value={100} color={'#FFFFFF'} />
+      return( <LinearProgress mode="determinate" value={100} color={white} /> )
     }
   }
 
   render (){
-    const t = this.props.historicalInfo
-    // get the nearest task
-    const nearT = t.tasks.slice().sort((x, y) => x.time > y.time)[0].time
+    const schedule = this.props.schedule
+    // get the soonest task
+    const nearT = schedule.tasks.slice().sort((x, y) => x.time > y.time)[0].time
     const isoToday = new Date(Date.now()).toISOString().split('.')[0]+"Z"
 
     return(
       <div style={isoToday < nearT ? styles.borderActive : styles.borderInactive}>
-        {this.statusBar()}
+        {this.statusBar(false)}
         <Table>
           <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
             <TableRow>
               <TableHeaderColumn colSpan="4" style={styles.tableTitle}>
-                <Link to={`/monitor/${t._id}`} style={styles.monitorLink} >
+                <Link to={`/monitor/${schedule._id}`} style={styles.monitorLink} >
                   <FlatButton fullWidth={true} hoverColor={white}>
                     {utils.splitISOToDateTime(nearT)[0]}
                   </FlatButton>
@@ -72,7 +72,7 @@ class Schedule extends React.Component {
           </TableHeader>
           <TableBody displayRowCheckbox={false}>
             {
-              t.tasks.map((s, index) => {
+              schedule.tasks.map((s, index) => {
                 return(
                   <TableRow key={index}>
                     <TableRowColumn>{s.generator}</TableRowColumn>
@@ -91,8 +91,8 @@ class Schedule extends React.Component {
 }
 
 Schedule.propTypes = {
-  historicalInfo:   PropTypes.object.isRequired,
-  isRunning:        PropTypes.bool.isRequired
+  schedule:   PropTypes.object.isRequired,
+  isRunning:  PropTypes.bool.isRequired
 }
 
 export default Schedule
