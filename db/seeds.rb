@@ -10,11 +10,9 @@
   j = rand(0..2)
   prefix = ["APC", "SF1", "SF2", "SZN"]
   n = i.to_s.length == 1 ? "0#{i}" : i
-  status = (j == 1 ? "connected" : "disconnected")
   Generator.create(
     {
       name: "#{prefix[j]}-WGROAPP3#{n}",
-      timestamp: Time.now.utc.iso8601,
       last_used: "#{i.day.ago.utc.iso8601}",
       frequency: 0
     }
@@ -25,7 +23,6 @@ end
 Generator.create(
   {
       name: "CYs-MacBook-Pro.local",
-      timestamp: Time.now.utc.iso8601,
       last_used: "2017-03-27T07:02:22Z",
       frequency: 0
   }
