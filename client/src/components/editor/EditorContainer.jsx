@@ -117,7 +117,7 @@ class EditorContainer extends React.Component {
       tasks: this.props.tasks
     }
 
-    fetch(`${host}/schedulers`, {
+    return fetch(`${host}/schedulers`, {
       method: 'POST',
       headers: new Headers({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(x)

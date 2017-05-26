@@ -58,7 +58,8 @@ class MonitorPage extends React.Component {
       //   ...
       // ]
       tunnelData: {},
-      progress: "stopped",
+      progress: "unknown",
+      baseTimeAsSeconds: 0,
 
       finishLoadSchedule: false,
       finishLoadTunnelData: false,
@@ -69,12 +70,20 @@ class MonitorPage extends React.Component {
     this.fetchSchedule = this.fetchSchedule.bind(this)
     this.fetchScheduleProgress = this.fetchScheduleProgress.bind(this)
     this.fetchTunnelData = this.fetchTunnelData.bind(this)
-    this.getExecutionFinishTime = this.getExecutionFinishTime.bind(this)
-    this.getBaseTime = this.getBaseTime.bind(this)
+    this.getTunnelDataMixTime = this.getTunnelDataMixTime.bind(this)
+    this.setBaseTime = this.setBaseTime.bind(this)
+    this.doWhenStatusChanged = this.doWhenStatusChanged.bind(this)
 
-    this.fetchSchedule(this.props.params.scheduleId)
-    this.fetchScheduleProgress(this.props.params.scheduleId)
-    this.fetchTunnelData(this.props.params.scheduleId)
+    // as 
+    // 1). the Execution finished time are extracted from TunnelDate; 
+    // 2). Execution finished time was needed when Progress changed,
+    // 3). the Execution begin time are extracted from Schedule
+    // 4). Execution begin time was needed when Progress changed
+    // so I need to fetch TunnelData and Schedule first, then fetch Progress.
+
+    const id = this.props.params.scheduleId
+    Promise.all([this.fetchSchedule(id), this.fetchTunnelData(id)])
+      .then(() => this.fetchScheduleProgress(id))
   }
 
   componentDidMount() {
@@ -83,6 +92,45 @@ class MonitorPage extends React.Component {
 
   componentWillUnmount() {
     clearInterval(this.interval)
+  }
+
+  fetchSchedule(id) {
+    const host = Config.host
+    return fetch(`${host}/schedulers/${id}`)
+      .then(response => response.json())
+      .then(json => { 
+        this.setState({schedule: json})
+      })
+      .then(() => {
+        this.setState({finishLoadSchedule: true})
+      })
+  }
+
+  fetchScheduleProgress(id) {
+    const host = Config.host
+    return fetch(`${host}/schedulers/${id}/progress`)
+      .then(response => response.json())
+      .then(json => { 
+        if(this.state.progress !== json.progress){
+          this.doWhenStatusChanged(json.progress)
+        }
+        this.setState({progress: json.progress})
+      })
+      .then(() => {
+        this.setState({finishLoadProgress: true})
+      })
+  }
+
+  fetchTunnelData(id) {
+    const host = Config.host
+    return fetch(`${host}/schedulers/${id}/tunnel_data`)
+      .then(response => response.json())
+      .then(json => {
+        this.setState({ tunnelData: json })
+      })
+      .then(() => {
+        this.setState({ finishLoadTunnelData: true })
+      })
   }
 
   doEverySixSeconds() {
@@ -96,43 +144,11 @@ class MonitorPage extends React.Component {
     this.fetchScheduleProgress(sheduleId)
   }
 
-  fetchSchedule(id) {
-    const host = Config.host
-    fetch(`${host}/schedulers/${id}`)
-      .then(response => response.json())
-      .then(json => { 
-        this.setState({schedule: json})
-      })
-      .then(json => {
-        this.setState({finishLoadSchedule: true})
-      })
+  doWhenStatusChanged(newStatus) {
+    this.setBaseTime(newStatus)
   }
 
-  fetchScheduleProgress(id) {
-    const host = Config.host
-    fetch(`${host}/schedulers/${id}/progress`)
-      .then(response => response.json())
-      .then(json => { 
-        this.setState({progress: json.progress})
-      })
-      .then(json => {
-        this.setState({finishLoadProgress: true})
-      })
-  }
-
-  fetchTunnelData(id) {
-    const host = Config.host
-    fetch(`${host}/schedulers/${id}/tunnel_data`)
-      .then(response => response.json())
-      .then(json => {
-        this.setState({ tunnelData: json })
-      })
-      .then(json => {
-        this.setState({ finishLoadTunnelData: true })
-      })
-  }
-
-  getExecutionFinishTime(values, hour) {
+  getTunnelDataMixTime(values, hour) {
     const sortedMinutes = Object.keys(values).map(x => parseInt(x)).sort((a, b) => a < b)
     const maxMinute = sortedMinutes[0]
     const sortedSeconds = Object.keys(values[maxMinute.toString()]).sort((a, b) => a < b)
@@ -143,22 +159,16 @@ class MonitorPage extends React.Component {
     return `${hour.split(':')[0]}:${utils.leadingZero(maxMinute)}:${utils.leadingZero(maxSecond)}Z`
   }
 
-  getBaseTime() {
-    const status = this.state.progress
+  setBaseTime(status) {
     const a = new Date(this.state.schedule.tasks[0].time)
-    let b = 0
-    if(status === 'running') {
-      b = new Date(Date.now())
-    } else if(status === 'stopped') {
-      const latest = this.state.tunnelData.sort((x, y) => x.hour < y.hour)[0]
-      b = new Date(this.getExecutionFinishTime(latest.values, latest.hour))
-    } else {
-      b = a
-    }
-    console.log(`a: ${a.toString()}`)
-    console.log(`b: ${b.toString()}`)
-    console.log(`getBaseTime: ${Math.round( (b - a) / 1000 )}`)
-    return Math.round( (b - a) / 1000 )
+    let b = a
+
+    const latest = this.state.tunnelData.sort((x, y) => x.hour < y.hour)[0]
+    if(latest !== undefined) {
+      b = new Date(this.getTunnelDataMixTime(latest.values, latest.hour))
+    } 
+
+    this.setState({ baseTimeAsSeconds: Math.round( (b - a) / 1000 )})
   }
 
   render() {
@@ -170,7 +180,7 @@ class MonitorPage extends React.Component {
             status={this.state.progress} />
           <MonitorPanelContainer
             schedule={this.state.schedule} 
-            baseTimeAsSeconds={this.getBaseTime()}
+            baseTimeAsSeconds={this.state.baseTimeAsSeconds}
             enableTimerTick={this.state.progress === 'running' ? true : false} />
           <MonitorChartContainer 
             tunnelData={this.state.tunnelData} />

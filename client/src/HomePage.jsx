@@ -69,7 +69,7 @@ class HomePage extends React.Component {
   // savedSchedulers component
   fetchHistoricalSchedulers(){
     const host = Config.host
-    fetch(`${host}/schedulers`)
+    return fetch(`${host}/schedulers`)
       .then(response => response.json())
       .then(json => { 
         this.setState({savedSchedulersData: json})
@@ -81,7 +81,7 @@ class HomePage extends React.Component {
 
   fetchGenerators(){
     const host = Config.host
-    fetch(`${host}/generators`)
+    return fetch(`${host}/generators`)
       .then(response => response.json())
       .then(json => {
         this.setState({generators: json})
