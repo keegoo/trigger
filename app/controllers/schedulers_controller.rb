@@ -21,6 +21,11 @@ class SchedulersController < ApplicationController
     render json: {progress: Scheduler.progress(id)}
   end
 
+  def all_progresses
+    @params = params[:_json]
+    render json: Scheduler.progresses(@params)
+  end
+
   def tunnel_data
     id = params[:id]
     render json: ExecutionTunnel.where({ scheduler_id: id })
