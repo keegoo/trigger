@@ -7,11 +7,13 @@ class Scheduler
 
 
   def self.create_with_defaults(schedule)
+    status = :waiting
+    status = :missed if self.schedule_expired?(schedule[:tasks])
     default_task = {
       generator:  "sample-generator".upcase,
       time:       Time.now.utc.iso8601,
       cmd:        "ping www.google.com -c",
-      status:     :disconnected,
+      status:     status,
       running:    0,
       stopped:    0
     }
@@ -52,5 +54,11 @@ class Scheduler
       "$set": {
         "tasks.$.status": bhash[:status]
       })
+  end
+
+  private
+
+  def self.schedule_expired?(tasks)
+    tasks.map{|x| x[:time]}.sort[0] > (Time.now + 12).utc.iso8601 ? false : true
   end
 end
