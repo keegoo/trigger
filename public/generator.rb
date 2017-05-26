@@ -40,12 +40,57 @@ module Utils
     end
   end
 
+  # ==========================
+  # task example:
+  # [
+  #   {
+  #     "_id": "591ec2358fb2380a31292223",
+  #     "schedule": [
+  #       { "generator": "APC-WGROAPP302", "time": "2017-05-19T12:00:00Z", "cmd": "ping www.google.com -c 30"},
+  #       { "generator": "APC-WGROAPP301", "time": "2017-05-19T12:00:00Z", "cmd": "ping www.google.com -c 30"}
+  #     ]
+  #   },
+  #   ...
+  # ]
+  def all_active_tasks()
+    response_body = ''
+    begin
+      response = HTTParty.get( host + "/schedulers/active")
+      response_body = response.body
+    rescue => err
+      $LOGGER.debug("get config failed")
+    end
+
+    unless valid_json?(response_body) && valid_json_content?(response_body)
+      $LOGGER.debug("invalid JSON response: #{@response_body}")
+      response_body = ''
+    end
+    response_body
+  end
+
   def whoami
     Socket.gethostname.upcase
   end
 
   def host
+    # "https://trigger-sample.herokuapp.com"
     "http://127.0.0.1:3000"
+  end
+
+  private
+
+  def valid_json?(str)
+    begin
+      JSON.parse(str)
+      return true
+    rescue JSON::ParserError => e
+      return false
+    end
+  end
+
+  # to-do
+  def valid_json_content?(str)
+    true
   end
 
   extend self
@@ -91,48 +136,6 @@ class Config
   end
 
   private
-
-  def valid_json?(str)
-    begin
-      JSON.parse(str)
-      return true
-    rescue JSON::ParserError => e
-      return false
-    end
-  end
-
-  # to-do
-  def valid_json_content?(str)
-    true
-  end
-
-  # ==========================
-  # task example:
-  # [
-  #   {
-  #     "_id": "591ec2358fb2380a31292223",
-  #     "schedule": [
-  #       { "generator": "APC-WGROAPP302", "time": "2017-05-19T12:00:00Z", "cmd": "ping www.google.com -c 30"},
-  #       { "generator": "APC-WGROAPP301", "time": "2017-05-19T12:00:00Z", "cmd": "ping www.google.com -c 30"}
-  #     ]
-  #   },
-  #   ...
-  # ]
-  def all_active_tasks()
-    response_body = ''
-    begin
-      response = HTTParty.get("http://127.0.0.1:3000/schedulers/active")
-      response_body = response.body
-    rescue => err
-      $LOGGER.debug("get config failed")
-    end
-
-    unless valid_json?(response_body) && valid_json_content?(response_body)
-      $LOGGER.debug("invalid JSON response: #{@response_body}")
-      response_body = ''
-    end
-    response_body
-  end
 
   # ==========================
   # given: [
