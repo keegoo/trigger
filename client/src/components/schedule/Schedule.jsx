@@ -35,8 +35,8 @@ class Schedule extends React.Component {
     super(props)
   }
 
-  statusBar(isRunning) {
-    if(isRunning) {
+  statusBar(status) {
+    if(false) {
       return( <LinearProgress mode="indeterminate" /> )
     } else {
       return( <LinearProgress mode="determinate" value={100} color={white} /> )
@@ -47,11 +47,11 @@ class Schedule extends React.Component {
     const schedule = this.props.schedule
     // get the soonest task
     const nearT = schedule.tasks.slice().sort((x, y) => x.time > y.time)[0].time
-    const isoToday = new Date(Date.now()).toISOString().split('.')[0]+"Z"
+    // const isoToday = new Date(Date.now()).toISOString().split('.')[0]+"Z"
 
     return(
-      <div style={isoToday < nearT ? styles.borderActive : styles.borderInactive}>
-        {this.statusBar(false)}
+      <div style={this.props.status === 'waiting' ? styles.borderActive : styles.borderInactive}>
+        {this.statusBar(this.props.status)}
         <Table>
           <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
             <TableRow>
@@ -92,7 +92,7 @@ class Schedule extends React.Component {
 
 Schedule.propTypes = {
   schedule:   PropTypes.object.isRequired,
-  isRunning:  PropTypes.bool.isRequired
+  status:     PropTypes.oneOf(['running', 'waiting', 'stopped', 'error', 'missed'])
 }
 
 export default Schedule

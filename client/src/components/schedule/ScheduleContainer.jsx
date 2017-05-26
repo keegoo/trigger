@@ -39,8 +39,17 @@ class ScheduleContainer extends React.Component {
     return Math.ceil(this.props.schedulers.length / this.state.itemsEachPage)
   }
 
-  isScheduleRunning(schedule) {
-    return schedule.tasks.map((x) => x.status).includes('running') ? true : false
+  getScheduleStatus(schedule) {
+    const status_ary = schedule.tasks.map((x) => x.status)
+    if(status_ary.includes('running')) {
+      return 'running'
+    }
+    const uniq_status_ary = [...new Set(status_ary)]
+    if(uniq_status_ary.length === 1) {
+      return uniq_status_ary[0]
+    } else {
+      return 'error'
+    }
   }
 
   handlePreviousPage(){
@@ -61,7 +70,7 @@ class ScheduleContainer extends React.Component {
               return <Schedule 
                 schedule={schedule} 
                 key={index}
-                isRunning={this.isScheduleRunning(schedule)} />
+                status={this.getScheduleStatus(schedule)} />
             })
           }
         </div>
