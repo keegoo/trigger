@@ -22,7 +22,7 @@ end
 module Utils
   def heart_beat()
     begin
-      HTTParty.get( host + "/generators/update_status?generator=#{whoami}")
+      HTTParty.get( host + "/generators/update_status?generator=#{whoami}", verify: false)
     rescue => err
       $LOGGER.debug("send heart beat failed")
     end
@@ -33,7 +33,8 @@ module Utils
       HTTParty.post( 
         host + "/schedulers/#{schedule_id}/update_status",
         body: jsonstr,
-        headers: { 'Content-Type' => 'application/json' }
+        headers: { 'Content-Type' => 'application/json' },
+        verify: false
       )
     rescue
       $LOGGER.debug("send data failed")
@@ -55,7 +56,7 @@ module Utils
   def all_active_tasks()
     response_body = ''
     begin
-      response = HTTParty.get( host + "/schedulers/active")
+      response = HTTParty.get( host + "/schedulers/active", verify: false)
       response_body = response.body
     rescue => err
       $LOGGER.debug("get config failed")
