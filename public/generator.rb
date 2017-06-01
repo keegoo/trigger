@@ -36,7 +36,7 @@ module Utils
         headers: { 'Content-Type' => 'application/json' },
         verify: false
       )
-    rescue
+    rescue => err
       $LOGGER.debug("send data failed")
     end
   end
@@ -224,6 +224,49 @@ class Generator
 end
 
 
+module OS
+  def self.windows?
+    (RUBY_PLATFORM =~ /cygwin|mswin|mingw|bccwin|wince|emx/) != nil
+  end
+
+  def self.mac?
+   (RUBY_PLATFORM =~ /darwin/) != nil
+  end
+
+  def self.linux?
+    not self.windows? and not self.mac?
+  end
+end
+
+
+class CommandParser
+  GENERAL_PING = /^ping (.*?) -c (.*?)$/i
+
+  def initialize(cmd)
+    @original_cmd = cmd
+    cmd.scan(GENERAL_PING) do |host, count|
+      @host = host
+      @count = count
+    end
+  end
+
+  def to_s
+    unless @host == nil or @count == nil
+      if OS.windows?
+        "ping #{@host} -n #{@count}"
+      elsif OS.mac?
+        "ping #{@host} -c #{@count}"
+      elsif OS.linux?
+        "ping #{@host} -c #{@count}"
+      else
+        @original_cmd
+      end
+    else
+      @original_cmd
+    end
+  end
+end
+
 # ==========================
 # PingParser class
 # 
@@ -253,6 +296,34 @@ end
 class PingParser
   extend Utils
 
+  if OS.windows?
+    PING = {
+      SUCCESS_LEADING_LINE: /^Pinging .*? with .*? bytes of data:/,
+      FAILED_LEADING_LINE: /Ping request could not find host .*/,
+      PING_PACKAGE_INFORMATION: /Reply from .*?: bytes=.* time=.* TTL=.*/,
+      TIMEOUT_INFORMATION: /^Request timed out.$/,
+      EMPTY_LINE: /^$/,
+      STATISTICS_TITLE: /Ping statistics for .*$/,
+      STATISTICS_PACKAGEs: /\W.* Sent = .*?, Received = .*?, Lost = .*/,
+      TRIP_TIMES_TITLE: /Approximate round trip times in milli-seconds:/,
+      TRIP_TIMES_INFORMATION: /\W Minimum = .*? Maximum = .*? Average = .*/
+
+    }
+  elsif OS.mac?
+    PING = {
+      SUCCESS_LEADING_LINE: /^PING\W.*data bytes$/,
+      FAILED_LEADING_LINE: /.*?\Wcannot resolve\W.*?\WUnknown host/,
+      PING_PACKAGE_INFORMATION: /icmp_seq=.* ttl=.* time=.*$/,
+      TIMEOUT_INFORMATION: /^Request timeout for/,
+      EMPTY_LINE: /^$/,
+      STATISTICS_TITLE: /--- .* statistics ---/,
+      STATISTICS_PACKAGEs: /.* packet loss$/,
+      STATISTICS_TIME: /round-trip/
+    }
+  else
+    PING = {}
+  end
+
   def self.read(schedule_id, str)
     jsonstr = self.parse(str).to_json
     self.send_data(schedule_id, jsonstr)
@@ -273,21 +344,25 @@ class PingParser
     error       = { errors: 1 }
 
     case str
-    when /.*?\Wcannot resolve\W.*?\WUnknown host/
+    when PING[:FAILED_LEADING_LINE]
       default.merge(nohit)
-    when /^PING\W.*data bytes$/
+    when PING[:SUCCESS_LEADING_LINE]
       default.merge(nohit).merge(user_start)
-    when /icmp_seq=.* ttl=.* time=.*$/
+    when PING[:PING_PACKAGE_INFORMATION]
       default
-    when /^Request timeout for/
+    when PING[:TIMEOUT_INFORMATION]
       default.merge(error)
-    when /^$/
+    when PING[:EMPTY_LINE]
       default.merge(nohit)
-    when /--- .* statistics ---/
+    when PING[:STATISTICS_TITLE]
       default.merge(nohit)
-    when /.* packet loss$/
+    when PING[:STATISTICS_PACKAGEs]
       default.merge(nohit)
-    when /round-trip/
+    when PING[:STATISTICS_TIME]
+      default.merge(nohit).merge(user_stop)
+    when PING[:TRIP_TIMES_TITLE]
+      default.merge(nohit)
+    when PING[:TRIP_TIMES_INFORMATION]
       default.merge(nohit).merge(user_stop)
     else
       $LOGGER.warn("unknown type of Ping's output: #{str}")
@@ -329,7 +404,8 @@ every_n_seconds(6) do
       $LOGGER.info("task: #{$task}")
       if Time.now.utc.iso8601 >= $task["time"]
         $LOGGER.info("trigger task #{$task['cmd']}")
-        $generator.run($task["cmd"])
+        #$generator.run($task["cmd"])
+        $generator.run(CommandParser.new($task["cmd"]).to_s)
         $schedule_id = $task["_id"]
         $task = {}
       end
