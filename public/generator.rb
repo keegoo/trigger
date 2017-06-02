@@ -215,7 +215,7 @@ class Generator
 
   def processExist?(pid)
     begin
-      Process.getpgid( pid )
+      Process.kill(0, pid)
       true
     rescue Errno::ESRCH
       false
@@ -304,9 +304,9 @@ class PingParser
       TIMEOUT_INFORMATION: /^Request timed out.$/,
       EMPTY_LINE: /^$/,
       STATISTICS_TITLE: /Ping statistics for .*$/,
-      STATISTICS_PACKAGEs: /\W.* Sent = .*?, Received = .*?, Lost = .*/,
+      STATISTICS_PACKAGEs: /.*?Sent = .*?, Received = .*?, Lost = .*/,
       TRIP_TIMES_TITLE: /Approximate round trip times in milli-seconds:/,
-      TRIP_TIMES_INFORMATION: /\W Minimum = .*? Maximum = .*? Average = .*/
+      TRIP_TIMES_INFORMATION: /\W*?Minimum = .*? Maximum = .*? Average = .*/
 
     }
   elsif OS.mac?
@@ -326,6 +326,7 @@ class PingParser
 
   def self.read(schedule_id, str)
     jsonstr = self.parse(str).to_json
+    $LOGGER.debug("Ping sending json: #{jsonstr}")
     self.send_data(schedule_id, jsonstr)
   end
 
@@ -403,14 +404,14 @@ every_n_seconds(6) do
     else
       $LOGGER.info("task: #{$task}")
       if Time.now.utc.iso8601 >= $task["time"]
-        $LOGGER.info("trigger task #{$task['cmd']}")
-        #$generator.run($task["cmd"])
-        $generator.run(CommandParser.new($task["cmd"]).to_s)
+        platform_specific_cmd = CommandParser.new($task["cmd"]).to_s
+        $LOGGER.info("start to execute:  #{platform_specific_cmd}")
+        $generator.run(platform_specific_cmd)
         $schedule_id = $task["_id"]
         $task = {}
       end
     end
   end
 
-  $task = $config.next_task
+  $task = $config.next_task if $task == {}
 end
