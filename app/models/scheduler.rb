@@ -49,7 +49,7 @@ class Scheduler
       "$inc": {
         total_hits: bhash[:hits],
         total_errors: bhash[:errors],
-        "tasks.$.running": bhash[:ustart],
+        "tasks.$.running": bhash[:ustart] - bhash[:ustop],
         "tasks.$.stopped": bhash[:ustop]
       }, 
       "$set": {
