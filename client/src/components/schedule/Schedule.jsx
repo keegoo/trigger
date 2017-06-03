@@ -4,10 +4,8 @@ import { Link } from 'react-router'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 import LinearProgress from 'material-ui/LinearProgress'
 import FlatButton from 'material-ui/FlatButton'
-import { grey500, grey400, cyan400 } from 'material-ui/styles/colors'
+import { grey500, grey400, cyan400, white } from 'material-ui/styles/colors'
 import * as utils from './../utils.js'
-
-const white = '#FFFFFF'
 
 const styles = {
   borderInactive: {
