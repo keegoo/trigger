@@ -27,7 +27,7 @@ class UsersStatusTable extends React.Component {
   render() {
     return(
       <div style={styles.border}>
-        <Table>
+        <Table height={280} >
           <TableHeader
             adjustForCheckbox={false} 
             displaySelectAll={false} >
