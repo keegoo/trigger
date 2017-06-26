@@ -1,7 +1,6 @@
-import chai from 'chai'
-import notificationReducer from './../src/reducers/notificationReducer.js'
+import { expect } from 'chai'
+import notificationReducer from './../../src/reducers/notificationReducer.js'
 
-let expect = chai.expect
 
 describe('notificationReducer', () => {
   it('should add a notification with: PUSH_NOTIFICATION', () => {

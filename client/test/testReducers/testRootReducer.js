@@ -1,7 +1,6 @@
-import chai from 'chai'
-import rootReducer from './../src/reducers/rootReducer.js'
+import { expect } from 'chai'
+import rootReducer from './../../src/reducers/rootReducer.js'
 
-let expect = chai.expect
 
 describe('rootReducer', () => {
   it('should return schedule state with scheduleReducer action', () => {

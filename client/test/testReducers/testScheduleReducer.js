@@ -1,7 +1,6 @@
-import chai from 'chai'
-import scheduleReducer from './../src/reducers/scheduleReducer.js'
+import { expect } from 'chai'
+import scheduleReducer from './../../src/reducers/scheduleReducer.js'
 
-let expect = chai.expect
 
 describe('scheduleReducer', () => {
   it('should add generator object with action: ADD_GENERATOR', () => {
