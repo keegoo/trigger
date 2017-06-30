@@ -1,5 +1,5 @@
 import React from 'react'
-import Gauge from '../../../src/components/panel/Gauge.jsx'
+import Gauge from 'srcDir/components/panel/Gauge.jsx'
 import { expect } from 'chai'
 import { shallow } from 'enzyme'
 

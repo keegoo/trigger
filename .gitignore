@@ -28,3 +28,6 @@
 /public/bundle.js
 
 public/generator.log
+
+# ignore tmp file of mocha-webpack
+client/.tmp
