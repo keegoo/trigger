@@ -1,8 +1,9 @@
 import React from 'react'
 import { expect } from 'chai'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
 import UserIcon from 'material-ui/svg-icons/social/group'
 
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import Gauge from 'srcDir/components/panel/Gauge.jsx'
 import HelpIcon from 'material-ui/svg-icons/action/help-outline'
 
@@ -45,5 +46,14 @@ describe('<Gauge />', () => {
       <Gauge />
     )
     expect(wrapper.find(HelpIcon)).to.have.length(1)
+  })
+
+  it('should render label with labelColor provided', () => {
+    const wrapper = mount(
+      <MuiThemeProvider>
+        <Gauge labelColor='#EEEEEE'/>
+      </MuiThemeProvider>
+    )
+    expect(wrapper.find(Gauge).get(0).props.labelColor).to.equal('#EEEEEE')
   })
 })

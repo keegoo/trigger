@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/mocha-webpack/bin/mocha-webpack --webpack-config webpack.config.test.js \"test/**/*.js\" || true",
+    "test": "./node_modules/mocha-webpack/bin/mocha-webpack --require test/setup.js --webpack-config webpack.config.test.js \"test/**/*.js\" || true",
     "build": "./node_modules/.bin/webpack -d"
   },
   "keywords": [],
@@ -29,6 +29,7 @@
     "babel-preset-react": "^6.23.0",
     "chai": "^3.5.0",
     "enzyme": "^2.9.1",
+    "jsdom": "^11.1.0",
     "mocha": "^3.3.0",
     "mocha-webpack": "^0.7.0",
     "prop-types": "^15.5.10",
