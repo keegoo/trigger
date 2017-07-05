@@ -4,6 +4,7 @@ import TimerIcon from 'material-ui/svg-icons/image/timer'
 import UserIcon from 'material-ui/svg-icons/social/group'
 import TrendIcon from 'material-ui/svg-icons/action/trending-up'
 import ErrorIcon from 'material-ui/svg-icons/alert/error-outline'
+import HelpIcon from 'material-ui/svg-icons/action/help-outline'
 import Divider from 'material-ui/Divider'
 import { grey400, grey500, red500, black } from 'material-ui/styles/colors'
 import R from 'ramda'
@@ -54,18 +55,13 @@ const chooseIcon = (style) => {
     [R.equals('duration'),  R.always(<TimerIcon style={style}/>)],
     [R.equals('hits'),      R.always(<TrendIcon style={style}/>)],
     [R.equals('errors'),    R.always(<ErrorIcon style={style}/>)],
-    [R.T,                   R.always(<div/>)]
+    [R.T,                   R.always(<HelpIcon style={style}/>)]
   ])
 }
 
 const Gauge = (props) => {
   const styles = getStyles(props)
   const chooseIconOnType = chooseIcon(styles.icon)
-  // const defaultProps = {
-  //   title: 'Title',
-  //   unit: 'Unit.'
-  //   label: 'Label'
-  // }
   return(
     <div style={styles.border}>
       <div style={styles.title}>{props.title}</div>
@@ -83,10 +79,17 @@ const Gauge = (props) => {
 
 Gauge.propTypes = {
   title:      PropTypes.string.isRequired,
-  iconType:   PropTypes.oneOf(['users', 'duration', 'hits', 'errors']),
+  iconType:   PropTypes.oneOf(['users', 'duration', 'hits', 'errors', 'default']),
   unit:       PropTypes.string.isRequired,
   label:      PropTypes.string.isRequired,
   labelColor: PropTypes.string
+}
+
+Gauge.defaultProps = {
+  title:    'Title',
+  iconType: 'default',
+  unit:     'Unit.',
+  label:    'Label'
 }
 
 export default Gauge

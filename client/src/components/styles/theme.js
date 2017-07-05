@@ -11,7 +11,7 @@ export default {
   boxShadow: `${grey400} 0px 0px 5px`,
   fontSize: {
     small: 10,
-    normal: 14,
+    normal: 12,
     large: 24
   },
   palette: {
