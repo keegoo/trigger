@@ -53,7 +53,7 @@ class GaugeContainer extends React.Component {
         <Gauge 
           title='Duration'
           iconType='duration'
-          sublabel='Time.'
+          unit='Time.'
           label={this.secondsToHHMMSS(this.state.secondsPassed  + this.props.baseTimeAsSeconds)} />
         {
           this.props.data.map((x, index) => {
@@ -61,7 +61,7 @@ class GaugeContainer extends React.Component {
               <Gauge key={index}
                 title={x.title}
                 iconType={x.iconType}
-                sublabel={x.sublabel}
+                unit={x.sublabel}
                 label={x.label} />
             )
           })
