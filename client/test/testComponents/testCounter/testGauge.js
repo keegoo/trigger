@@ -1,34 +1,24 @@
 import React from 'react'
 import { expect } from 'chai'
 import { shallow, mount } from 'enzyme'
-import UserIcon from 'material-ui/svg-icons/social/group'
-
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import Gauge from 'srcDir/components/panel/Gauge.jsx'
+import UserIcon from 'material-ui/svg-icons/social/group'
 import HelpIcon from 'material-ui/svg-icons/action/help-outline'
 
-describe('<Gauge />', () => {
-  it('pass', () => {
-    expect([1]).to.deep.equal([1])
-  })
+import Gauge from 'srcDir/components/counter/Gauge.jsx'
 
-  it('accept props of title, unit and label as required', () => {
+describe('<Gauge />', () => {
+  it('accept props of title, icon, unit and label as required', () => {
     const wrapper = shallow(
       <Gauge 
         title='users'
-        iconType='users'
+        icon={UserIcon}
         unit='No.'
         label='1000'
         />)
     expect(wrapper.find('div div').at(0).text()).to.contain('users')
     expect(wrapper.find('div div div span').at(0).text()).to.contain('No.')
     expect(wrapper.find('div div div span').at(1).text()).to.contain('1000')
-  })
-
-  it('accept props of iconType as one of users/duration/hits/errors/default', () => {
-    const wrapper = shallow(
-      <Gauge iconType='users'/>
-    )
     expect(wrapper.find(UserIcon)).to.have.length(1)
   })
 
